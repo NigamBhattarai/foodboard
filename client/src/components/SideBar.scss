@@ -1,0 +1,30 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200&display=swap');
+.sideNav-dashboard {
+    height: 100vh;
+    background: rgb(25, 27, 39);
+    color: aliceblue;
+    position: relative;
+}
+.sidebar-btn {
+    width: 100%;
+    padding: 10px;
+    color: #FFFFFF;
+    text-align: center;
+    font-family: 'Poppins', sans-serif;
+    font-size: 20px;
+    border-radius: 0px;
+    &:hover {
+        text-decoration: none;
+        background: #5b5863;
+        color: #FFFFFF;
+    }
+    &:focus {
+        text-decoration: none;
+    }
+}
+.sideNav-minimize-btn {
+    position: absolute;
+    right: 20px;
+    top: 15px;
+    font-size: 20px;
+}

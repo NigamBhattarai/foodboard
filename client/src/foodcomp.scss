@@ -1,0 +1,51 @@
+@import "App.scss";
+@media (min-width: $lg) {
+  .main-container {
+    max-height: 100vh;
+  }
+}
+.dashboard-top-bar {
+  background: #ffffff;
+}
+.main-container {
+  background: #eaecf5;
+  overflow: hidden;
+}
+.header-category-menu {
+  background: #ffffff;
+  border-radius: 5px;
+}
+.header-category-menu button {
+  color: #4f4f4f;
+  font-weight: bold;
+  &:hover {
+    color: #ea7c69;
+    text-decoration: none;
+  }
+}
+.header-category-menu .active {
+  position: relative;
+  color: #ea7c69;
+}
+.header-category-menu .active .active-underline {
+  position: absolute;
+  background: #ea7c69;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 2px;
+}
+.food-search {
+  padding: 30px;
+  border-radius: 10px;
+}
+.item-card-row {
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.order-bill {
+  background: #ffffff;
+  border-radius: 20px;
+}
