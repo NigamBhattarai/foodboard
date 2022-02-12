@@ -1,0 +1,26 @@
+@import "../../../App.scss";
+
+.dashboard-top-bar {
+  background: #ffffff;
+  font-family: 'Barlow', sans-serif;
+}
+.top-bar-link {
+    line-height: 55px;
+    color: #333333;
+    &:hover {
+        color: $orange_secondary;
+        text-decoration: none;
+    }
+}
+.top-bar-clock {
+    color: $orange_primary;
+}
+.top-bar-time, .top-bar-user-text {
+    color: $gray_2;
+    font-family: 'Barlow' sans-serif;
+}
+.top-bar-user-image {
+    margin-top: -3px;
+    width: 30px;
+    height: auto;
+}

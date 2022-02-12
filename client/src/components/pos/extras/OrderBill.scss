@@ -1,0 +1,98 @@
+@import "../../../App.scss";
+.order-bill {
+  font-family: "Barlow", sans-serif;
+  overflow: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.order-bill-token-number {
+  color: $gray_2;
+  font-size: 28px;
+  text-align: center;
+}
+.order-bill-image {
+  width: 65px;
+  height: auto;
+}
+.order-bill-items {
+  padding: 2px 30px;
+  height: 45vh;
+  overflow-y: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.order-bill-item {
+  margin-top: 20px;
+}
+.order-bill-food-name {
+  font-size: 18px;
+  line-height: 55px;
+}
+.order-bill-item-count {
+  display: flex;
+  flex-direction: row;
+  margin-top: 10px;
+  align-items: flex-start;
+  padding: 5px 2px;
+  border-radius: 10px;
+  font-size: 15px;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.order-bill-in-out {
+  color: $orange_primary;
+}
+.order-bill-item-price-col {
+  line-height: 55px;
+}
+.order-bill-item-price {
+  font-size: "16px";
+  font-weight: bold;
+}
+.order-bill-item-cancel {
+  color: $orange_primary;
+  margin-top: -3px;
+}
+.order-bill-addon-row {
+  color: $gray_2;
+}
+.order-bill-addon-name {
+  font-size: 15px;
+}
+.order-bill-addon-price {
+  font-size: 18px;
+}
+.order-bill-addon-cancel {
+  color: $orange_primary;
+}
+.order-bill-total-box {
+  margin-top: 15px;
+}
+.order-bill-discount-percentage {
+  padding: 8px;
+  margin-left: 10px;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+.order-bill-grand-total {
+  font-size: 20px;
+}
+.order-bill-place-order-btn {
+  background: $orange_primary;
+  border-radius: 8px;
+  color: $base;
+  box-shadow: 0px 8px 24px rgba(234, 124, 105, 0.3);
+  padding: 14px;
+  width: 100%;
+  margin: 8% 20px 0 20px;
+  &:hover {
+    background: $orange_secondary;
+    color: $orange_light_secondary;
+  }
+}

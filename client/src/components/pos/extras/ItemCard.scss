@@ -1,3 +1,5 @@
+@import "../../../App.scss";
+
 .item-card {
     border-radius: 20px;
     text-align: center;
@@ -5,8 +7,8 @@
     overflow: hidden;
     padding-bottom: 40px;
     &:hover .item-card-btn{
-        background: #fdb9ab;
-        color: #cf624f;
+        background: $orange_light_primary;
+        color: $orange_secondary;
     }
 }
 .item-card-desc {
@@ -19,15 +21,15 @@
     width: 100%;
     border-radius: 0px;
     padding: 15px;
-    background: #FAE0DB;
-    color: #EA7C69;
+    background: $orange_light_secondary;
+    color: $orange_primary;
     border: none;
     &:focus {
-        background: #fdb9ab;
-        color: #cf624f;
+        background: $orange_light_primary;
+        color: $orange_secondary;
     }
     &:active {
-        background: #fdb9ab;
-        color: #cf624f;
+        background: $orange_light_primary;
+        color: $orange_secondary;
     }
 }

@@ -1,14 +1,12 @@
-@import "App.scss";
+@import "../../App.scss";
 @media (min-width: $lg) {
   .main-container {
     max-height: 100vh;
   }
 }
-.dashboard-top-bar {
-  background: #ffffff;
-}
 .main-container {
   background: #eaecf5;
+  padding: 0px;
   overflow: hidden;
 }
 .header-category-menu {
@@ -19,17 +17,17 @@
   color: #4f4f4f;
   font-weight: bold;
   &:hover {
-    color: #ea7c69;
+    color: $orange_primary;
     text-decoration: none;
   }
 }
 .header-category-menu .active {
   position: relative;
-  color: #ea7c69;
+  color: $orange_primary;
 }
 .header-category-menu .active .active-underline {
   position: absolute;
-  background: #ea7c69;
+  background: $orange_primary;
   bottom: 0;
   left: 0;
   width: 100%;
@@ -41,6 +39,7 @@
 }
 .item-card-row {
   overflow-y: scroll;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }

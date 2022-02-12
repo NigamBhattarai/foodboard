@@ -1,8 +1,10 @@
 import React, { useEffect } from "react";
 import { Col, Container, Row, Button, Form } from "react-bootstrap";
-import ItemCard from "./components/ItemCard";
+import ItemCard from "./extras/ItemCard";
+import OrderBill from "./extras/OrderBill";
+import TopBar from "./extras/TopBar";
 
-import "./foodcomp.scss";
+import "./pos.scss";
 function itemCards() {
   var rows = [];
   for (var i = 0; i < 15; i++) {
@@ -27,7 +29,7 @@ function adjustPOSPage() {
     getAbsoluteHeight(document.querySelector(".food-search")) +
     "px";
 }
-export default function FoodComp() {
+export default function POS() {
   useEffect(() => {
     adjustPOSPage();
   });
@@ -44,7 +46,7 @@ export default function FoodComp() {
         {/* <Col xs={2} className="p-0 m-0">
               <SideBar/>
             </Col> */}
-        <Row className="dashboard-top-bar py-4"></Row>
+        <TopBar />
         <Row className="mt-1">
           <Col xs={12} lg={8}>
             <Container>
@@ -77,7 +79,7 @@ export default function FoodComp() {
               <Row className="item-card-row pb-3">{itemCards()}</Row>
             </Container>
           </Col>
-          <Col xs={12} lg={4} className="order-bill"></Col>
+          <Col xs={12} lg={4}><OrderBill /></Col>
         </Row>
         {/* </Row> */}
       </Container>
