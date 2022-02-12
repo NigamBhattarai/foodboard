@@ -1,11 +1,11 @@
 import './App.scss';
-import FoodComp from './FoodComp';
+import POS from './components/pos/pos';
 
 
 function App() {
   return (
     <>
-    <FoodComp />
+    <POS />
 </>
   );
 }
