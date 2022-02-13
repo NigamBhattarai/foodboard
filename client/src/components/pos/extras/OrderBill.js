@@ -51,7 +51,7 @@ function OrderBill() {
           <Col xs={5} className="order-bill-food-name">
             Chicken tandoori
           </Col>
-          <Col xs={2.5}>
+          <Col xs={2.5} >
             <span className="order-bill-item-count">
               <RemoveCircleOutlineIcon className="order-bill-in-out mr-2" /> 2{" "}
               <AddCircleOutlineIcon className="order-bill-in-out ml-2" />

@@ -20,6 +20,7 @@
   padding: 2px 30px;
   height: 45vh;
   overflow-y: scroll;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
