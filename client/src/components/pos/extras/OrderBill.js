@@ -1,5 +1,5 @@
 import React, { useEffect } from "react";
-import { Container, Row, Col, Button } from "react-bootstrap";
+import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
@@ -130,9 +130,17 @@ function OrderBill() {
           </Col>
           <Col xs={3}>Rs. 200</Col>
         </Row>
-        <Row className="justify-content-between order-bill-total-box order-bill-discount">
-          <Col xs={5} className="ml-3">
-            Discount <span className="order-bill-discount-percentage">10%</span>
+        <Row className="order-bill-total-box order-bill-discount">
+          <Col xs={1} className="ml-3">
+            Discount
+          </Col>
+          <Col xs={2} className="ml-4 mr-auto">
+            <Form.Control
+              type="number"
+              placeholder="0%"
+              className="order-bill-discount-percentage"
+              max="100"
+            />
           </Col>
           <Col xs={3}>Rs. 200</Col>
         </Row>
