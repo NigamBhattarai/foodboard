@@ -1,0 +1,50 @@
+@import "../../../App.scss";
+
+.item-card-row {
+  overflow-y: scroll;
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+  font-family: 'Barlow', sans-serif;
+}
+
+.item-card-list {
+  border-radius: 10px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+  &:hover .item-card-list-btn {
+    background: $orange_light_primary;
+    color: $orange_secondary;
+  }
+}
+
+.item-card-list-title {
+    font-weight: bold;
+    font-size: 18px;
+    margin-top: 14px;
+}
+
+.item-card-list-desc {
+    font-size: 16px;
+    color: $gray_2;
+    margin-top: 20px;
+}
+
+.item-card-list-btn {
+  position: absolute;
+  right: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  border-radius: 0px;
+  padding: 15px;
+  background: $orange_light_secondary;
+  color: $orange_primary;
+  border: none;
+  &:focus {
+    background: $orange_light_primary;
+    color: $orange_secondary;
+  }
+}
