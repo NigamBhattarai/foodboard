@@ -1,17 +1,12 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Col, Container, Row, Button, Form } from "react-bootstrap";
-import ItemCard from "./extras/ItemCard";
+import ItemCardsGrid from "./extras/ItemCardsGrid";
+import ItemCardsList from "./extras/ItemCardsList";
 import OrderBill from "./extras/OrderBill";
 import TopBar from "./extras/TopBar";
+import ViewModuleIcon from "@mui/icons-material/ViewModule";
 
 import "./pos.scss";
-function itemCards() {
-  var rows = [];
-  for (var i = 0; i < 15; i++) {
-    rows.push(<ItemCard />);
-  }
-  return rows;
-}
 function getAbsoluteHeight(el) {
   el = typeof el === "string" ? document.querySelector(el) : el;
 
@@ -30,6 +25,7 @@ function adjustPOSPage() {
     "px";
 }
 export default function POS() {
+  const [isGridSelected, setIsGridSelected] = useState(true);
   useEffect(() => {
     adjustPOSPage();
   });
@@ -75,11 +71,28 @@ export default function POS() {
                     className="food-search mb-3"
                   />
                 </Col>
+                <Col
+                  xs={2}
+                  lg={2}
+                  className="ml-auto grid-icon-col"
+                  style={{ textAlign: "right", marginTop: "20px" }}
+                >
+                  <ViewModuleIcon
+                    className={
+                      "items-grid-toggle " + (isGridSelected ? "active" : "")
+                    }
+                    onClick={(e) => {
+                      setIsGridSelected(isGridSelected ? false : true);
+                    }}
+                  />
+                </Col>
               </Row>
-              <Row className="item-card-row pb-3">{itemCards()}</Row>
+              {isGridSelected ? <ItemCardsGrid /> : <ItemCardsList />}
             </Container>
           </Col>
-          <Col xs={12} lg={4}><OrderBill /></Col>
+          <Col xs={12} lg={4}>
+            <OrderBill />
+          </Col>
         </Row>
         {/* </Row> */}
       </Container>
