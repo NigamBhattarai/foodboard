@@ -4,21 +4,21 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import "./ItemCardsGrid.scss";
 
-function itemCardsGrid() {
+function itemCardsGrid(itemData) {
   var rows = [];
-  for (var i = 0; i < 15; i++) {
+  itemData.forEach((value, index, array) => {
     rows.push(
       <Col xs={12} sm={6} md={4} lg={3} xxl={2} className="mt-2">
         <Card className="item-card">
           <Card.Img
             className="rounded-circle px-5 py-3"
             variant="top"
-            src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
+            src={value.image}
           />
           <Card.Body>
-            <Card.Title>Jhol Momo</Card.Title>
+            <Card.Title>{value.name}</Card.Title>
             <Card.Text className="item-card-desc">
-              Rs. 200 &nbsp; &nbsp; 30 Plts
+              Rs. {value.price} &nbsp; &nbsp; {value.available_stock} Plts
             </Card.Text>
             <Button className="item-card-btn">
               {" "}
@@ -28,11 +28,13 @@ function itemCardsGrid() {
         </Card>
       </Col>
     );
-  }
+  });
   return rows;
 }
-function ItemCardsGrid() {
-  return <Row className="item-card-row pb-3">{itemCardsGrid()}</Row>;
+function ItemCardsGrid(props) {
+  return (
+    <Row className="item-card-row pb-3">{itemCardsGrid(props.itemData)}</Row>
+  );
 }
 
 export default ItemCardsGrid;
