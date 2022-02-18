@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -20,7 +20,7 @@ function adjustOrderBill() {
     getAbsoluteHeight(document.querySelector(".dashboard-top-bar")) +
     "px";
 }
-function OrderBill() {
+function OrderBill(props) {
   useEffect(() => {
     adjustOrderBill();
   });
@@ -30,6 +30,20 @@ function OrderBill() {
     }
     window.addEventListener("resize", handleResize);
   });
+  var billItemsArray = props.billItems;
+  const [billItems, setBillItems] = useState(billItemsArray);
+  function changeCountItem(i, action) {
+    let temp_state = [...billItems];
+    let temp_element = { ...temp_state[i] };
+    temp_element.count =
+      action === "+"
+        ? (temp_element.count = temp_element.count + 1)
+        : temp_element.count-1 > 0
+        ? (temp_element.count = temp_element.count - 1)
+        : 1;
+    temp_state[i] = temp_element;
+    setBillItems(temp_state);
+  }
   return (
     <div className="order-bill py-3">
       <Container>
@@ -40,81 +54,66 @@ function OrderBill() {
         </Row>
       </Container>
       <Container className="order-bill-items">
-        <Row className="order-bill-item">
-          <Col xs={2}>
-            <img
-              src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
-              alt="user"
-              className="img-fluid rounded-circle order-bill-image mr-4"
-            />
-          </Col>
-          <Col xs={5} className="order-bill-food-name">
-            Chicken tandoori
-          </Col>
-          <Col xs={2.5} >
-            <span className="order-bill-item-count">
-              <RemoveCircleOutlineIcon className="order-bill-in-out mr-2" /> 2{" "}
-              <AddCircleOutlineIcon className="order-bill-in-out ml-2" />
-            </span>
-          </Col>
-          <Col xs={2.5} className="ml-auto order-bill-item-price-col">
-            <span className="order-bill-item-price">Rs. 400</span>
-            <CancelIcon className="ml-2 order-bill-item-cancel" />
-          </Col>
-        </Row>
-        <Container>
-          <Row className="order-bill-addon-row">
-            <Col xs={9} className="order-bill-addon-name">
-              +extra jhol
-            </Col>
-            <Col xs={3}>
-              <span className="order-bill-addon-price">Rs. 20</span>
-              <CancelIcon className="ml-2 order-bill-addon-cancel" />
-            </Col>
-          </Row>
-        </Container>
-        <Row className="order-bill-item">
-          <Col xs={2}>
-            <img
-              src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
-              alt="user"
-              className="img-fluid rounded-circle order-bill-image mr-4"
-            />
-          </Col>
-          <Col xs={5} className="order-bill-food-name">
-            Chicken tandoori
-          </Col>
-          <Col xs={2.5}>
-            <span className="order-bill-item-count">
-              <RemoveCircleOutlineIcon className="order-bill-in-out mr-2" /> 2{" "}
-              <AddCircleOutlineIcon className="order-bill-in-out ml-2" />
-            </span>
-          </Col>
-          <Col xs={2.5} className="ml-auto order-bill-item-price-col">
-            <span className="order-bill-item-price">Rs. 400</span>
-            <CancelIcon className="ml-2 order-bill-item-cancel" />
-          </Col>
-        </Row>
-        <Container>
-          <Row className="order-bill-addon-row">
-            <Col xs={9} className="order-bill-addon-name">
-              +extra jhol
-            </Col>
-            <Col xs={3}>
-              <span className="order-bill-addon-price">Rs. 20</span>
-              <CancelIcon className="ml-2 order-bill-addon-cancel" />
-            </Col>
-          </Row>
-          <Row className="order-bill-addon-row">
-            <Col xs={9} className="order-bill-addon-name">
-              +extra jhol
-            </Col>
-            <Col xs={3}>
-              <span className="order-bill-addon-price">Rs. 20</span>
-              <CancelIcon className="ml-2 order-bill-addon-cancel" />
-            </Col>
-          </Row>
-        </Container>
+        {billItems.map((value, i) => {
+          return (
+            <>
+              <Row className="order-bill-item">
+                <Col xs={2}>
+                  <img
+                    src={value.image}
+                    alt="user"
+                    className="img-fluid rounded-circle order-bill-image mr-4"
+                  />
+                </Col>
+                <Col xs={5} className="order-bill-food-name">
+                  {value.name}
+                </Col>
+                <Col xs={2.5}>
+                  <span className="order-bill-item-count">
+                    <RemoveCircleOutlineIcon
+                      className="order-bill-in-out mr-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        changeCountItem(i, "-");
+                      }}
+                    />
+                    {value.count}
+                    <AddCircleOutlineIcon
+                      className="order-bill-in-out ml-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        changeCountItem(i, "+");
+                      }}
+                    />
+                  </span>
+                </Col>
+                <Col xs={2.5} className="ml-auto order-bill-item-price-col">
+                  <span className="order-bill-item-price">
+                    Rs. {value.price * value.count}
+                  </span>
+                  <CancelIcon className="ml-2 order-bill-item-cancel" />
+                </Col>
+              </Row>
+              <Container>
+                {value.extras.map((extra, subindex) => {
+                  return (
+                    <Row className="order-bill-addon-row">
+                      <Col xs={9} className="order-bill-addon-name">
+                        {"+" + extra.name}
+                      </Col>
+                      <Col xs={3}>
+                        <span className="order-bill-addon-price">
+                          Rs. {extra.price}
+                        </span>
+                        <CancelIcon className="ml-2 order-bill-addon-cancel" />
+                      </Col>
+                    </Row>
+                  );
+                })}
+              </Container>
+            </>
+          );
+        })}
       </Container>
       <Container>
         <hr />
