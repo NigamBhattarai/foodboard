@@ -35,6 +35,64 @@ export default function POS() {
     }
     window.addEventListener("resize", handleResize);
   });
+
+  var itemData = [
+    {
+      id: 0,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
+      name: "Jhol Momo",
+      price: 200,
+      available_stock: 30,
+    },
+  ];
+  for (var i = 0; i < 15; i++)
+    itemData.push({
+      id: i + 1,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
+      name: "Jhol Momo",
+      price: 200,
+      available_stock: 30,
+    });
+  var billItems = [
+    {
+      id: 0,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
+      count: 1,
+      name: "Chicken Tandoori",
+      price: 400,
+      extras: [
+        {
+          id: 0,
+          name: "extra Sauce",
+          price: 25,
+        },
+      ],
+    },
+    {
+      id: 1,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
+      count: 1,
+      name: "Jhol Momo",
+      price: 400,
+      extras: [
+        {
+          id: 0,
+          name: "extra jhol",
+          price: 10,
+        },
+        {
+          id: 0,
+          name: "extra jhol",
+          price: 10,
+        },
+      ],
+    },
+  ];
+
   return (
     <div>
       <Container fluid className="main-container">
@@ -87,11 +145,15 @@ export default function POS() {
                   />
                 </Col>
               </Row>
-              {isGridSelected ? <ItemCardsGrid /> : <ItemCardsList />}
+              {isGridSelected ? (
+                <ItemCardsGrid itemData={itemData} />
+              ) : (
+                <ItemCardsList itemData={itemData} />
+              )}
             </Container>
           </Col>
           <Col xs={12} lg={4}>
-            <OrderBill />
+            <OrderBill billItems={billItems} />
           </Col>
         </Row>
         {/* </Row> */}
