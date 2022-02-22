@@ -32,6 +32,7 @@ function OrderBill(props) {
   });
   var billItemsArray = props.billItems;
   const [billItems, setBillItems] = useState(billItemsArray);
+  
   function changeCountItem(i, action) {
     let temp_state = [...billItems];
     let temp_element = { ...temp_state[i] };
