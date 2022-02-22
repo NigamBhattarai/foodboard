@@ -1,2 +1,19 @@
 @import "variables.scss";
-@import url('https://fonts.googleapis.com/css2?family=Barlow:wght@500&family=Poppins:wght@200&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Barlow:wght@500&family=Poppins:wght@200&display=swap");
+.default-button {
+  background: $orange_primary;
+  border-radius: 8px;
+  color: $base;
+  border-color: $orange_primary;
+  box-shadow: 0px 8px 24px rgba(234, 124, 105, 0.3);
+  &:hover {
+    background: $orange_secondary;
+    color: $orange_light_secondary;
+    border-color: $orange_primary;
+  }
+  &:active,
+  &:focus {
+    background: $orange_secondary !important;
+    color: $orange_light_secondary !important;
+  }
+}
