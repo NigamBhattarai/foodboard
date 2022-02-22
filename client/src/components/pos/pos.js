@@ -40,9 +40,9 @@ export default function POS() {
     {
       id: 0,
       image:
-        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
-      name: "Jhol Momo",
-      price: 200,
+        "https://thewoksoflife.com/wp-content/uploads/2016/07/grilled-tandoori-chicken-12-500x500.jpg",
+      name: "Chicken Tandoori",
+      price: 400,
       available_stock: 30,
     },
   ];
