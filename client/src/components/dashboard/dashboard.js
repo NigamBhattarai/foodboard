@@ -65,6 +65,7 @@ class dashboard extends Component {
           </Row>
         </Col>
       </Row>
+      
     );
   }
 }
