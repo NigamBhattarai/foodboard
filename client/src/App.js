@@ -2,7 +2,7 @@ import './App.scss';
 import POS from './components/pos/pos';
 import { Routes, Route } from "react-router";
 import TopBar from './components/pos/extras/TopBar';
-import Dashboard from './components/dashboard/dashboard';
+import Categories from './components/dashboard/Categories';
 
 
 function App() {
@@ -10,7 +10,7 @@ function App() {
     <Routes>
       <Route index element = {<POS />} />
       <Route path="/developing" element = {<TopBar show={true} onHide={() => {return true}}  />} />
-      <Route path="/dashboard" element = {<Dashboard show={true} onHide={() => {return true}}  />} />
+      <Route path="/dashboard" element = {<Categories show={true} onHide={() => {return true}}  />} />
     </Routes>
   );
 }
