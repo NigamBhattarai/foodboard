@@ -5,7 +5,7 @@
   border-radius: 8px;
   color: $base;
   border-color: $orange_primary;
-  box-shadow: 0px 8px 24px rgba(234, 124, 105, 0.3);
+  box-shadow: 0px 8px 24px rgba($orange_primary, 0.3);
   &:hover {
     background: $orange_secondary;
     color: $orange_light_secondary;
@@ -15,5 +15,7 @@
   &:focus {
     background: $orange_secondary !important;
     color: $orange_light_secondary !important;
+    border: none !important;
+    box-shadow: 0px 8px 24px rgba($orange_primary, 0.3) !important;
   }
 }
