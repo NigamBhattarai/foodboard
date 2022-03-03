@@ -1,17 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Card, Button, Row, Col } from "react-bootstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import OrderPopup from "./OrderPopup";
 import "./ItemCardsGrid.scss";
+import { POSContext } from "../pos";
 
 function ItemCardsGrid(props) {
+  //States
   const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(0);
+
+  const posContext = useContext(POSContext);
+
   function itemCardsGrid(itemData) {
     var rows = [];
     itemData.forEach((value, index, array) => {
       rows.push(
-        <Col xs={12} sm={6} md={4} lg={3} xxl={2} className="mt-2">
+        <Col key={index} xs={12} sm={6} md={4} lg={4} xl={3} className="mt-2">
           <Card className="item-card">
             <Card.Img
               className="rounded-circle px-5 py-3"
@@ -24,8 +30,9 @@ function ItemCardsGrid(props) {
                 Rs. {value.price} &nbsp; &nbsp; {value.available_stock} Plts
               </Card.Text>
               <Button
-                className="item-card-btn"
+                className="default-button item-card-btn"
                 onClick={(e) => {
+                  setSelectedItem(index)
                   setShowModal(true);
                 }}
               >
@@ -43,11 +50,12 @@ function ItemCardsGrid(props) {
     <Row className="item-card-row pb-3">
       <OrderPopup
         show={showModal}
+        itemindex={selectedItem}
         onHide={() => {
           setShowModal(false);
         }}
       />
-      {itemCardsGrid(props.itemData)}
+      {itemCardsGrid(posContext.state.itemData)}
     </Row>
   );
 }

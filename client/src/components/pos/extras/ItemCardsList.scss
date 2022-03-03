@@ -38,13 +38,14 @@
   top: 0;
   width: 100%;
   height: 100%;
-  border-radius: 0px;
+  border-radius: 0px !important;
   padding: 15px;
-  background: $orange_light_secondary;
-  color: $orange_primary;
+  background: $orange_light_secondary !important;
+  color: $orange_primary !important;
+  box-shadow: none !important;
   border: none;
-  &:focus {
-    background: $orange_light_primary;
-    color: $orange_secondary;
+  &:hover {
+    background: $orange_light_primary !important;
+    color: $orange_secondary !important;
   }
 }
