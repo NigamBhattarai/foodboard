@@ -1,16 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Button, Card, Col, Row } from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import OrderPopup from "./OrderPopup";
 import "./ItemCardsList.scss";
+import { POSContext } from "../pos";
 
 function ItemCardsList(props) {
+  //States
   const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState(0);
+
+  const posContext = useContext(POSContext);
+
   function itemCardsList(itemData) {
     var rows = [];
     itemData.forEach((value, index, array) => {
       rows.push(
-        <Col xs={12} md={6} className="mt-2">
+        <Col key={index} xs={12} md={6} className="mt-2">
           <Card className="item-card-list">
             <Row>
               <Col xs={3}>
@@ -29,8 +35,9 @@ function ItemCardsList(props) {
               </Col>
               <Col xs={3}>
                 <Button
-                  className="item-card-list-btn"
+                  className="default-button item-card-list-btn"
                   onClick={(e) => {
+                    setSelectedItem(index)
                     setShowModal(true);
                   }}
                 >
@@ -49,11 +56,12 @@ function ItemCardsList(props) {
     <Row className="item-card-row pb-3">
       <OrderPopup
         show={showModal}
+        itemindex={selectedItem}
         onHide={() => {
           setShowModal(false);
         }}
       />
-      {itemCardsList(props.itemData)}
+      {itemCardsList(posContext.state.itemData)}
     </Row>
   );
 }

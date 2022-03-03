@@ -1,4 +1,5 @@
 import React from "react";
+import {Link} from "react-router-dom";
 import { Button, Col, Navbar, Nav } from "react-bootstrap";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import "./TopBar.scss";
@@ -18,7 +19,7 @@ function TopBar() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Button variant="link" className="top-bar-link">
+          <Button as={Link} to="/dashboard" variant="link" className="top-bar-link">
             {" "}
             Dashboard{" "}
           </Button>
