@@ -1,12 +1,76 @@
-import React from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { Col, Modal, Row, Button, Form, Container } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
-import HighlightOffIcon from '@mui/icons-material/HighlightOff';
+import HighlightOffIcon from "@mui/icons-material/HighlightOff";
 import "./OrderPopup.scss";
+import { POSContext } from "../pos";
+
+function getVariantsOfItem(itemID) {
+  var variants = [
+    { id: 1, name: "Chicken", selected: true },
+    { id: 2, name: "Buff", selected: false },
+    { id: 3, name: "Veg", selected: false },
+  ];
+  return variants;
+}
+
+function getAddOnsOfItem(itemID) {
+  var addons = [
+    { id: 1, name: "extra cheese", price: 25, selected: false },
+    { id: 2, name: "extra sause", price: 20, selected: false },
+    { id: 3, name: "seperate jhol", price: 10, selected: false },
+  ];
+  return addons;
+}
 
 function OrderPopup(props) {
+  const posContext = useContext(POSContext);
+  var item = posContext.state.itemData[props.itemindex];
+
+  //States
+  const [variants, setVariants] = useState([]);
+  const [addOns, setAddOns] = useState([]);
+  const [count, setCount] = useState(1);
+
+  function changeCountItem(i, action) {
+    action === "+"
+      ? setCount(count + 1)
+      : count - 1 > 0
+      ? setCount(count - 1)
+      : setCount(1);
+  }
+
+  useEffect(() => {
+    setVariants(getVariantsOfItem(item.id));
+    setAddOns(getAddOnsOfItem(item.id));
+  }, [item]);
+
+  function addMultipleVariantClicked(event) {}
+
+  function addToBillClicked(e) {
+    const newBillItem = {
+      id: posContext.state.bill.billItems.length,
+      image: item.image,
+      count: count,
+      name: item.name,
+      price: item.price,
+      extras: addOns.filter((value) => {
+        return value.selected;
+      }),
+    };
+    posContext.dispatch({ type: "addbillItems", value: newBillItem });
+    posContext.dispatch({ type: "updateBillPrices" });
+    props.onHide(e);
+  }
+
+  function checkHandler(i) {
+    let temp_state = [...addOns];
+    temp_state[i].selected = !temp_state[i].selected;
+    setAddOns(temp_state);
+  }
+
   return (
     <Modal
       {...props}
@@ -25,22 +89,35 @@ function OrderPopup(props) {
         <Row className="order-popup-item-row">
           <Col xs={2}>
             <img
-              src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
+              src={item.image}
+              alt="item"
               className="img-fluid rounded-circle"
               style={{ padding: 10 }}
             />
           </Col>
           <Col xs={3} className="my-auto">
-            <span className="order-popup-item-name">Jhol Momo</span>
+            <span className="order-popup-item-name">{item.name}</span>
           </Col>
           <Col xs={2} className="my-auto">
             <Form.Select
               aria-label="Default select"
               className="order-popup-item-dropdown"
             >
-              <option value="1">Chicken</option>
-              <option value="2">Buff</option>
-              <option value="3">Veg</option>
+              {variants.length > 0 ? (
+                variants.map((value, index, array) => {
+                  return (
+                    <option
+                      selected={value.selected}
+                      key={value.id + value.name}
+                      value="1"
+                    >
+                      {value.name}
+                    </option>
+                  );
+                })
+              ) : (
+                <option value="1">Default</option>
+              )}
             </Form.Select>
           </Col>
           <Col xs={2} className="px-4 my-auto">
@@ -51,17 +128,23 @@ function OrderPopup(props) {
               <RemoveCircleOutlineIcon
                 className="order-popup-in-out mr-2"
                 style={{ cursor: "pointer" }}
+                onClick={(e) => {
+                  changeCountItem(0, "-");
+                }}
               />
-              1
+              {count}
               <AddCircleOutlineIcon
                 className="order-popup-in-out ml-2"
                 style={{ cursor: "pointer" }}
+                onClick={(e) => {
+                  changeCountItem(0, "+");
+                }}
               />
             </span>
           </Col>
           <Col xs={3} className="my-auto">
             <Row>
-              <Col xs={7}>Rs. 400</Col>
+              <Col xs={7}>{item.price}</Col>
               <Col xs={2}>
                 {" "}
                 <HighlightOffIcon className="mr-auto order-popup-cancel-icon" />{" "}
@@ -74,32 +157,45 @@ function OrderPopup(props) {
           <Form>
             <Container className="m-4">
               <Row>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
-                <Col xs={4} className="p-2 order-popup-variant-checkbox">
-                  <Form.Check type={"checkbox"} id={``} label={`Cheese`} />
-                </Col>
+                {addOns.map((value, index, array) => {
+                  return (
+                    <Col
+                      xs={4}
+                      key={value.id + value.name}
+                      className="p-2 order-popup-variant-checkbox"
+                    >
+                      <Form.Check
+                        type={"checkbox"}
+                        id={``}
+                        checked={value.selected}
+                        onChange={(e) => {
+                          checkHandler(index);
+                        }}
+                        label={value.name}
+                      />
+                    </Col>
+                  );
+                })}
               </Row>
             </Container>
           </Form>
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button className="default-button order-popup-bottom-button">Add Multiple Variant</Button>
-        <Button className="default-button order-popup-bottom-button">Add To Cart</Button>
+        <Button
+          onClick={(e) => {
+            addMultipleVariantClicked(e);
+          }}
+          className="default-button order-popup-bottom-button"
+        >
+          Add Multiple Variant
+        </Button>
+        <Button
+          onClick={addToBillClicked}
+          className="default-button order-popup-bottom-button"
+        >
+          Add To Bill
+        </Button>
       </Modal.Footer>
     </Modal>
   );
