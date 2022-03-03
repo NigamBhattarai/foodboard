@@ -1,0 +1,37 @@
+@import "../../App.scss";
+body{
+    background: #EAECF5 !important;
+}
+.sideBar{
+    background-color: white;
+}
+.sidebar-link{
+    font-family: 'Barlow', sans-serif;
+}
+
+.sidebar-link:hover{
+    color:orange;
+    border-right: 5px orange solid;  
+}
+
+.active{
+    background: rgba(234, 124, 105, 0.29);
+    color:$orange_primary;
+    border-right: 5px $orange_primary solid;
+
+}
+
+.topbar{
+    background-color: white;
+    margin: 0px;
+    height:max-content;
+}
+.topbar-link{
+    padding: 10px 5px;
+    font-family: 'Barlow', sans-serif;
+}
+.topbar-link:hover{
+    background-color:$orange_primary;
+    color: white;
+
+}
