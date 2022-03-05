@@ -6,11 +6,10 @@ import AssignmentIcon from "@mui/icons-material/Assignment";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
 import LocalOfferIcon from "@mui/icons-material/LocalOffer";
 import SettingsIcon from "@mui/icons-material/Settings";
-class dashboard extends Component {
-  render() {
+function dashboard(props) {
     return (
       <Row>
-        <Col md={3} className=" sideBar">
+        <Col md={2} className="sideBar">
           <Row className="imagePane py-3">
             <Col md={9}>
               <img
@@ -53,7 +52,7 @@ class dashboard extends Component {
             </Row>
           </div>
         </Col>
-        <Col md={9} className="topbar">
+        <Col md={10} className="topbar">
           <Row>
           <Col md={1} className="topbar-link text-center mx-1">POS</Col>
           <Col md={1} className="topbar-link text-center mx-1">Order</Col>
@@ -61,13 +60,11 @@ class dashboard extends Component {
           <Col md={1} className="topbar-link text-center mx-1">Order</Col>
           </Row>
           <Row>
-            {this.props.children}
+            {props.children}
           </Row>
         </Col>
       </Row>
       
     );
   }
-}
-
 export default dashboard;
