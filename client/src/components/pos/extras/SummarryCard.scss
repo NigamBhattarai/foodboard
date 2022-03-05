@@ -1,0 +1,21 @@
+@import "../../../App.scss";
+
+.summaryCard {
+  background-color: white;
+  border-radius: 8px;
+}
+
+.valueType {
+  background: #333333;
+  border-radius: 8px;
+  color: white;
+}
+.changeValue {
+  color: $orange_primary;
+}
+.change {
+  color: $orange_primary;
+}
+.value{
+    font-weight: 800;
+}

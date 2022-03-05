@@ -2,7 +2,7 @@ import './App.scss';
 import POS from './components/pos/pos';
 import { Routes, Route } from "react-router";
 import TopBar from './components/pos/extras/TopBar';
-import Categories from './components/dashboard/Main';
+import Main from './components/dashboard/Main';
 import Dashboard from './components/dashboard/dashboard';
 
 

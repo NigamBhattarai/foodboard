@@ -129,21 +129,15 @@ export default class Main extends Component {
               <Col>
                 <DropdownButton id="dropdown-basic-button" title="Today">
                   <Dropdown.Item href="#/action-1">Yesterday</Dropdown.Item>
-                  <Dropdown.Item href="#/action-2">
-                    Last 7 days
-                  </Dropdown.Item>
-                  <Dropdown.Item href="#/action-3">
-                    This Month
-                  </Dropdown.Item>
+                  <Dropdown.Item href="#/action-2">Last 7 days</Dropdown.Item>
+                  <Dropdown.Item href="#/action-3">This Month</Dropdown.Item>
                 </DropdownButton>
               </Col>
             </Row>
             <hr />
             <Row>
               <Col>
-                <Row>
-
-                </Row>
+                <Row></Row>
               </Col>
             </Row>
           </Col>
