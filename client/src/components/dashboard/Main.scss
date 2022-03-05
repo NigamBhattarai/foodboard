@@ -1,0 +1,24 @@
+@import "../../App.scss";
+
+
+.order-report{
+    background-color: white;
+    color: #333;
+}
+.pill-completed{
+    color:#50D1AA !important;
+    background-color:rgba(107, 226, 190, 0.24) !important;
+}
+.order-report tbody{
+    color:#4f4f4f;
+    font-size: smaller;
+    font-weight: 200;
+}
+.order-report thead{
+    font-size:small;
+    font-weight: 200;
+    border-bottom: #F2f2f2 solid 1px;
+}
+.trending-tab{
+    background-color: white;
+}
