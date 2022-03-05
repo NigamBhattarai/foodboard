@@ -9,7 +9,7 @@ import {
   Dropdown,
   DropdownButton,
 } from "react-bootstrap";
-import SummaryCard from "../pos/extras/SummaryCard";
+import SummaryCard from "../pos/extras/SummaryCard.js";
 import "./Main.scss";
 export default class Main extends Component {
   render() {
