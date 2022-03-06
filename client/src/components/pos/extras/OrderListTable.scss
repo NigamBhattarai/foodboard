@@ -1,0 +1,29 @@
+@import "../../../App.scss";
+
+.badge{
+    height:25px !important;
+    width:90px !important;
+    font-size:14px;
+}
+.pill-completed{
+    color:#50D1AA !important;
+    background-color:rgba(107, 226, 190, 0.24) !important;
+}.pill-preparing{
+    color:#9290fe !important;
+    background-color: #9290FE33 !important;
+}.pill-pending{
+    color: #FFB572 !important;
+    background: rgba(255, 181, 114, 0.2) !important;
+}
+.orderTable Table{
+    color:#333333 !important;
+}
+
+.orderTable tbody{
+    font-size: smaller;
+}
+.orderTable thead{
+    font-size:small;
+    font-weight: 200;
+    border-bottom: #F2f2f2 solid 1px;
+}
