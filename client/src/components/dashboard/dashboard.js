@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import "./dashboard.scss";
 import { Row, Col } from "react-bootstrap";
 import DashboardIcon from "@mui/icons-material/Dashboard";

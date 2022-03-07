@@ -25,7 +25,7 @@ function SummaryCard(props) {
           {props.changeValue}%
         </Col>
         <Col md={3} className="change text-center">
-          {props.change=="0"?<ArrowCircleUpIcon />:<ArrowCircleDownIcon/>}
+          {props.change==="0"?<ArrowCircleUpIcon />:<ArrowCircleDownIcon/>}
         </Col>
       </Row>
       <Row className="value">
