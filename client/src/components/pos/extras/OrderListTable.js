@@ -54,6 +54,42 @@ export default function OrderListTable(props) {
                   Completed
                 </Badge>
               </td>
+            </tr><tr>
+              <td>22 Feb 2022,12:42 AM</td>
+              <td>#12354</td>
+              <td>Rs.400</td>
+              <td>
+                <Badge pill className="pill-completed">
+                  Completed
+                </Badge>
+              </td>
+            </tr><tr>
+              <td>22 Feb 2022,12:42 AM</td>
+              <td>#12354</td>
+              <td>Rs.400</td>
+              <td>
+                <Badge pill className="pill-completed">
+                  Completed
+                </Badge>
+              </td>
+            </tr><tr>
+              <td>22 Feb 2022,12:42 AM</td>
+              <td>#12354</td>
+              <td>Rs.400</td>
+              <td>
+                <Badge pill className="pill-completed">
+                  Completed
+                </Badge>
+              </td>
+            </tr><tr>
+              <td>22 Feb 2022,12:42 AM</td>
+              <td>#12354</td>
+              <td>Rs.400</td>
+              <td>
+                <Badge pill className="pill-completed">
+                  Completed
+                </Badge>
+              </td>
             </tr>
           </tbody>
         </Table>

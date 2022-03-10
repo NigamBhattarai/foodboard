@@ -1,6 +1,36 @@
 @import "../../App.scss";
 
-.order-report{
-    background-color: white;
-    color: #333 !important;
+.order-report {
+  background-color: white;
+  color: #333 !important;
+  height:80vh;
+}
+
+.detailOrder {
+  background-color: white;
+  border-radius: 8px;
+  height: 80vh;
+}
+.nav-tabs .active {
+  border-bottom: 4px solid #2f80ed !important;
+}
+.nav-tabs .active:hover {
+  border-bottom: 4px solid #2f80ed !important;
+}
+
+.nav-tabs button {
+  background-color: white;
+  margin-right: 45px;
+  border-color: white !important;
+}
+.nav-tabs button:hover {
+  border-bottom: 2px solid #2f80ed !important;
+}
+
+.item-list{
+  font-size:small;
+}
+
+.item-list .item-description{
+  font-weight: bolder;
 }
