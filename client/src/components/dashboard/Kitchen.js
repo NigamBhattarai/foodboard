@@ -1,29 +1,53 @@
-import React from 'react';
-import { Col, Button, Row, Container } from "react-bootstrap";
-import FormatListNumberedIcon from "@mui/icons-material/FormatListNumbered";
-import './kitchen.scss';
-import Kitchencomp from './Kitchencomp';
+import React, { useState } from "react";
+import { Row, Col, Container, Button } from "react-bootstrap";
+
+import AddBusinessIcon from "@mui/icons-material/AddBusiness";
+import OrderCard from "../pos/extras/OrderCard";
+import orderData from "./orders";
+
+function getFoodItems(orders) {
+  orders.map((order) => {
+    return order.foodItems.map((foodItem) => {
+      return console.log(foodItem.foodName);
+    });
+  });
+}
 
 function Kitchen(props) {
-    return (
-        <Container className="order-body">
-      <Row>
-        <Col xs={10} className="order-header">
-          Kitchen <Row className="date-time"> Tuesday 2 Feb, 2021 </Row>{" "}
-        </Col>{" "}
-        <Col xs={2} className="md-auto">
-          <Button className="filter-order">
-            <FormatListNumberedIcon className="filter-icon" />
-            Filter Order{" "}
+  const [orders, setOrders] = useState(orderData);
+
+  getFoodItems(orders);
+  return (
+    <Container fluid className="mx-2">
+      <Row className="title align-items-center">
+        <Col lg={3}>
+          <h2>Kitchen</h2>
+          <small className="text-muted">Tuesday 2,Feb,2021</small>
+        </Col>
+        <Col></Col>
+        <Col lg={2}>
+          <Button variant="light" className="titleButton">
+            <AddBusinessIcon className="mr-2" />
+            Filter Order
           </Button>{" "}
-        </Col>{" "}
-      </Row>{" "}
+        </Col>
+      </Row>
       <hr />
-      <Kitchencomp />
-      </Container>
 
-
-    );
+      <Row className="mt-3">
+        {orders.map((order) => (
+          <Col lg={4}>
+            <OrderCard
+              page="kitchen"
+              order={order}
+              key={order.id}
+              id={order.id}
+            />
+          </Col>
+        ))}
+      </Row>
+    </Container>
+  );
 }
 
 export default Kitchen;

@@ -6,11 +6,13 @@ import {
   Button,
   Dropdown,
   DropdownButton,
+  Table
 } from "react-bootstrap";
 import SummaryCard from "../pos/extras/SummaryCard.js";
 import OrderListTable from "../pos/extras/OrderListTable.js";
-import ListAltIcon from '@mui/icons-material/ListAlt';
+import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./Main.scss";
+import orderData from "./orders";
 
 export default class Main extends Component {
   render() {
@@ -38,7 +40,7 @@ export default class Main extends Component {
                 <SummaryCard
                   changeValue="2"
                   change="1"
-                  value="345"
+                  value="994"
                   valueType="Order"
                 />
               </Col>
@@ -53,30 +55,57 @@ export default class Main extends Component {
             </Row>
           </Col>
         </Row>
-        <Row className="mx-0 my-2 justify-content-between">
-          <Col lg={7} className="rounded order-report py-3">
+        <Row className="mt-4 justify-content-between">
+          <Col lg={7} >
+          <div className="rounded order-report py-3">
             <Row className="mx-0">
               <Col lg={4}>
                 <h4>Order Report</h4>
               </Col>
               <Col></Col>
               <Col lg={3}>
-              <Button variant="light" className="button1">
-              <ListAltIcon className="mr-2" />
-              
-              Full List
-            </Button>              </Col>
+                <Button variant="light" className="button1">
+                  <ListAltIcon className="mr-2" />
+                  Full List
+                </Button>{" "}
+              </Col>
             </Row>
-            <OrderListTable/>
+            <Table className="table-borderless" hover>
+                <thead>
+                  <tr>
+                    <th>Time</th>
+                    <th>Order ID</th>
+                    <th>Amount</th>
+                    <th>Status</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orderData.map((order) => {
+                    return (
+                      <OrderListTable
+                        order={order}
+                        key={order.id}
+                        id={order.id}
+                      />
+                    );
+                  })}
+                </tbody>
+              </Table>            </div>
           </Col>
-          <Col lg={4} className="trending-tab py-3 offset-1">
+          <Col lg={5} >
+          <div className="rounded trending-tab py-3">
             <Row className="mx-0">
               <Col>
                 <h4>Trending</h4>
               </Col>
               <Col></Col>
-              <Col>
-                <DropdownButton id="dropdown-basic-button" variant="light" className="button1" title="Today">
+              <Col lg={3}>
+                <DropdownButton
+                  id="dropdown-basic-button"
+                  variant="light"
+                  className="button1"
+                  title="Today"
+                >
                   <Dropdown.Item href="#/action-1">Yesterday</Dropdown.Item>
                   <Dropdown.Item href="#/action-2">Last 7 days</Dropdown.Item>
                   <Dropdown.Item href="#/action-3">This Month</Dropdown.Item>
@@ -89,6 +118,7 @@ export default class Main extends Component {
                 <Row></Row>
               </Col>
             </Row>
+            </div>
           </Col>
         </Row>
       </Container>
