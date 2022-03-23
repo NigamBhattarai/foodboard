@@ -12,39 +12,9 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import "./Categories.scss";
+import categoriesData from "./categoriesdata"
 function Categories() {
-  let categoryData = [
-    {
-      id: 1,
-      name: "Bread",
-      foodCount: 4,
-      status: "active",
-    },
-    {
-      id: 2,
-      name: "Curry",
-      foodCount: 4,
-      status: "inactive",
-    },
-    {
-      id: 3,
-      name: "Appetizers",
-      foodCount: 10,
-      status: "active",
-    },
-    {
-      id: 4,
-      name: "Fastfood",
-      foodCount: 11,
-      status: "inactive",
-    },
-    {
-      id: 5,
-      name: "Drinks",
-      foodCount: 9,
-      status: "active",
-    },
-  ];
+  let categoryData = categoriesData;
   const [categories, setCategories] = useState(categoryData);
   const [selected, setSelected] = useState([]);
   const [click, setClick] = useState(false);
