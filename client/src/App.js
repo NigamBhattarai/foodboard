@@ -17,7 +17,7 @@ function App() {
       <Route path='/orderpage' element={<Dashboard><Order /></Dashboard>} />
       <Route path='/kitchen' element={<Dashboard><Kitchen /></Dashboard>} />
       <Route path='/main' element={<Dashboard><Main /></Dashboard>} />
-      {/* <Route path='/food' element={<Dashboard><FoodManagement /></Dashboard>} /> */}
+      <Route path='/food' element={<Dashboard><FoodManagement /></Dashboard>} />
       <Route path='/categories' element={<Dashboard><Categories /></Dashboard>} />
       <Route path="/fullreport" element = {<Dashboard><FullReport/></Dashboard>} />
     </Routes>
