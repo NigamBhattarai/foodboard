@@ -8,6 +8,7 @@ import Main from './components/dashboard/Main';
 import Categories from './components/dashboard/Categories';
 import Dashboard from './components/dashboard/dashboard';
 import FoodManagement from './components/dashboard/FoodManagement';
+import AddOns from './components/dashboard/AddOns';
 
 
 function App() {
@@ -19,6 +20,7 @@ function App() {
       <Route path='/main' element={<Dashboard><Main /></Dashboard>} />
       <Route path='/food' element={<Dashboard><FoodManagement /></Dashboard>} />
       <Route path='/categories' element={<Dashboard><Categories /></Dashboard>} />
+      <Route path='/addons' element={<Dashboard><AddOns /></Dashboard>} />
       <Route path="/fullreport" element = {<Dashboard><FullReport/></Dashboard>} />
     </Routes>
   );

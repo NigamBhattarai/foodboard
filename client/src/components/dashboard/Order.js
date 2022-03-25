@@ -60,7 +60,7 @@ function Order(props) {
           <small className="text-muted">Tuesday 2,Feb,2021</small>
         </Col>
         <Col></Col>
-        <Col lg={3}>
+        <Col lg={4}>
           <Button variant="light" className="titleButton">
             <ListAltIcon className="mr-2" />
             Full Report{" "}

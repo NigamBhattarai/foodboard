@@ -25,10 +25,13 @@ function Kitchen(props) {
           <small className="text-muted">Tuesday 2,Feb,2021</small>
         </Col>
         <Col></Col>
-        <Col lg={2}>
-          <Button variant="light" className="titleButton">
+        <Col lg={4}>
+        <Button variant="light" className="titleButton">
             <AddBusinessIcon className="mr-2" />
             Filter Order
+          </Button><Button variant="light" className="titleButton">
+            <AddBusinessIcon className="mr-2" />
+            Order List
           </Button>{" "}
         </Col>
       </Row>
