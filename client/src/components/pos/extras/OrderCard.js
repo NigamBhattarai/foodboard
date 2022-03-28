@@ -9,6 +9,8 @@ import EditIcon from "@mui/icons-material/Edit";
 
 
 export default function OrderCard(props) {
+  console.log("Render Order Card:"+props.id)
+  const [foodItems,setFoodItems]=useState(props.order.foodItems)
   function renderStatus(status) {
     switch (status) {
       case "served":
@@ -39,6 +41,21 @@ export default function OrderCard(props) {
         return "foo";
     }
   }
+  function handleCallBack(getChecked,getId){
+    let status="pending";
+    if(getChecked)
+      status="preparing";
+    setFoodItems(prevFoodItems=>{
+      return prevFoodItems.map((foodItem)=>{
+        return foodItem.id===getId?{...foodItem,status:status}:foodItem
+      })
+    })
+    console.log("Update status in order:"+props.id)
+  }
+  function submitData(){
+    console.log("button Clicked")
+    props.handleCallback(foodItems,props.id)
+  }
   return (
     <Row className="orderCard pt-2 mx-0 mb-5">
       <Col lg={8} className="mb-4 top-row">
@@ -48,7 +65,7 @@ export default function OrderCard(props) {
       <Col>{props.page=="order" ? (props.order.status==='pending' && <Button style={{ width: "100%" }}><EditIcon/> Edit</Button>):(<Button>Time </Button>)}</Col>
       <Row className="mx-0 order-items">
         {props.order.foodItems.map((foodItem) => (
-          <OrderItems page={props.page} foodItems={foodItem} key={foodItem.id} id={foodItem.id} />
+          <OrderItems page={props.page} foodItems={foodItem} key={foodItem.id} id={foodItem.id} handleCallBack={handleCallBack}/>
         ))}
       </Row>
       <Col>
@@ -62,10 +79,10 @@ export default function OrderCard(props) {
               </span>
             ) : props.page === "kitchen" ? (
               <span>
-                <Button className="button-served">
-                  <DoneIcon />
+                <Button className="served">
+                  <DoneIcon onClick={submitData}/>
                 </Button>
-                <Button className="button-canceled ml-2">
+                <Button className="canceled ml-2">
                   <ClearIcon />
                 </Button>
               </span>
@@ -79,7 +96,7 @@ export default function OrderCard(props) {
               renderStatus(props.order.status)
             ) : props.page === "kitchen" ? (
               <span>
-                <Form.Check type={"checkbox"} label="Select All" />
+                <Form.Check type={"checkbox"} label="Select All"/>
               </span>
             ) : (
               <span></span>

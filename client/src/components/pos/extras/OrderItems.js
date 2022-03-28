@@ -3,6 +3,10 @@ import { Col, Row, Form, Badge } from "react-bootstrap";
 import "./OrderItems.scss";
 export default function OrderItems(props) {
   const foodItems=props.foodItems;
+  function onChange(event){
+    console.log(props.id+" checked")
+    props.handleCallBack(event.target.checked,foodItems.id)
+  }
   return (
     <div>
       <Row className="orderItems px-2">
@@ -25,7 +29,7 @@ export default function OrderItems(props) {
         </Col>
         <Col lg={3} className="item-total type">
           {props.page === "kitchen" ? (
-             foodItems.status==="pending"  ? (<Form.Check type={"checkbox"} />):
+             foodItems.status==="pending"  ? (<Form.Check type={"checkbox"} onChange={onChange} name="prepare"/>):
             (<Badge pill className="pill-preparing">Preparing</Badge>)
           ) : props.page==="order"?(<p>Rs.{foodItems.final_price}</p>):null}
         </Col>

@@ -1,19 +1,10 @@
 import React, { useState } from "react";
-import {
-  Row,
-  Col,
-  Container,
-  Button,
-  Table,
-  Badge,
-  Form,
-} from "react-bootstrap";
+import { Row, Col, Container, Button, Table, Badge } from "react-bootstrap";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
-import EditIcon from "@mui/icons-material/Edit";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import "./OrderReport.scss";
-function Categories() {
-    const [showModal, setShowModal] = useState(false);
+import OrderListPopUp from "../pos/extras/OrderListPopUp";
+function OrderReport() {
+  const [showModal, setShowModal] = useState(false);
   return (
     <Container fluid className="mx-2 categories">
       <Row className="title align-items-center mx-0">
@@ -61,14 +52,23 @@ function Categories() {
                   </Badge>
                 </td>
                 <td>
-                  <VisibilityIcon className="mr-2 icon" onClick={setShowModal(true)}></VisibilityIcon>
+                  <VisibilityIcon
+                    className="mr-2 icon"
+                    onClick={() => setShowModal(true)}
+                  ></VisibilityIcon>
                 </td>
               </tr>
             </tbody>
           </Table>
         </Col>
       </Row>
+      <OrderListPopUp
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+        }}
+      />
     </Container>
   );
 }
-export default Categories;
+export default OrderReport;
