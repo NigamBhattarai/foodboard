@@ -5,6 +5,7 @@ import TopBar from './components/pos/extras/TopBar';
 // import Categories from './components/dashboard/Categories';
 import Order from '../src/components/dashboard/Order';
 import Main from './components/dashboard/Main';
+import FullReport from './components/dashboard/FullReport';
 import Dashboard from './components/dashboard/dashboard';
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
       {/* <Route path="/dashboard" element = {<Categories show={true} onHide={() => {return true}}  />} /> */}
       <Route path='/orderpage'element={<Order />} />
       <Route path="/dashboard" element = {<Dashboard><Main show={true} onHide={() => {return true}}  /></Dashboard>} />
+      {/* <Route path="/dashboard" element = {<Dashboard><FullReport show={true} onHide={() => {return true}}  /></Dashboard>} /> */}
     </Routes>
   );
 }
