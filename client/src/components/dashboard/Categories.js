@@ -13,7 +13,6 @@ import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import "./Categories.scss";
-import categoriesData from "./categoriesdata"
 function Categories() {
   const [categories, setCategories] = useState([]);
   useEffect(()=>{

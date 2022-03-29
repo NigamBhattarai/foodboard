@@ -1,22 +1,28 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Row, Col, Container, Button } from "react-bootstrap";
 
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import OrderCard from "../pos/extras/OrderCard";
-import orderData from "./orders";
-
+import axios from "axios";
 
 function Kitchen(props) {
-  console.log("Render Kitchen")
-  const [orders, setOrders] = useState(orderData);
-  function handleCallback(foodItems,id){
-    console.log("Reached Here")
-    setOrders(prevOrders=>{
-      return prevOrders.map((order)=>{
-        return order.id===id?{...order,foodItems:foodItems}:order
-      })
-    })
-    console.log("Updated ALL")
+  console.log("Render Kitchen");
+  const [orders, setOrders] = useState([]);
+  useEffect(() => {
+    const fetchData = async () => {
+      const result = await axios.get("/api/orders");
+      setOrders(result.data);
+    };
+    fetchData();
+  }, []);
+  function handleCallback(foodItems, id) {
+    console.log("Reached Here");
+    setOrders((prevOrders) => {
+      return prevOrders.map((order) => {
+        return order.id === id ? { ...order, foodItems: foodItems } : order;
+      });
+    });
+    console.log("Updated ALL");
   }
   return (
     <Container fluid className="mx-2">
@@ -27,10 +33,11 @@ function Kitchen(props) {
         </Col>
         <Col></Col>
         <Col lg={4}>
-        <Button variant="light" className="titleButton">
+          <Button variant="light" className="titleButton">
             <AddBusinessIcon className="mr-2" />
             Filter Order
-          </Button>  <Button variant="light" className="titleButton">
+          </Button>{" "}
+          <Button variant="light" className="titleButton">
             <AddBusinessIcon className="mr-2" />
             Order List
           </Button>{" "}

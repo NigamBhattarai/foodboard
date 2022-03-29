@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Row,
   Col,
@@ -10,13 +10,20 @@ import {
   Tab,
   Table,
 } from "react-bootstrap";
-
+import axios from 'axios';
 import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./FullReport.scss";
 import OrderItems from "../pos/extras/OrderItems.js";
-import orderData from "./orders";
 function FullReport(props) {
+  const [orders,setOrders]=useState([])
+  useEffect(()=>{
+    const fetchData=async ()=>{
+      const result=await axios.get("/api/orders")
+      setOrders(result.data);
+    }
+    fetchData()
+  },[])
   const [selected, setSelected] = useState([]);
   const [click,setClick]=useState(false);
   function handleClick(order) {
@@ -72,7 +79,7 @@ function FullReport(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {orderData.map((order) => {
+                  {orders.map((order) => {
                     return (
                       <OrderListTable
                         order={order}

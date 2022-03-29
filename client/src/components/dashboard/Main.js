@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Row,
   Col,
@@ -12,10 +12,17 @@ import SummaryCard from "../pos/extras/SummaryCard.js";
 import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./Main.scss";
-import orderData from "./orders";
+import axios from 'axios';
 
-export default class Main extends Component {
-  render() {
+export default function Main(){
+  const [orders,setOrders]=useState([])
+  useEffect(()=>{
+    const fetchData=async ()=>{
+      const result=await axios.get("/api/orders")
+      setOrders(result.data);
+    }
+    fetchData()
+  },[])
     return (
       <Container fluid>
         <Row className="title">
@@ -80,7 +87,7 @@ export default class Main extends Component {
                   </tr>
                 </thead>
                 <tbody>
-                  {orderData.map((order) => {
+                  {orders.map((order) => {
                     return (
                       <OrderListTable
                         order={order}
@@ -124,4 +131,3 @@ export default class Main extends Component {
       </Container>
     );
   }
-}

@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useState,useEffect} from "react";
 import {
   Row,
   Col,
@@ -11,14 +11,13 @@ import {
   Sonnet,
 } from "react-bootstrap";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-
+import axios from 'axios';
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import "./Order.scss";
 import OrderCard from "../pos/extras/OrderCard";
 import EditIcon from "@mui/icons-material/Edit";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
-import orders from "./orders.js";
 
 const orderSummarys=[{
   orderNo:"#123",
@@ -51,7 +50,14 @@ const orderSummarys=[{
 
 
 function Order(props) {
-
+  const [orders,setOrders]=useState([])
+  useEffect(()=>{
+    const fetchData=async ()=>{
+      const result=await axios.get("/api/orders")
+      setOrders(result.data);
+    }
+    fetchData()
+  },[])
   return (
     <Container fluid className="mx-2 order start">
       <Row className="title align-items-center">

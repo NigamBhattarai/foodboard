@@ -9,4 +9,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.get('/api/categories',(req,res)=>{
     res.send(data.categories)
 })
+app.get('/api/orders',(req,res)=>{
+    res.send(data.orders)
+})
 app.listen(port, () => console.log(`Example app listening on port ${port}!`))
