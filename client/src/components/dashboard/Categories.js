@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import {
   Row,
   Col,
@@ -8,14 +8,21 @@ import {
   Badge,
   Form,
 } from "react-bootstrap";
+import axios from 'axios'
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import EditIcon from "@mui/icons-material/Edit";
 import ClearIcon from "@mui/icons-material/Clear";
 import "./Categories.scss";
 import categoriesData from "./categoriesdata"
 function Categories() {
-  let categoryData = categoriesData;
-  const [categories, setCategories] = useState(categoryData);
+  const [categories, setCategories] = useState([]);
+  useEffect(()=>{
+    const fetchData=async ()=>{
+      const result=await axios.get("/api/categories")
+      setCategories(result.data);
+    }
+    fetchData()
+  },[])
   const [selected, setSelected] = useState([]);
   const [click, setClick] = useState(false);
   function editCategory(category) {
