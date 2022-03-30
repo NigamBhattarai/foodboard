@@ -10,6 +10,7 @@ import Dashboard from './components/dashboard/dashboard';
 import FoodManagement from './components/dashboard/FoodManagement';
 import AddOns from './components/dashboard/AddOns';
 import OrderReport from './components/dashboard/OrderReport';
+import React from 'react';
 
 
 function App() {

@@ -1,9 +1,42 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useReducer } from "react";
 import { Row, Col, Container, Button, Table, Badge } from "react-bootstrap";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import VisibilityIcon from "@mui/icons-material/Visibility";
-import OrderListPopUp from "../pos/extras/OrderListPopUp";
+import axios from "axios";
+
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, orders: action.payload, loading: false };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
 function OrderReport() {
+  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+    orders: [],
+    loading: true,
+    error: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
+      try {
+        const result = await axios.get("/api/orders");
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: err.message });
+      }
+    };
+    fetchData();
+  }, []);
   const [showModal, setShowModal] = useState(false);
   return (
     <Container fluid className="mx-2 categories">
@@ -41,10 +74,10 @@ function OrderReport() {
               </tr>
             </thead>
             <tbody>
-              <tr>
-                <td>12 January 2022</td>
+              {orders.map((order)=>{return (<tr>
+                <td>{order.ordered_time}</td>
                 <td>12:40</td>
-                <td>#84237</td>
+                <td>{order.token_number}</td>
                 <td>3</td>
                 <td>
                   <Badge pill bg="primary" className="pill-pending">
@@ -57,17 +90,11 @@ function OrderReport() {
                     onClick={() => setShowModal(true)}
                   ></VisibilityIcon>
                 </td>
-              </tr>
+              </tr>)})}
             </tbody>
           </Table>
         </Col>
       </Row>
-      <OrderListPopUp
-        show={showModal}
-        onHide={() => {
-          setShowModal(false);
-        }}
-      />
     </Container>
   );
 }

@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState,useEffect,useReducer } from "react";
 import {
   Row,
   Col,
@@ -15,15 +15,40 @@ import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./FullReport.scss";
 import OrderItems from "../pos/extras/OrderItems.js";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, orders: action.payload, loading: false };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
+
 function FullReport(props) {
-  const [orders,setOrders]=useState([])
-  useEffect(()=>{
-    const fetchData=async ()=>{
-      const result=await axios.get("/api/orders")
-      setOrders(result.data);
-    }
-    fetchData()
-  },[])
+  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+    orders: [],
+    loading: true,
+    error: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
+      try {
+        const result = await axios.get("/api/orders");
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: err.message });
+      }
+    };
+    fetchData();
+  }, []);
   const [selected, setSelected] = useState([]);
   const [click,setClick]=useState(false);
   function handleClick(order) {

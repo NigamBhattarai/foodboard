@@ -16,13 +16,11 @@ function Kitchen(props) {
     fetchData();
   }, []);
   function handleCallback(foodItems, id) {
-    console.log("Reached Here");
     setOrders((prevOrders) => {
       return prevOrders.map((order) => {
         return order.id === id ? { ...order, foodItems: foodItems } : order;
       });
     });
-    console.log("Updated ALL");
   }
   return (
     <Container fluid className="mx-2">
