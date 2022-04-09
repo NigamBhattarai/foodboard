@@ -1,6 +1,6 @@
 import React from "react";
 import "./dashboard.scss";
-import { Row, Col } from "react-bootstrap";
+import { Row, Col, Container } from "react-bootstrap";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import AssignmentIcon from "@mui/icons-material/Assignment";
 import LocalDiningIcon from "@mui/icons-material/LocalDining";
@@ -14,6 +14,7 @@ function Dashboard(props) {
   const { pathname } = location;
   const splitLocation = pathname.split("/");
   return (
+    <Container fluid>
     <Row>
       <Col md={2} className="sideBar">
         <Row className="imagePane py-3">
@@ -137,6 +138,7 @@ function Dashboard(props) {
         <Row className="m-1">{props.children}</Row>
       </Col>
     </Row>
+    </Container>
   );
 }
 export default Dashboard;
