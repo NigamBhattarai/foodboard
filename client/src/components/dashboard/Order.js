@@ -1,57 +1,45 @@
-import React from "react";
-import {
-  Row,
-  Col,
-  Container,
-  Button,
-  Dropdown,
-  DropdownButton,
-  Tabs,
-  Tab,
-  Sonnet,
-} from "react-bootstrap";
+import React, { useReducer, useEffect } from "react";
+import { Row, Col, Container, Button } from "react-bootstrap";
 import ListAltIcon from "@mui/icons-material/ListAlt";
-
+import axios from "axios";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import "./Order.scss";
 import OrderCard from "../pos/extras/OrderCard";
-import EditIcon from "@mui/icons-material/Edit";
-import DoneIcon from "@mui/icons-material/Done";
-import ClearIcon from "@mui/icons-material/Clear";
-import orders from "./orders.js";
+import LoadingBox from "./components/LoadingBox";
+import MessageBox from "./components/MessageBox";
 
-const orderSummarys=[{
-  orderNo:"#123",
-  orderInfo:"served",
-},{
-  orderNo:"#123",
-  orderInfo:"pending",
-},{
-  orderNo:"#123",
-  orderInfo:"preparing",
-},{
-  orderNo:"#123",
-  orderInfo:"incounter",
-},{
-  orderNo:"#123",
-  orderInfo:"canceled",
-},{
-  orderNo:"#123",
-  orderInfo:"served",
-},{
-  orderNo:"#123",
-  orderInfo:"served",
-},{
-  orderNo:"#123",
-  orderInfo:"served",
-},{
-  orderNo:"#123",
-  orderInfo:"served",
-},];
-
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, orders: action.payload, loading: false };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
 
 function Order(props) {
+  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+    orders: [],
+    loading: true,
+    error: "",
+  });
 
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
+      try {
+        const result = await axios.get("/api/orders");
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: err.message });
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <Container fluid className="mx-2 order start">
       <Row className="title align-items-center">
@@ -72,22 +60,35 @@ function Order(props) {
         </Col>
       </Row>
       <hr />
-      <Row className="orderSummary mr-3">
-        <Col>
-        {orderSummarys.map((orderSummary)=>
-        <Button className={`${orderSummary.orderInfo}`}>
-            {orderSummary.orderNo}
-          </Button>
-        )}
-          
-        </Col>
-      </Row>
-      <Row className="mt-3">
-        {orders.map((order)=><Col lg={4}>
-          <OrderCard page="order" order={order}/>
-        </Col>)}
-        
-      </Row>
+      <div className="main-body">
+
+      {loading ? (
+        <center>
+          <LoadingBox />
+        </center>
+      ) : error ? (
+        <MessageBox variant="danger">{error}</MessageBox>
+      ) : (
+        <>
+          <Row className="orderSummary mr-3">
+            <Col>
+              {orders.map((order) => (
+                <Button className={`${order.status}`}>
+                  {order.token_number}
+                </Button>
+              ))}
+            </Col>
+          </Row>
+          <Row className="mt-3">
+            {orders.map((order) => (
+              <Col lg={4}>
+                <OrderCard page="order" order={order} />
+              </Col>
+            ))}
+          </Row>
+        </>
+      )}{" "}
+      </div>
     </Container>
   );
 }

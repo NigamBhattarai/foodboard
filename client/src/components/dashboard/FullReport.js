@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState,useEffect,useReducer } from "react";
 import {
   Row,
   Col,
@@ -10,13 +10,45 @@ import {
   Tab,
   Table,
 } from "react-bootstrap";
-
+import axios from 'axios';
 import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./FullReport.scss";
 import OrderItems from "../pos/extras/OrderItems.js";
-import orderData from "./orders";
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "FETCH_REQUEST":
+      return { ...state, loading: true };
+    case "FETCH_SUCCESS":
+      return { ...state, orders: action.payload, loading: false };
+    case "FETCH_FAIL":
+      return { ...state, loading: false, error: action.payload };
+    default:
+      return state;
+  }
+}
+
+
 function FullReport(props) {
+  const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
+    orders: [],
+    loading: true,
+    error: "",
+  });
+
+  useEffect(() => {
+    const fetchData = async () => {
+      dispatch({ type: "FETCH_REQUEST" });
+      try {
+        const result = await axios.get("/api/orders");
+        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+      } catch (err) {
+        dispatch({ type: "FETCH_FAIL", payload: err.message });
+      }
+    };
+    fetchData();
+  }, []);
   const [selected, setSelected] = useState([]);
   const [click,setClick]=useState(false);
   function handleClick(order) {
@@ -25,7 +57,7 @@ function FullReport(props) {
   }
 
   return (
-    <Container fluid className="mx-2">
+    <Container fluid>
       <Row className="title align-items-center">
         <Col lg={3}>
           <h2>Full Report</h2>
@@ -46,6 +78,8 @@ function FullReport(props) {
         </Col>
       </Row>
       <hr />
+      <div className="main-body">
+
       <Row>
         <Col lg={7}>
           <div className="order-report py-3 rounded">
@@ -72,7 +106,7 @@ function FullReport(props) {
                   </tr>
                 </thead>
                 <tbody>
-                  {orderData.map((order) => {
+                  {orders.map((order) => {
                     return (
                       <OrderListTable
                         order={order}
@@ -118,6 +152,7 @@ function FullReport(props) {
           </div>
         </Col>
       </Row>
+      </div>
     </Container>
   );
 }
