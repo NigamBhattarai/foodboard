@@ -6,34 +6,3 @@
     display: none;
   }
 }
-
-.item-card {
-  border-radius: 20px;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  padding-bottom: 40px;
-  &:hover .item-card-btn {
-    background: $orange_light_primary;
-    color: $orange_secondary;
-  }
-}
-.item-card-desc {
-  color: #4f4f4f;
-}
-.item-card-btn {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
-  border-radius: 0px !important;
-  padding: 15px;
-  background: $orange_light_secondary !important;
-  color: $orange_primary !important;
-  box-shadow: none !important;
-  border: none;
-  &:hover {
-    background: $orange_light_primary !important;
-    color: $orange_secondary !important;
-  }
-}
