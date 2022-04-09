@@ -28,7 +28,7 @@ function reducer(state, action) {
       return state;
   }
 }
-function Categories() {
+function AddOns() {
   const [{ loading, error, categories }, dispatch] = useReducer(reducer, {
     categories: [],
     loading: true,
@@ -66,7 +66,7 @@ function Categories() {
         <Col lg={2}>
           <Row>
             {" "}
-            <h2>Categories</h2>
+            <h2>AddOns</h2>
             <small className="text-muted">Tuesday 2,Feb,2021</small>{" "}
           </Row>
         </Col>
@@ -76,12 +76,12 @@ function Categories() {
         <Col lg={2}>
           <Button variant="light" className="titleButton">
             <AddBusinessIcon className="mr-2" />
-            Manage AddOns
+            Manage Categories
           </Button>{" "}
         </Col>
       </Row>
       <hr />
-      <div className="main-body">
+
       <Row>
         <Col md="7">
           {loading ? (
@@ -96,7 +96,7 @@ function Categories() {
                 <tr>
                   <th>Image</th>
                   <th>Name</th>
-                  <th>Food Count</th>
+                  <th>Price</th>
                   <th>Status</th>
                   <th>Action</th>
                 </tr>
@@ -142,7 +142,7 @@ function Categories() {
           <Row>
             {" "}
             <Col md={8}>
-              <h4>{click ? "Update" : "Add New"} Category</h4>
+              <h4>{click ? "Update" : "Add New"} AddOns</h4>
             </Col>
             {click && (
               <Button
@@ -153,7 +153,7 @@ function Categories() {
                   setSelected([]);
                 }}
               >
-                Add New Category
+                Add New AddOns
               </Button>
             )}
           </Row>
@@ -162,7 +162,7 @@ function Categories() {
           <Form>
             <Form.Control
               type="text"
-              placeholder="Category Name"
+              placeholder="AddOns Name"
               className="formlen"
               value={selected.name}
               onChange={handleChange}
@@ -198,8 +198,7 @@ function Categories() {
           </Form>
         </Col>
       </Row>
-      </div>
     </Container>
   );
 }
-export default Categories;
+export default AddOns;

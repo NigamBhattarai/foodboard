@@ -1,0 +1,19 @@
+@import "../../../App.scss";
+
+.item-name,
+.item-qty,
+.item-total {
+  font-weight: 600 !important;
+  font-size: 16px !important;
+}
+.item-addons {
+  font-weight: 400 !important;
+  font-size: 14px !important;
+  color: #4f4f4f !important;
+}
+
+.item-total{
+  display: flex;
+  align-items: center;
+    justify-content: center;
+}

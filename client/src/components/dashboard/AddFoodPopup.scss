@@ -1,0 +1,45 @@
+@import "../../App.scss";
+.order-popup-modal {
+  font-family: "Barlow", sans-serif;
+}
+.order-popup-item-name {
+  font-weight: bold;
+  font-size: 18px;
+}
+.order-popup-close-btn{
+    cursor: pointer;
+    color: $orange_primary;
+    &:hover {
+        color: $orange_secondary;
+    }
+    &:active {
+        color: $orange_light_primary;
+    }
+}
+.order-popup-item-count {
+  padding: 10px 5px;
+  border-radius: 10px;
+  font-size: 15px;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+.order-popup-in-out {
+  color: $orange_primary;
+}
+.order-popup-item-dropdown {
+  padding: 10px;
+  background: #ffffff;
+  border: 1px solid #c4c4c4;
+  box-sizing: border-box;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+}
+.order-popup-bottom-button {
+    width: 250px;
+    height: 45px;
+    font-size: 13px;
+}
+.order-popup-cancel-icon{
+    color: $orange_primary;
+}

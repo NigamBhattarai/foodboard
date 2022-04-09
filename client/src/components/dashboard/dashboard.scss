@@ -1,18 +1,17 @@
 @import "../../App.scss";
 body{
-    background: #EAECF5 !important;
+    background: #e5e5e5 !important;
 }
 .sideBar{
     background-color: white;
-    height:100vh;
+    height: 98vh;
 }
 .sidebar-link{
     font-family: 'Barlow', sans-serif;
 }
 
 .sidebar-link:hover{
-    color:orange;
-    border-right: 5px orange solid;  
+    border-right: 5px $orange_primary solid;  
 }
 
 .sideBar .active{
@@ -25,14 +24,32 @@ body{
 .topbar{
     background-color: white;
     margin: 0px;
-    height:max-content;
+    height:5vh;
 }
 .topbar-link{
-    padding: 10px 5px;
     font-family: 'Barlow', sans-serif;
 }
 .topbar-link:hover{
     background-color:$orange_primary;
     color: white;
 
+}
+
+a{
+    text-decoration: none;
+    color:#212529;
+
+}
+.sidebar-link.active a{
+    color:$orange_primary;
+    text-decoration: none;
+}
+.sidebar-link a:hover{
+    color:$orange_primary;
+    text-decoration: none;
+}
+
+.topbar-link a:hover{
+    color:white;
+    text-decoration:none
 }
