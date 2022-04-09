@@ -1,1 +1,9 @@
 @import "../../App.scss";
+.add-new-item-card {
+    user-select: none;
+    cursor: pointer;
+    transition: .3s ease;
+    &:hover {
+        background: rgba($color: $orange_light_secondary, $alpha: 0.6);
+    }
+}

@@ -1,126 +1,111 @@
-import React, { useState } from "react";
+import React, { useState, createContext, useReducer, useEffect } from "react";
 import { Row, Col, Container, Button, Card } from "react-bootstrap";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
 import categoriesdata from "./categoriesdata";
 import "./FoodManagement.scss";
+import ItemsCard from "../pos/extras/ItemsCard";
+
+const initialState = {
+  itemData: [],
+};
+
+function posReducer(state, action) {
+  switch (action.type) {
+    //Item Data State
+    case "addItemData":
+      return { ...state, itemData: [...state.itemData, action.value] };
+    case "updateItemData":
+      return { ...state, itemData: action.value };
+    case "setInitialItemData":
+      const itemData = [
+        {
+          id: 1,
+          image:
+            "https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg",
+          name: "Chicken Tandoori",
+          price: 400,
+          available_stock: 30,
+        },
+      ];
+      for (var i = 0; i < 15; i++) {
+        itemData.push({
+          id: i + 2,
+          image:
+            "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
+          name: "Jhol Momo",
+          price: 200,
+          available_stock: 30,
+        });
+      }
+      return { ...state, itemData: itemData };
+
+    default:
+      return state;
+  }
+}
+
+export const FoodManagementContext = createContext();
+
 function FoodManagement(props) {
+  const [state, dispatch] = useReducer(posReducer, initialState);
+  const [nullState] = useState(null);
+
+  function itemCardsGrid(itemData) {
+    var rows = [];
+    itemData.forEach((value, index, array) => {
+      rows.push(<ItemsCard index={index} value={value} />);
+    });
+    return rows;
+  }
+  useEffect(() => {
+    dispatch({ type: "setInitialItemData" });
+  }, [nullState]);
+
   return (
-    <Container fluid className="mx-2">
-      <Row className="title align-items-center">
-        <Col lg={3}>
-          <h2>Full Report</h2>
-          <small className="text-muted">Tuesday 2,Feb,2021</small>
-        </Col>
-        <Col></Col>
-        <Col lg={2}>
-          <Button variant="light" className="button1">
-            Manage AddOns
-          </Button>
-        </Col>
-      </Row>
-      <hr />
-      <Row className="mx-0">
-        <div className="header-category-menu  py-2">
-          <Button variant="link" className="active mr-1">
-            All <span className="active-underline"></span>{" "}
-          </Button>
-          {categoriesdata.map((category) => (
-            <Button variant="link" className="mr-1">
-              {category.name} <span className="active-underline"></span>{" "}
+    <FoodManagementContext.Provider value={{ state, dispatch }}>
+      <Container fluid className="mx-2">
+        <Row className="title align-items-center">
+          <Col lg={3}>
+            <h2>Full Report</h2>
+            <small className="text-muted">Tuesday 2,Feb,2021</small>
+          </Col>
+          <Col></Col>
+          <Col lg={2}>
+            <Button variant="light" className="button1">
+              Manage AddOns
             </Button>
-          ))}
-        </div>
-        </Row>
-        <Row className="mt-4">
-        <Col lg={3}>
-            <Card className="item-card d-flex align-items-center justify-content-center" style={{height:"100%",border:"dashed 3px #EA7C69",color:"#EA7C69"}}>
-            Add New Food
-             <h1>+</h1>
-            </Card>
-          </Col><Col lg={3}>
-            <Card className="item-card">
-              <Card.Img
-                className="rounded-circle px-5 py-3"
-                variant="top"
-                src="https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Chicken Tandoori</Card.Title>
-                <Card.Text className="item-card-desc">Rs. 500 &nbsp; &nbsp;5 varient</Card.Text>
-                <Button className="default-button item-card-btn">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Add Dish
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col><Col lg={3}>
-            <Card className="item-card">
-              <Card.Img
-                className="rounded-circle px-5 py-3"
-                variant="top"
-                src="https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Chicken Tandoori</Card.Title>
-                <Card.Text className="item-card-desc">Rs. 500 &nbsp; &nbsp;5 varient</Card.Text>
-                <Button className="default-button item-card-btn">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Add Dish
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col><Col lg={3}>
-            <Card className="item-card">
-              <Card.Img
-                className="rounded-circle px-5 py-3"
-                variant="top"
-                src="https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Chicken Tandoori</Card.Title>
-                <Card.Text className="item-card-desc">Rs. 500 &nbsp; &nbsp;5 varient</Card.Text>
-                <Button className="default-button item-card-btn">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Add Dish
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col><Col lg={3}>
-            <Card className="item-card">
-              <Card.Img
-                className="rounded-circle px-5 py-3"
-                variant="top"
-                src="https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Chicken Tandoori</Card.Title>
-                <Card.Text className="item-card-desc">Rs. 500 &nbsp; &nbsp;5 varient</Card.Text>
-                <Button className="default-button item-card-btn">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Add Dish
-                </Button>
-              </Card.Body>
-            </Card>
-          </Col><Col lg={3}>
-            <Card className="item-card">
-              <Card.Img
-                className="rounded-circle px-5 py-3"
-                variant="top"
-                src="https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg"
-              />
-              <Card.Body>
-                <Card.Title>Chicken Tandoori</Card.Title>
-                <Card.Text className="item-card-desc">Rs. 500 &nbsp; &nbsp;5 varient</Card.Text>
-                <Button className="default-button item-card-btn">
-                  {" "}
-                  <FontAwesomeIcon icon={faPlus} /> Add Dish
-                </Button>
-              </Card.Body>
-            </Card>
           </Col>
         </Row>
-    </Container>
+        <hr />
+        <Row className="mx-0">
+          <div className="header-category-menu  py-2">
+            <Button variant="link" className="active mr-1">
+              All <span className="active-underline"></span>{" "}
+            </Button>
+            {categoriesdata.map((category) => (
+              <Button variant="link" className="mr-1">
+                {category.name} <span className="active-underline"></span>{" "}
+              </Button>
+            ))}
+          </div>
+        </Row>
+        <Row className="mt-4">
+          <Col lg={3}>
+            <Card
+              className="item-card add-new-item-card d-flex align-items-center justify-content-center"
+              style={{
+                height: "100%",
+                border: "dashed 3px #EA7C69",
+                color: "#EA7C69",
+              }}
+            >
+              Add New Food
+              <h1>+</h1>
+            </Card>
+          </Col>
+          {itemCardsGrid(state.itemData)}
+        </Row>
+      </Container>
+    </FoodManagementContext.Provider>
   );
 }
 
