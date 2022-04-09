@@ -57,7 +57,7 @@ function FullReport(props) {
   }
 
   return (
-    <Container fluid className="mx-2">
+    <Container fluid>
       <Row className="title align-items-center">
         <Col lg={3}>
           <h2>Full Report</h2>
@@ -78,6 +78,8 @@ function FullReport(props) {
         </Col>
       </Row>
       <hr />
+      <div className="main-body">
+
       <Row>
         <Col lg={7}>
           <div className="order-report py-3 rounded">
@@ -150,6 +152,7 @@ function FullReport(props) {
           </div>
         </Col>
       </Row>
+      </div>
     </Container>
   );
 }

@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
-
+const dotenv = require('dotenv');
 function connectDB(){
-    mongoose.connect("mongodb://localhost:27017/foodboard",{useUnifiedTopology:true,useNewUrlParser:true})
+    dotenv.config();
+    mongoose.connect(process.env.MONGODB_URI,{useUnifiedTopology:true,useNewUrlParser:true})
     const connection=mongoose.connection;
 
     connection.on("connected",()=>{

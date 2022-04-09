@@ -11,20 +11,23 @@ import FoodManagement from './components/dashboard/FoodManagement';
 import AddOns from './components/dashboard/AddOns';
 import OrderReport from './components/dashboard/OrderReport';
 import React from 'react';
-
+import SignIn from './components/dashboard/SignIn';
+import SignUp from './components/dashboard/SignUp';
 
 function App() {
   return (
     <Routes>
       <Route index element = {<POS />} />
-      <Route path='/orderpage' element={<Dashboard><Order /></Dashboard>} />
+      <Route path='/orders' element={<Dashboard><Order /></Dashboard>} />
       <Route path='/kitchen' element={<Dashboard><Kitchen /></Dashboard>} />
-      <Route path='/main' element={<Dashboard><Main /></Dashboard>} />
+      <Route path='/dashboard' element={<Dashboard><Main /></Dashboard>} />
       <Route path='/food' element={<Dashboard><FoodManagement /></Dashboard>} />
       <Route path='/categories' element={<Dashboard><Categories /></Dashboard>} />
       <Route path='/addons' element={<Dashboard><AddOns /></Dashboard>} />
       <Route path="/fullreport" element = {<Dashboard><FullReport/></Dashboard>} />
       <Route path="/orderreport" element = {<Dashboard><OrderReport/></Dashboard>} />
+      <Route path="/signin" element = {<SignIn/>} />
+      <Route path="/signup" element = {<SignUp/>} />
     </Routes>
   );
 }

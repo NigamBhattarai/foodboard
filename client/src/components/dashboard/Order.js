@@ -60,6 +60,8 @@ function Order(props) {
         </Col>
       </Row>
       <hr />
+      <div className="main-body">
+
       {loading ? (
         <center>
           <LoadingBox />
@@ -86,6 +88,7 @@ function Order(props) {
           </Row>
         </>
       )}{" "}
+      </div>
     </Container>
   );
 }

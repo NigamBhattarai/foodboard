@@ -11,7 +11,7 @@ function SummaryCard(props) {
   return (
     <Col className="summaryCard">
       <Row className="p-3 align-items-center">
-        <Col md={2} className="valueType p-1 text-center">
+        <Col md={3} className="valueType px-2 py-1">
         {
     props.valueType === "Revenue" ? (
       <CurrencyRupeeIcon />

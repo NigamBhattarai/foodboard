@@ -42,6 +42,7 @@ function Kitchen(props) {
         </Col>
       </Row>
       <hr />
+      <div className="main-body">
 
       <Row className="mt-3">
         {orders.map((order) => (
@@ -56,6 +57,7 @@ function Kitchen(props) {
           </Col>
         ))}
       </Row>
+      </div>
     </Container>
   );
 }

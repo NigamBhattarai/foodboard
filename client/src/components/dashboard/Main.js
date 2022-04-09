@@ -24,7 +24,7 @@ export default function Main() {
     fetchData();
   }, []);
   return (
-    <Container fluid>
+    <Container fluid >
       <Row className="title">
         <Col>
           <h2>Dashboard</h2>
@@ -32,6 +32,7 @@ export default function Main() {
         </Col>
       </Row>
       <hr />
+      <div className="main-body">
       <Row>
         <Col lg={7}>
           <Row>
@@ -87,7 +88,31 @@ export default function Main() {
                 </tr>
               </thead>
               <tbody>
-                {orders.map((order) => {
+              {orders.map((order) => {
+                  return (
+                    <OrderListTable
+                      order={order}
+                      key={order.id}
+                      id={order.id}
+                    />
+                  );
+                })}{orders.map((order) => {
+                  return (
+                    <OrderListTable
+                      order={order}
+                      key={order.id}
+                      id={order.id}
+                    />
+                  );
+                })}{orders.map((order) => {
+                  return (
+                    <OrderListTable
+                      order={order}
+                      key={order.id}
+                      id={order.id}
+                    />
+                  );
+                })}{orders.map((order) => {
                   return (
                     <OrderListTable
                       order={order}
@@ -129,6 +154,7 @@ export default function Main() {
           </div>
         </Col>
       </Row>
+      </div>
     </Container>
   );
 }

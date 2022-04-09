@@ -81,7 +81,7 @@ function Categories() {
         </Col>
       </Row>
       <hr />
-
+      <div className="main-body">
       <Row>
         <Col md="7">
           {loading ? (
@@ -198,6 +198,7 @@ function Categories() {
           </Form>
         </Col>
       </Row>
+      </div>
     </Container>
   );
 }

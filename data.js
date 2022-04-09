@@ -1,36 +1,58 @@
+const bcrypt = require("bcryptjs");
 const data = {
+  users: [
+    {
+      firstname: "anmol",
+      lastname: "pradhan",
+      email: "anamol@gmail.com",
+      mobile: "9846075945",
+      profile_img: "profile_img.jpg",
+      password: bcrypt.hashSync("123456"),
+    },
+  ],
   categories: [
     {
-      id: 1,
+      //id: 1,
       name: "Bread",
       foodCount: 4,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
       status: "active",
     },
     {
-      id: 2,
+      //id: 2,
       name: "Curry",
       foodCount: 4,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
       status: "inactive",
     },
     {
-      id: 3,
+      //id: 3,
       name: "Appetizers",
       foodCount: 10,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
       status: "active",
     },
     {
-      id: 4,
+      //id: 4,
       name: "Fastfood",
       foodCount: 11,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
       status: "inactive",
     },
     {
-      id: 5,
+      //id: 5,
       name: "Drinks",
       foodCount: 9,
+      image:
+        "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
       status: "active",
     },
-  ],orders:[
+  ],
+  orders: [
     {
       id: 1,
       token_number: "#4383",
@@ -48,6 +70,14 @@ const data = {
         },
         {
           id: 2,
+          foodName: "chowmien",
+          addOns: ["extra jhol", "extra achar"],
+          final_price: 3000,
+          qty: 3,
+          status: "pending",
+        },
+        {
+          id: 3,
           foodName: "chowmien",
           addOns: ["extra jhol", "extra achar"],
           final_price: 3000,
@@ -81,7 +111,7 @@ const data = {
         },
       ],
     },
-  ]
+  ],
 };
 
-module.exports= data;
+module.exports = data;
