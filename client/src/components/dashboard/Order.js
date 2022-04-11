@@ -8,6 +8,8 @@ import OrderCard from "../pos/extras/OrderCard";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 
+import DoneIcon from "@mui/icons-material/Done";
+import ClearIcon from "@mui/icons-material/Clear"
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -74,6 +76,7 @@ function Order(props) {
             <Col>
               {orders.map((order) => (
                 <Button className={`${order.status}`}>
+                  {(order.status === "served" || order.status==="pending")?(<DoneIcon/>):(order.status==="canceled")?(<ClearIcon/>):(<></>)}
                   {order.token_number}
                 </Button>
               ))}
