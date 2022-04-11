@@ -9,7 +9,7 @@ import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 
 import DoneIcon from "@mui/icons-material/Done";
-import ClearIcon from "@mui/icons-material/Clear"
+import ClearIcon from "@mui/icons-material/Clear";
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -63,34 +63,39 @@ function Order(props) {
       </Row>
       <hr />
       <div className="main-body">
-
-      {loading ? (
-        <center>
-          <LoadingBox />
-        </center>
-      ) : error ? (
-        <MessageBox variant="danger">{error}</MessageBox>
-      ) : (
-        <>
-          <Row className="orderSummary mr-3">
-            <Col>
-              {orders.map((order) => (
-                <Button className={`${order.status}`}>
-                  {(order.status === "served" || order.status==="pending")?(<DoneIcon/>):(order.status==="canceled")?(<ClearIcon/>):(<></>)}
-                  {order.token_number}
-                </Button>
-              ))}
-            </Col>
-          </Row>
-          <Row className="mt-3">
-            {orders.map((order) => (
-              <Col lg={4}>
-                <OrderCard page="order" order={order} />
+        {loading ? (
+          <center>
+            <LoadingBox />
+          </center>
+        ) : error ? (
+          <MessageBox variant="danger">{error}</MessageBox>
+        ) : (
+          <>
+            <Row className="orderSummary mr-3">
+              <Col>
+                {orders.map((order) => (
+                  <Button className={`${order.status}`}>
+                    {order.status === "served" || order.status === "pending" ? (
+                      <DoneIcon />
+                    ) : order.status === "canceled" ? (
+                      <ClearIcon />
+                    ) : (
+                      <></>
+                    )}
+                    {order.token_number}
+                  </Button>
+                ))}
               </Col>
-            ))}
-          </Row>
-        </>
-      )}{" "}
+            </Row>
+            <Row className="mt-3">
+              {orders.map((order) => (
+                <Col lg={4}>
+                  <OrderCard page="order" order={order} />
+                </Col>
+              ))}
+            </Row>
+          </>
+        )}{" "}
       </div>
     </Container>
   );

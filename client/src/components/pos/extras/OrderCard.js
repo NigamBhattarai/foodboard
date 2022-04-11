@@ -84,7 +84,7 @@ export default function OrderCard(props) {
         ))}
       </Row>
       <Col>
-        <Row className="bottom-row pl-2 my-3">
+        <Row className="bottom-row pl-2 mb-2">
           <Col lg={5}>
             {props.page === "order" ? (
               <span>
