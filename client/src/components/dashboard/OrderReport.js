@@ -3,7 +3,7 @@ import { Row, Col, Container, Button, Table, Badge } from "react-bootstrap";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import axios from "axios";
-
+import PrintIcon from '@mui/icons-material/Print';
 
 function reducer(state, action) {
   switch (action.type) {
@@ -51,9 +51,9 @@ function OrderReport() {
 
         <Col> </Col>
 
-        <Col lg={3}>
+        <Col lg={2}>
           <Button variant="light" className="titleButton">
-            <AddBusinessIcon className="mr-2" />
+            <AddBusinessIcon/>
             Manage Orders
           </Button>{" "}
         </Col>
@@ -62,7 +62,7 @@ function OrderReport() {
 
       <Row>
         <Col md="12">
-          <Table className="table-borderless align-middle" hover size="sm">
+          <Table className="table-borderless align-middle"Visibility hover size="sm">
             <thead>
               <tr>
                 <th>Date</th>
@@ -74,21 +74,26 @@ function OrderReport() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order)=>{return (<tr>
+              {
+                orders.map((order)=>{
+                  const classname="pill-"+order.status;
+                  return (<tr>
                 <td>{order.ordered_time}</td>
                 <td>12:40</td>
                 <td>{order.token_number}</td>
                 <td>3</td>
                 <td>
-                  <Badge pill bg="primary" className="pill-pending">
-                    Pending
+                  <Badge pill bg="primary" className={classname}>
+                    {order.status}
                   </Badge>
                 </td>
                 <td>
                   <VisibilityIcon
                     className="mr-2 icon"
-                    onClick={() => setShowModal(true)}
                   ></VisibilityIcon>
+                  <PrintIcon
+                    className="mr-2 icon"
+                  ></PrintIcon>
                 </td>
               </tr>)})}
             </tbody>
