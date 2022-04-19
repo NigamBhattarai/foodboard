@@ -3,6 +3,7 @@ import { Row, Col, Container, Button, Card } from "react-bootstrap";
 import categoriesdata from "./categoriesdata";
 import "./FoodManagement.scss";
 import ItemsCard from "../pos/extras/ItemsCard";
+import AddFoodPopup from "./AddFoodPopup";
 
 const initialState = {
   itemData: [],
@@ -48,6 +49,7 @@ export const FoodManagementContext = createContext();
 function FoodManagement(props) {
   const [state, dispatch] = useReducer(posReducer, initialState);
   const [nullState] = useState(null);
+  const [showModal, setShowModal] = useState(false);
 
   function itemCardsGrid(itemData) {
     var rows = [];
@@ -62,6 +64,12 @@ function FoodManagement(props) {
 
   return (
     <FoodManagementContext.Provider value={{ state, dispatch }}>
+      <AddFoodPopup
+        show={showModal}
+        onHide={() => {
+          setShowModal(false);
+        }}
+      />
       <Container fluid className="mx-2">
         <Row className="title align-items-center">
           <Col lg={3}>
@@ -91,6 +99,7 @@ function FoodManagement(props) {
         <Row className="mt-4">
           <Col lg={3}>
             <Card
+            onClick={(e)=>{setShowModal(true)}}
               className="item-card add-new-item-card d-flex align-items-center justify-content-center"
               style={{
                 height: "100%",
