@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 function connectDB(){
     dotenv.config();
-    mongoose.connect(process.env.MONGODB_URI,{useUnifiedTopology:true,useNewUrlParser:true})
+    mongoose.connect("mongodb://localhost:27017/?readPreference=primary&ssl=false",{useUnifiedTopology:true,useNewUrlParser:true})
     const connection=mongoose.connection;
 
     connection.on("connected",()=>{

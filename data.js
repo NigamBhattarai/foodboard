@@ -88,10 +88,10 @@ const data = {
     },
     {
       id: 2,
-      token_number: "#4383",
-      ordered_time: "23 Feb 2022,8:26PM",
+      token_number: "#4381",
+      ordered_time: "22 Feb 2022,8:26PM",
       status: "served",
-      grand_total: 3000,
+      grand_total: 1000,
       foodItems: [
         {
           id: 1,
