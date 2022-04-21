@@ -54,7 +54,7 @@ function FoodManagement(props) {
   function itemCardsGrid(itemData) {
     var rows = [];
     itemData.forEach((value, index, array) => {
-      rows.push(<ItemsCard index={index} value={value} />);
+      rows.push(<ItemsCard key={index+"itemsCard"} index={index} value={value} type="food" />);
     });
     return rows;
   }
@@ -73,7 +73,7 @@ function FoodManagement(props) {
       <Container fluid className="mx-2">
         <Row className="title align-items-center">
           <Col lg={3}>
-            <h2>Full Report</h2>
+            <h2>Food Management</h2>
             <small className="text-muted">Tuesday 2,Feb,2021</small>
           </Col>
           <Col></Col>
@@ -89,8 +89,8 @@ function FoodManagement(props) {
             <Button variant="link" className="active mr-1">
               All <span className="active-underline"></span>{" "}
             </Button>
-            {categoriesdata.map((category) => (
-              <Button variant="link" className="mr-1">
+            {categoriesdata.map((category, index) => (
+              <Button variant="link" className="mr-1" key={index}>
                 {category.name} <span className="active-underline"></span>{" "}
               </Button>
             ))}
