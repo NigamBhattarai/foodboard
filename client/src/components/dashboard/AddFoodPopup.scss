@@ -6,15 +6,15 @@
   font-weight: bold;
   font-size: 18px;
 }
-.order-popup-close-btn{
-    cursor: pointer;
-    color: $orange_primary;
-    &:hover {
-        color: $orange_secondary;
-    }
-    &:active {
-        color: $orange_light_primary;
-    }
+.order-popup-close-btn {
+  cursor: pointer;
+  color: $orange_primary;
+  &:hover {
+    color: $orange_secondary;
+  }
+  &:active {
+    color: $orange_light_primary;
+  }
 }
 .order-popup-item-count {
   padding: 10px 5px;
@@ -36,10 +36,51 @@
   border-radius: 8px;
 }
 .order-popup-bottom-button {
-    width: 250px;
-    height: 45px;
-    font-size: 13px;
+  width: 250px;
+  height: 45px;
+  font-size: 13px;
 }
-.order-popup-cancel-icon{
-    color: $orange_primary;
+.order-popup-cancel-icon {
+  color: $orange_primary;
+}
+.add-food-input {
+  background: #ffffff;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  font-size: 15px;
+}
+.upload-image {
+  display: inline-block;
+  background-color: #ffffff;
+  color: $gray_2;
+  padding: 0.5rem;
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.5s ease;
+  &:hover {
+    background-color: $base;
+  }
+}
+.add-variant-button {
+  width: 100%;
+  background-color: #ffffff;
+  border: 1px dashed $orange_primary;
+  color: $orange_primary;
+  border-radius: 0%;
+  font-size: 14px;
+  &:hover {
+    background-color: #ffffff;
+    border: 1px dashed $orange_light_primary;
+    color: $orange_secondary;
+  }
+  &:active{
+    background-color: $orange_light_primary !important;
+  }
+  &:focus {
+    background-color: #ffffff;
+    border: 1px dashed $orange_light_primary !important;
+    color: $orange_secondary !important;
+    box-shadow: 0px 0px 0px 3px rgba($orange_primary, 0.3) !important;
+  }
 }
