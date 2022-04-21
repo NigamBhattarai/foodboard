@@ -19,6 +19,7 @@ function ItemCardsGrid(props) {
         <ItemsCard
           index={index}
           value={value}
+          type={"pos"}
           setSelectedItem={setSelectedItem}
           setShowModal={setShowModal}
         />
