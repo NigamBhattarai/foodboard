@@ -26,14 +26,14 @@ function ItemsCard(props) {
             className="default-button item-card-btn"
             onClick={
               typeof props.setSelectedItem != undefined &&
-              (type == "pos" ?(e) => {
+              ((e) => {
                 props.setSelectedItem(index);
                 props.setShowModal(true);
-              }:(e)=>{})
+              })
             }
           >
             {" "}
-            {type == "pos" ? (
+            {type === "pos" ? (
               <>
                 <FontAwesomeIcon icon={faPlus} /> Add Dish
               </>
