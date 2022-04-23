@@ -8,6 +8,7 @@ import { FoodManagementContext } from "./FoodManagement";
 
 function AddFoodPopup(props) {
   const foodManagementContext = useContext(FoodManagementContext);
+  const itemID = props.itemID;
   const initialAddOns = [
     {
       name: "extra cheese",
@@ -51,6 +52,7 @@ function AddFoodPopup(props) {
   //States
   const [food, setFood] = useState({ ...initialFoodState });
   const [addOns, setAddOns] = useState([...initialAddOns]);
+  const [isEdit, setIsEdit] = useState(false);
   const [variants, setVariants] = useState([
     { ...initialVariantsState, default: true },
   ]);
@@ -139,9 +141,26 @@ function AddFoodPopup(props) {
     }
   }
 
-  // useEffect(() => {
-  //   console.log(food);
-  // }, [food]);
+  function clearPopup() {
+    setFood(initialFoodState)
+    setVariants([{ ...initialVariantsState, default: true }])
+    setAddOns([...initialAddOns])
+  }
+
+  useEffect(() => {
+    if(itemID>=0) {
+      setIsEdit(true);
+      clearPopup();
+      var selectedFood = foodManagementContext.state.itemData.filter((value, index, array) => {return value.id===itemID})[0];
+      setFood(selectedFood)
+      selectedFood.variants&&setVariants(selectedFood.variants)
+      selectedFood.addOns&&setAddOns(selectedFood.addOns)
+    } else {
+      setIsEdit(false);
+      setFood(initialFoodState)
+      setVariants([{ ...initialVariantsState, default: true }])
+    }
+  }, [props.show]);
 
   return (
     <Modal
@@ -153,7 +172,7 @@ function AddFoodPopup(props) {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          Add New Food Item
+          {isEdit?"Update":"Add New"} Food Item
         </Modal.Title>
         <CancelIcon onClick={props.onHide} className="order-popup-close-btn" />
       </Modal.Header>
@@ -183,6 +202,7 @@ function AddFoodPopup(props) {
                 textChangeHandlerFood(e, "name");
               }}
               type="text"
+              value={food.name}
               className="add-food-input food-name-input"
               placeholder="Food name"
             ></Form.Control>
@@ -378,7 +398,7 @@ function AddFoodPopup(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" className="default-button px-5">
-          Add Food
+        {isEdit?"Update":"Add"}
         </Button>
       </Modal.Footer>
     </Modal>
