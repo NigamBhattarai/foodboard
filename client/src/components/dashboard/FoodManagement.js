@@ -50,11 +50,21 @@ function FoodManagement(props) {
   const [state, dispatch] = useReducer(posReducer, initialState);
   const [nullState] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [selectedItem, setSelectedItem] = useState();
 
   function itemCardsGrid(itemData) {
     var rows = [];
     itemData.forEach((value, index, array) => {
-      rows.push(<ItemsCard key={index+"itemsCard"} index={index} value={value} type="food" />);
+      rows.push(
+        <ItemsCard
+          key={index + "itemsCard"}
+          index={value.id}
+          value={value}
+          setSelectedItem={setSelectedItem}
+          setShowModal={setShowModal}
+          type="food"
+        />
+      );
     });
     return rows;
   }
@@ -66,6 +76,7 @@ function FoodManagement(props) {
     <FoodManagementContext.Provider value={{ state, dispatch }}>
       <AddFoodPopup
         show={showModal}
+        itemID={selectedItem}
         onHide={() => {
           setShowModal(false);
         }}
@@ -99,7 +110,10 @@ function FoodManagement(props) {
         <Row className="mt-4">
           <Col lg={3}>
             <Card
-            onClick={(e)=>{setShowModal(true)}}
+              onClick={(e) => {
+                setSelectedItem(-1);
+                setShowModal(true);
+              }}
               className="item-card add-new-item-card d-flex align-items-center justify-content-center"
               style={{
                 height: "100%",
