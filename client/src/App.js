@@ -1,7 +1,7 @@
 import "./App.scss";
 import POS from "./components/pos/pos";
 import { Routes, Route } from "react-router";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import Order from "../src/components/dashboard/Order";
 import FullReport from "./components/dashboard/FullReport";
 import Kitchen from "./components/dashboard/Kitchen";
@@ -13,7 +13,7 @@ import AddOns from "./components/dashboard/AddOns";
 import OrderReport from "./components/dashboard/OrderReport";
 import AddFoodPopup from "./components/dashboard/AddFoodPopup";
 
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer } from "react";
 import SignIn from "./components/dashboard/SignIn";
 import SignUp from "./components/dashboard/SignUp";
 
@@ -26,12 +26,12 @@ const initialState = {
     isLoggedIn: cookies.get("accessToken") !== undefined ? true : false,
     user: cookies.get("user"),
   },
+  loginError: { isError: false, errorField: "", errorText: "" },
 };
 
 export const AppContext = createContext();
 
 function App() {
-
   const navigate = useNavigate();
 
   function AppReducer(state, action) {
@@ -46,7 +46,6 @@ function App() {
           path: "*",
           expires: new Date(Date.now() + 2592000),
         });
-        navigate("/");
         return {
           ...state,
           userData: {
@@ -58,109 +57,122 @@ function App() {
       case "logout":
         cookies.remove("accessToken", { path: "*" });
         cookies.remove("user", { path: "*" });
-        navigate("/signin");
         return {
           ...state,
-          userData: {
-            ...state.userData,
-            isLoggedIn: false,
-            user: {},
+          userData: initialState.userData,
+        };
+      case "loginError":
+        return {
+          ...state,
+          loginError: {
+            isError: true,
+            errorField: action.value.errorField,
+            errorText: action.value.errorText,
           },
+        };
+      case "removeLoginError":
+        return {
+          ...state,
+          loginError: initialState.loginError,
         };
       default:
         return state;
     }
   }
-  
-  
+
   const [state, dispatch] = useReducer(AppReducer, initialState);
+
+  useEffect(() => {
+    state.userData.isLoggedIn ? navigate("/") : navigate("/signin");
+  }, [state.userData.isLoggedIn]);
+
   return (
-    <AppContext.Provider value={{state, dispatch}}>
-    <Routes>
-      {state.userData.isLoggedIn ? (
-        <>
-          <Route index element={<POS />} />
-          <Route
-            path="/orders"
-            element={
-              <Dashboard>
-                <Order />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/kitchen"
-            element={
-              <Dashboard>
-                <Kitchen />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/dashboard"
-            element={
-              <Dashboard>
-                <Main />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/food"
-            element={
-              <Dashboard>
-                <FoodManagement />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/categories"
-            element={
-              <Dashboard>
-                <Categories />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/addons"
-            element={
-              <Dashboard>
-                <AddOns />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/fullreport"
-            element={
-              <Dashboard>
-                <FullReport />
-              </Dashboard>
-            }
-          />
-          <Route
-            path="/orderreport"
-            element={
-              <Dashboard>
-                <OrderReport />
-              </Dashboard>
-            }
-          />
-          <Route path="/temp" element={<AddFoodPopup show={true} />} />
-          <Route
-            path="/logout"
-            render={(props) => {
-              console.log("On logout");
-            }}
-          />
-          <Route path="*" element={<Err404 />} />
-        </>
-      ) : (
-        <>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="*" element={<Err404 />} />
-        </>
-      )}
-    </Routes>
+    <AppContext.Provider value={{ state, dispatch }}>
+      <Routes>
+        {state.userData.isLoggedIn ? (
+          <>
+            <Route index element={<POS />} />
+            <Route
+              path="/orders"
+              element={
+                <Dashboard>
+                  <Order />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/kitchen"
+              element={
+                <Dashboard>
+                  <Kitchen />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/dashboard"
+              element={
+                <Dashboard>
+                  <Main />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/food"
+              element={
+                <Dashboard>
+                  <FoodManagement />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/categories"
+              element={
+                <Dashboard>
+                  <Categories />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/addons"
+              element={
+                <Dashboard>
+                  <AddOns />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/fullreport"
+              element={
+                <Dashboard>
+                  <FullReport />
+                </Dashboard>
+              }
+            />
+            <Route
+              path="/orderreport"
+              element={
+                <Dashboard>
+                  <OrderReport />
+                </Dashboard>
+              }
+            />
+            <Route path="/temp" element={<AddFoodPopup show={true} />} />
+            <Route
+              path="/logout"
+              render={(props) => {
+                console.log("On logout");
+              }}
+            />
+            <Route path="*" element={<Err404 />} />
+          </>
+        ) : (
+          <>
+            <Route path="/signin" element={<SignIn />} />
+            <Route path="/signup" element={<SignUp />} />
+            <Route path="*" element={<Err404 />} />
+          </>
+        )}
+      </Routes>
     </AppContext.Provider>
   );
 }
