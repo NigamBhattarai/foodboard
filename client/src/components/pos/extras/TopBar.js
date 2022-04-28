@@ -1,10 +1,16 @@
-import React from "react";
-import {Link} from "react-router-dom";
+import React, { useContext } from "react";
+import { Link } from "react-router-dom";
 import { Button, Col, Navbar, Nav } from "react-bootstrap";
 import AccessTimeFilledIcon from "@mui/icons-material/AccessTimeFilled";
 import "./TopBar.scss";
+import { AppContext } from "../../../App";
 
 function TopBar() {
+  const appContext = useContext(AppContext);
+  function handleLogout() {
+    appContext.dispatch({type:"logout"});
+  }
+
   return (
     <Navbar expand="lg" className="dashboard-top-bar">
       <Col xs={6} sm={4} md={4} lg={2}>
@@ -19,7 +25,12 @@ function TopBar() {
       <Navbar.Toggle aria-controls="basic-navbar-nav" />
       <Navbar.Collapse id="basic-navbar-nav">
         <Nav className="me-auto">
-          <Button as={Link} to="/dashboard" variant="link" className="top-bar-link">
+          <Button
+            as={Link}
+            to="/dashboard"
+            variant="link"
+            className="top-bar-link"
+          >
             {" "}
             Dashboard{" "}
           </Button>
@@ -40,7 +51,19 @@ function TopBar() {
           <AccessTimeFilledIcon className="top-bar-clock mr-2" />
           <span className="top-bar-time mr-4">Wed,Feb 10,2022 | 6:15PM</span>
           <span className="top-bar-user-text mr-2">ADMIN</span>
-          <img src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg" alt="user" className="img-fluid rounded-circle top-bar-user-image mr-4"/>
+          <Button
+            variant="link"
+            onClick={(e) => {
+              handleLogout();
+            }}
+          >
+            Logout
+          </Button>
+          <img
+            src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
+            alt="user"
+            className="img-fluid rounded-circle top-bar-user-image mr-4"
+          />
         </Nav>
       </Navbar.Collapse>
     </Navbar>

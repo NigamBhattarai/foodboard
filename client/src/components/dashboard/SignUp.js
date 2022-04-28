@@ -1,11 +1,13 @@
 import React from 'react';
 import {Form} from "react-bootstrap"
 import { Link } from 'react-router-dom';
+import OutsideHeader from '../outside/fragments/OutsideHeader';
 import './auth.scss';
 function SignUp() {
   return (
       <div className="auth-wrapper">
-        <div className="auth-inner">
+      <OutsideHeader />
+      <div className="auth-inner mt-5">
         <Form>
                 <h3>Sign Up</h3>
                 <Form.Group>
