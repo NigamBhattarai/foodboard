@@ -37,13 +37,44 @@ function SignIn() {
       })
       .then((res) => {
         appContext.dispatch({
+          type: "removeLoginError",
+        });
+        appContext.dispatch({
           type: "login",
           value: { accessToken: res.data.accessToken, user: res.data.user },
         });
       })
-      .catch((err) => {
-        console.error(err);
+      .catch((err, data) => {
+        var status = err.toJSON().status;
+        var errorField, errorText;
+        if (status === 400) {
+          errorField = "username";
+          errorText = "Username does not exist";
+        } else if (status === 406) {
+          errorField = "password";
+          errorText = "Incorrect password";
+        }
+        appContext.dispatch({
+          type: "loginError",
+          value: { errorField, errorText },
+        });
       });
+  }
+
+  var errorInput = { border: "1px solid #d44" };
+
+  function isUsernameError() {
+    return (
+      appContext.state.loginError.isError &&
+      appContext.state.loginError.errorField === "username"
+    );
+  }
+
+  function isPasswordError() {
+    return (
+      appContext.state.loginError.isError &&
+      appContext.state.loginError.errorField === "password"
+    );
   }
 
   return (
@@ -64,6 +95,7 @@ function SignIn() {
               id="username"
               type="text"
               className="form-control"
+              style={isUsernameError() ? errorInput : {}}
               placeholder="Enter email"
             />
           </Form.Group>
@@ -75,6 +107,7 @@ function SignIn() {
               id="password"
               type="password"
               className="form-control"
+              style={isPasswordError() ? errorInput : {}}
               placeholder="Enter password"
             />
           </Form.Group>
@@ -93,6 +126,11 @@ function SignIn() {
               </Form.Label>
             </div>
           </Form.Group>
+          <center style={{ color: "#d44" }} className="my-2">
+            {appContext.state.loginError.isError
+              ? appContext.state.loginError.errorText
+              : ""}
+          </center>
           <button type="submit" className="btn btn-primary btn-block">
             Submit
           </button>
