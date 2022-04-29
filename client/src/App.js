@@ -46,6 +46,7 @@ function App() {
           path: "*",
           expires: new Date(Date.now() + 2592000),
         });
+        navigate("/");
         return {
           ...state,
           userData: {
@@ -57,6 +58,7 @@ function App() {
       case "logout":
         cookies.remove("accessToken", { path: "*" });
         cookies.remove("user", { path: "*" });
+        navigate("/signin");
         return {
           ...state,
           userData: initialState.userData,
@@ -82,9 +84,9 @@ function App() {
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
 
-  useEffect(() => {
-    state.userData.isLoggedIn ? navigate("/") : navigate("/signin");
-  }, [state.userData.isLoggedIn]);
+  // useEffect(() => {
+  //   state.userData.isLoggedIn ? navigate("/") : navigate("/signin");
+  // }, [state.userData.isLoggedIn]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
