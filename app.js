@@ -37,6 +37,7 @@ var db = Database._connect;
 
 
 //Authentication Token
+//TODO: Create function AuthintaceTokenFor[UserType]; create token secret for all user types; create token on login according to user type;
 const authenticateToken = (req, res, next) => {
   const authHeader = req.headers["authorization"];
   const token = authHeader && authHeader.split(" ")[1];

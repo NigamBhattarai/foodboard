@@ -1,9 +1,10 @@
 var express = require('express');
 var router = express.Router();
+const orderController = require("../controllers/order.controller");
 
-/* GET home page. */
-router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+/* GET order api. */
+router.get('/api/orders', function(req, res, next) {
+  orderController.getAllOrderDetails(req, res);
 });
 
 module.exports = router;
