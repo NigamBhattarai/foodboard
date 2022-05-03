@@ -3,7 +3,8 @@ let mongoose = require("mongoose");
 let foodSchema = new mongoose.Schema({
     name: {type: String},
     code: {type: String},
-    veg: {type: Boolean},
+    desc:{type:String},
+    veg:{type:Boolean},
     image: {type: String},
     status: {type: Boolean},
     createdAt: {type:Date, default:Date.now()},
