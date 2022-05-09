@@ -7,31 +7,30 @@ import ClearIcon from "@mui/icons-material/Clear";
 import EditIcon from "@mui/icons-material/Edit";
 
 export default function OrderCard(props) {
-  console.log("Render Order Card:" + props.id);
   const [foodItems, setFoodItems] = useState(props.order.foodItems);
   function renderStatus(status) {
     switch (status) {
-      case "served":
+      case 0:
         return (
-          <Button className={`${status}`} style={{ width: "100%" }} disabled>
-            <DoneIcon /> Served
-          </Button>
-        );
-      case "preparing":
-        return (
-          <Button className={`${status}`} style={{ width: "100%" }} disabled>
-            <DoneIcon /> Preparing
-          </Button>
-        );
-      case "pending":
-        return (
-          <Button className={`${status}`} style={{ width: "100%" }} disabled>
+          <Button className="pending" style={{ width: "100%" }} disabled>
             Pending
           </Button>
         );
-      case "canceled":
+        case 1:
+          return (
+            <Button className="preparing" style={{ width: "100%" }} disabled>
+              <DoneIcon /> Preparing
+            </Button>
+          );
+      case 2:
         return (
-          <Button className={`${status}`} style={{ width: "100%" }} disabled>
+          <Button className="served" style={{ width: "100%" }} disabled>
+            <DoneIcon /> Served
+          </Button>
+        );
+      case 3:
+        return (
+          <Button className="canceled" style={{ width: "100%" }} disabled>
             <ClearIcon /> Canceled
           </Button>
         );
@@ -62,7 +61,7 @@ export default function OrderCard(props) {
         <small className="text-muted">{props.order.ordered_time}</small>
       </Col>
       <Col>
-        {props.page == "order" ? (
+        {props.page === "order" ? (
           props.order.status === "pending" && (
             <Button style={{ width: "100%" }} className="default-button order-popup-bottom-button">
               <EditIcon /> Edit
@@ -74,11 +73,12 @@ export default function OrderCard(props) {
       </Col>
       <Row className="mx-0 order-items">
         {props.order.foodItems.map((foodItem) => (
+          
           <OrderItems
             page={props.page}
             foodItems={foodItem}
-            key={foodItem.id}
-            id={foodItem.id}
+            key={foodItem._id}
+            id={foodItem._id}
             handleCallBack={handleCallBack}
           />
         ))}

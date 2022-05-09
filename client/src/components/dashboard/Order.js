@@ -34,7 +34,7 @@ function Order(props) {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("/api/orders");
+        const result = await axios.get("http://localhost:5000/api/orders");
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -73,8 +73,8 @@ function Order(props) {
           <>
             <Row className="orderSummary mr-3">
               <Col>
-                {orders.map((order) => (
-                  <Button className={`${order.status}`}>
+                {orders.map((order, index) => (
+                  <Button className={`${order.status}`} key={"Order"+index}>
                     {order.status === "served" || order.status === "pending" ? (
                       <DoneIcon />
                     ) : order.status === "canceled" ? (
@@ -88,8 +88,8 @@ function Order(props) {
               </Col>
             </Row>
             <Row className="mt-3">
-              {orders.map((order) => (
-                <Col lg={4}>
+              {orders.map((order, ind) => (
+                <Col lg={4}  key={"Order"+ind}>
                   <OrderCard page="order" order={order} />
                 </Col>
               ))}

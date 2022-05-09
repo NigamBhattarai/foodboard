@@ -12,19 +12,20 @@ export default function OrderItems(props) {
       <Row className="orderItems px-2">
         <Col lg="3">
           <img
-            src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
+            src={foodItems.variant.food.image}
+            alt="food"
             className="rounded-circle img-thumbnail"
           />
         </Col>
         <Col lg={6} className="px-0">
           <Row className="item-name">
-            <Col>{foodItems.foodName}</Col>
+            <Col>{foodItems.variant.food.name+" ("+foodItems.variant.name+")"}</Col>
           </Row>
           <Row className="item-addons">
-            <Col className="pl-4">{foodItems.addOns.map((addOn)=>"+"+addOn+" ")}</Col>
+            <Col className="pl-4">{foodItems.addons.map((addOn)=>"+"+addOn.name+" ")}</Col>
           </Row>
           <Row className="item-qty">
-            <Col>{props.page=='order' ? ("Qty:"+foodItems.qty):("")}</Col>
+            <Col>{props.page==='order' ? ("Qty:"+foodItems.qty):("")}</Col>
           </Row>
         </Col>
         <Col lg={3} className="item-total type">
