@@ -15,6 +15,7 @@ import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./FullReport.scss";
 import OrderItems from "../pos/extras/OrderItems.js";
+import UseTitle from "../../hooks/useTitle.js";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -31,6 +32,8 @@ function reducer(state, action) {
 
 
 function FullReport(props) {
+  UseTitle("Full Report");
+  //eslint-disable-next-line
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     orders: [],
     loading: true,
@@ -113,7 +116,7 @@ function FullReport(props) {
                         key={order.id}
                         id={order.id}
                         handleClick={() => handleClick(order)}
-                        selected={order.id == selected.id}
+                        selected={order.id === selected.id}
                       />
                     );
                   })}

@@ -10,6 +10,7 @@ import MessageBox from "./components/MessageBox";
 
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
+import UseTitle from "../../hooks/useTitle";
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -24,6 +25,10 @@ function reducer(state, action) {
 }
 
 function Order(props) {
+
+  UseTitle("Orders");
+
+
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     orders: [],
     loading: true,

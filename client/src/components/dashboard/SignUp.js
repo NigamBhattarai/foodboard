@@ -1,10 +1,12 @@
 import React from 'react';
 import {Form} from "react-bootstrap"
 import { Link } from 'react-router-dom';
+import UseTitle from '../../hooks/useTitle';
 import OutsideHeader from '../outside/fragments/OutsideHeader';
 import './auth.scss';
 function SignUp() {
-  return (
+    UseTitle("Sign Up");
+    return (
       <div className="auth-wrapper">
       <OutsideHeader />
       <div className="auth-inner mt-5">

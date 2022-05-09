@@ -19,13 +19,11 @@ function ItemsCard(props) {
         />
         <Card.Body>
           <Card.Title>{value.name}</Card.Title>
-          <Card.Text className="item-card-desc">
-            Rs. {value.price} &nbsp; &nbsp; {value.available_stock} Plts
-          </Card.Text>
+          <Card.Text className="item-card-desc"></Card.Text>
           <Button
             className="default-button item-card-btn"
             onClick={
-              typeof props.setSelectedItem != undefined &&
+              typeof props.setSelectedItem != 'undefined' &&
               ((e) => {
                 props.setSelectedItem(index);
                 props.setShowModal(true);

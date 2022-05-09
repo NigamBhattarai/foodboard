@@ -5,6 +5,7 @@ import CancelIcon from "@mui/icons-material/Cancel";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
 import "./AddFoodPopup.scss";
 import { FoodManagementContext } from "./FoodManagement";
+import axios from "axios";
 
 function AddFoodPopup(props) {
   const foodManagementContext = useContext(FoodManagementContext);
@@ -43,20 +44,19 @@ function AddFoodPopup(props) {
     price: 0,
     sourLevel: 0,
   };
-  const categories = [
-    { id: 0, name: "Fast Food" },
-    { id: 1, name: "Dairy Product" },
-    { id: 2, name: "Continental" },
-  ];
 
   //States
   const [food, setFood] = useState({ ...initialFoodState });
   const [addOns, setAddOns] = useState([...initialAddOns]);
+  const [categories, setCategories] = useState([]);
+  //eslint-disable-next-line
+  const [nullState, setNullState] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [variants, setVariants] = useState([
     { ...initialVariantsState, default: true },
   ]);
 
+  //eslint-disable-next-line
   function addToBillClicked(e) {
     props.onHide(e);
   }
@@ -68,6 +68,7 @@ function AddFoodPopup(props) {
   }
 
   function handleCategoryChange(event) {
+    //eslint-disable-next-line
     const { name, value } = event.target;
     setFood((prevFood) => {
       return { ...prevFood, category: value };
@@ -142,24 +143,35 @@ function AddFoodPopup(props) {
   }
 
   function clearPopup() {
-    setFood(initialFoodState)
-    setVariants([{ ...initialVariantsState, default: true }])
-    setAddOns([...initialAddOns])
+    setFood(initialFoodState);
+    setVariants([{ ...initialVariantsState, default: true }]);
+    setAddOns([...initialAddOns]);
   }
 
+  //eslint-disable-next-line
+  useEffect(async () => {
+    const result = await axios.get("http://localhost:5000/api/category");
+    setCategories(result.data);
+  }, [nullState]);
+
   useEffect(() => {
-    if(itemID>=0) {
+    if (typeof itemID != "undefined" && itemID !== -1) {
       setIsEdit(true);
       clearPopup();
-      var selectedFood = foodManagementContext.state.itemData.filter((value, index, array) => {return value.id===itemID})[0];
-      setFood(selectedFood)
-      selectedFood.variants&&setVariants(selectedFood.variants)
-      selectedFood.addOns&&setAddOns(selectedFood.addOns)
+      var selectedFood = foodManagementContext.state.itemData.filter(
+        (value, index, array) => {
+          return value._id === itemID;
+        }
+      )[0];
+      setFood(selectedFood);
+      selectedFood.variants && setVariants(selectedFood.variants);
+      selectedFood.addOns && setAddOns(selectedFood.addons);
     } else {
       setIsEdit(false);
-      setFood(initialFoodState)
-      setVariants([{ ...initialVariantsState, default: true }])
+      setFood(initialFoodState);
+      setVariants([{ ...initialVariantsState, default: true }]);
     }
+    //eslint-disable-next-line
   }, [props.show]);
 
   return (
@@ -172,7 +184,7 @@ function AddFoodPopup(props) {
     >
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
-          {isEdit?"Update":"Add New"} Food Item
+          {isEdit ? "Update" : "Add New"} Food Item
         </Modal.Title>
         <CancelIcon onClick={props.onHide} className="order-popup-close-btn" />
       </Modal.Header>
@@ -182,7 +194,7 @@ function AddFoodPopup(props) {
             <Form.Control
               as="select"
               className="form-select"
-              value={food.category}
+              value={food.category.name}
               name="status"
               onChange={handleCategoryChange}
             >
@@ -344,7 +356,10 @@ function AddFoodPopup(props) {
                   ></Form.Control>
                 </Col>
                 <Col md={3} className="ml-auto">
-                  <Form.Group controlId={"variantImage"+varInd} className="mb-3">
+                  <Form.Group
+                    controlId={"variantImage" + varInd}
+                    className="mb-3"
+                  >
                     <Form.Label className="upload-image">
                       <UploadFileIcon /> Upload Image
                     </Form.Label>
@@ -398,7 +413,7 @@ function AddFoodPopup(props) {
       </Modal.Body>
       <Modal.Footer>
         <Button variant="primary" className="default-button px-5">
-        {isEdit?"Update":"Add"}
+          {isEdit ? "Update" : "Add"}
         </Button>
       </Modal.Footer>
     </Modal>

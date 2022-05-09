@@ -15,6 +15,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import "./Categories.scss";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
+import UseTitle from "../../hooks/useTitle";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -29,6 +30,7 @@ function reducer(state, action) {
   }
 }
 function AddOns() {
+  UseTitle("Addons");
   const [{ loading, error, categories }, dispatch] = useReducer(reducer, {
     categories: [],
     loading: true,
@@ -107,7 +109,8 @@ function AddOns() {
                     <tr>
                       <td>
                         <img
-                          src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
+                          src={category.image}
+                          alt="category"
                           className="rounded-circle img-thumbnail"
                         />
                       </td>

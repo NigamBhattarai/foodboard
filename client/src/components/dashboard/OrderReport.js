@@ -7,6 +7,7 @@ import PrintIcon from "@mui/icons-material/Print";
 
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
+import UseTitle from "../../hooks/useTitle";
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -21,6 +22,7 @@ function reducer(state, action) {
 }
 
 function OrderReport() {
+  UseTitle("Order Report");
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     orders: [],
     loading: true,

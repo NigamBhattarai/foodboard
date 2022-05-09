@@ -13,8 +13,10 @@ import OrderListTable from "../pos/extras/OrderListTable.js";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./Main.scss";
 import axios from "axios";
+import UseTitle from "../../hooks/useTitle.js";
 
 export default function Main() {
+  UseTitle("Dashboard");
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchData = async () => {

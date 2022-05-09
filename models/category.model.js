@@ -1,7 +1,7 @@
 let mongoose = require("mongoose");
 
 let categorySchema = new mongoose.Schema({
-    category_name: {type: String},
+    name: {type: String},
     image: {type: String},
     status: {type: Boolean},
     createdAt: {type:Date, default:Date.now()},
