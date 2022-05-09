@@ -5,8 +5,12 @@ import { Link } from "react-router-dom";
 import axios from "axios";
 import OutsideHeader from "../outside/fragments/OutsideHeader";
 import { AppContext } from "../../App";
+import UseTitle from "../../hooks/useTitle";
 
 function SignIn() {
+
+  UseTitle("Sign In");
+
   const appContext = useContext(AppContext);
 
   const [loginDetails, setLoginDetails] = useState({

@@ -4,9 +4,10 @@ import { Row, Col, Container, Button } from "react-bootstrap";
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import OrderCard from "../pos/extras/OrderCard";
 import axios from "axios";
+import UseTitle from "../../hooks/useTitle";
 
 function Kitchen(props) {
-  console.log("Render Kitchen");
+  UseTitle("Kitchen");
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchData = async () => {

@@ -15,6 +15,7 @@ import ClearIcon from "@mui/icons-material/Clear";
 import "./Categories.scss";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
+import UseTitle from "../../hooks/useTitle";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -29,6 +30,7 @@ function reducer(state, action) {
   }
 }
 function Categories() {
+  UseTitle("Categories");
   const [{ loading, error, categories }, dispatch] = useReducer(reducer, {
     categories: [],
     loading: true,
@@ -39,7 +41,7 @@ function Categories() {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("/api/categories");
+        const result = await axios.get("http://localhost:5000/api/category");
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -82,122 +84,123 @@ function Categories() {
       </Row>
       <hr />
       <div className="main-body">
-      <Row>
-        <Col md="7">
-          {loading ? (
-            <center>
-              <LoadingBox />
-            </center>
-          ) : error ? (
-            <MessageBox variant="danger">{error}</MessageBox>
-          ) : (
-            <Table className="table-borderless align-middle" hover size="sm">
-              <thead>
-                <tr>
-                  <th>Image</th>
-                  <th>Name</th>
-                  <th>Food Count</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {categories.map((category) => {
-                  return (
-                    <tr>
-                      <td>
-                        <img
-                          src="https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
-                          className="rounded-circle img-thumbnail"
-                        />
-                      </td>
-                      <td>{category.name}</td>
-                      <td>{category.foodCount}</td>
-                      <td>
-                        {category.status === "active" ? (
-                          <Badge pill bg="primary" className="pill-active">
-                            Active
-                          </Badge>
-                        ) : (
-                          <Badge pill bg="primary" className="pill-inactive">
-                            InActive
-                          </Badge>
-                        )}
-                      </td>
-                      <td>
-                        <EditIcon
-                          className="mr-2 icon"
-                          onClick={() => editCategory(category)}
-                        ></EditIcon>
-                        <ClearIcon className="mr-2 icon2"></ClearIcon>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          )}
-        </Col>
-        <Col md="5" className="edit py-3 rounded">
-          <Row>
-            {" "}
-            <Col md={8}>
-              <h4>{click ? "Update" : "Add New"} Category</h4>
-            </Col>
-            {click && (
-              <Button
-                className="default-button"
-                style={{ fontSize: "13px" }}
-                onClick={() => {
-                  setClick(false);
-                  setSelected([]);
-                }}
-              >
-                Add New Category
-              </Button>
+        <Row>
+          <Col md="7">
+            {loading ? (
+              <center>
+                <LoadingBox />
+              </center>
+            ) : error ? (
+              <MessageBox variant="danger">{error}</MessageBox>
+            ) : (
+              <Table className="table-borderless align-middle" hover size="sm">
+                <thead>
+                  <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Food Count</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {categories.map((category) => {
+                    return (
+                      <tr>
+                        <td>
+                          <img
+                            alt="category"
+                            src={category.image}
+                            className="rounded-circle img-thumbnail"
+                          />
+                        </td>
+                        <td>{category.name}</td>
+                        <td>{category.foodCount}</td>
+                        <td>
+                          {category.status ? (
+                            <Badge pill bg="primary" className="pill-active">
+                              Active
+                            </Badge>
+                          ) : (
+                            <Badge pill bg="primary" className="pill-inactive">
+                              InActive
+                            </Badge>
+                          )}
+                        </td>
+                        <td>
+                          <EditIcon
+                            className="mr-2 icon"
+                            onClick={() => editCategory(category)}
+                          ></EditIcon>
+                          <ClearIcon className="mr-2 icon2"></ClearIcon>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
             )}
-          </Row>
-          <hr />
-          <br />
-          <Form>
-            <Form.Control
-              type="text"
-              placeholder="Category Name"
-              className="formlen"
-              value={selected.name}
-              onChange={handleChange}
-              name="name"
-            />
-            <br />
-            <Form.Control type="file" className="formlen" />
-            <br />
-            <Form.Control
-              as="select"
-              className="form-select"
-              value={selected.status}
-              name="status"
-              onChange={handleChange}
-            >
-              <option value="status">Status</option>
-              <option value="active">Active</option>
-              <option value="inactive">Inactive</option>
-            </Form.Control>
-            <br />
-            <br />
-
+          </Col>
+          <Col md="5" className="edit py-3 rounded">
             <Row>
-              <Col className="d-grid">
-                <Button
-                  className="default-button order-popup-bottom-button"
-                  style={{ width: "100%" }}
-                >
-                  {click ? "Update" : "Add"} Category
-                </Button>
+              {" "}
+              <Col md={8}>
+                <h4>{click ? "Update" : "Add New"} Category</h4>
               </Col>
+              {click && (
+                <Button
+                  className="default-button"
+                  style={{ fontSize: "13px" }}
+                  onClick={() => {
+                    setClick(false);
+                    setSelected([]);
+                  }}
+                >
+                  Add New Category
+                </Button>
+              )}
             </Row>
-          </Form>
-        </Col>
-      </Row>
+            <hr />
+            <br />
+            <Form>
+              <Form.Control
+                type="text"
+                placeholder="Category Name"
+                className="formlen"
+                value={selected.name}
+                onChange={handleChange}
+                name="name"
+              />
+              <br />
+              <Form.Control type="file" className="formlen" />
+              <br />
+              <Form.Control
+                as="select"
+                className="form-select"
+                value={selected.status}
+                name="status"
+                onChange={handleChange}
+              >
+                <option value="status">Status</option>
+                <option value="active">Active</option>
+                <option value="inactive">Inactive</option>
+              </Form.Control>
+              <br />
+              <br />
+
+              <Row>
+                <Col className="d-grid">
+                  <Button
+                    className="default-button order-popup-bottom-button"
+                    style={{ width: "100%" }}
+                  >
+                    {click ? "Update" : "Add"} Category
+                  </Button>
+                </Col>
+              </Row>
+            </Form>
+          </Col>
+        </Row>
       </div>
     </Container>
   );
