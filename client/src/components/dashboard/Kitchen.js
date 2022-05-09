@@ -10,13 +10,14 @@ function Kitchen(props) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("/api/orders");
+      const result = await axios.get("http://localhost:5000/api/orders");
       setOrders(result.data);
     };
     fetchData();
   }, []);
   function handleCallback(foodItems, id) {
     setOrders((prevOrders) => {
+      // console.log(prevOrders)
       return prevOrders.map((order) => {
         return order.id === id ? { ...order, foodItems: foodItems } : order;
       });
