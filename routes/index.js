@@ -4,7 +4,7 @@ const orderController = require("../controllers/order.controller");
 
 /* GET order api. */
 router.get('/api/orders', function(req, res, next) {
-  orderController.getAllOrderDetails(req, res);
+  orderController.getAllOrders(req, res);
 });
 
 module.exports = router;

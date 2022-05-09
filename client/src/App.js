@@ -13,7 +13,7 @@ import AddOns from "./components/dashboard/AddOns";
 import OrderReport from "./components/dashboard/OrderReport";
 import AddFoodPopup from "./components/dashboard/AddFoodPopup";
 
-import React, { createContext, useEffect, useReducer } from "react";
+import React, { createContext, useReducer } from "react";
 import SignIn from "./components/dashboard/SignIn";
 import SignUp from "./components/dashboard/SignUp";
 

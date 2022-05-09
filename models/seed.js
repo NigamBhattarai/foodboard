@@ -470,7 +470,7 @@ const data = {
       token_number:"246",
       customer_name:"Customer 1",
       ordered_time:new Date("May 1, 2022 12:12:36"),
-      status:0,//statuses: 0: ordered, 1: accepted, 2: partially, 3: done
+      status:0,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled
       completed_time: null,
       payment:true,
       payment_method:"cash",
@@ -479,14 +479,13 @@ const data = {
       coupon_applied:false,
       createdAt: new Date(),
       updatedAt: new Date(),
-      coupon_details:null,
     },
     {
       _id:"6270a7463e27b954d2129710",
       token_number:"247",
       customer_name:"Customer 2",
       ordered_time:new Date("May 1, 2022 12:18:20"),
-      status:1,
+      status:1,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled
       completed_time:null,
       payment:true,
       payment_method:"card",
@@ -495,7 +494,7 @@ const data = {
       coupon_applied:true,
       createdAt: new Date(),
       updatedAt: new Date(),
-      coupon_detail:"626e3c7f7c76d7861e202676",
+      coupon_details:"626e3c7f7c76d7861e202676",
     },
   ],
   order_detail:[
