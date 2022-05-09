@@ -1,10 +1,12 @@
 var express = require('express');
 var router = express.Router();
-const orderController = require("../controllers/order.controller");
+const OrderRouter = require("./order");
+const FoodRouter = require("./food");
+const CategoryRouter = require("./category");
 
 /* GET order api. */
-router.get('/api/orders', function(req, res, next) {
-  orderController.getAllOrders(req, res);
-});
+router.use('/api/orders', OrderRouter);
+router.use('/api/food', FoodRouter);
+router.use('/api/category', CategoryRouter);
 
 module.exports = router;
