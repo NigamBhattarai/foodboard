@@ -1,12 +1,14 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
 import { Row, Col, Container, Button, Card } from "react-bootstrap";
-import categoriesdata from "./categoriesdata";
 import "./FoodManagement.scss";
 import ItemsCard from "../pos/extras/ItemsCard";
 import AddFoodPopup from "./AddFoodPopup";
+import axios from "axios";
+import UseTitle from "../../hooks/useTitle";
 
 const initialState = {
   itemData: [],
+  originalItemData: [],
 };
 
 function posReducer(state, action) {
@@ -16,28 +18,10 @@ function posReducer(state, action) {
       return { ...state, itemData: [...state.itemData, action.value] };
     case "updateItemData":
       return { ...state, itemData: action.value };
+    case "setOriginalItemData":
+      return { ...state, originalItemData: action.value };
     case "setInitialItemData":
-      const itemData = [
-        {
-          id: 1,
-          image:
-            "https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg",
-          name: "Chicken Tandoori",
-          price: 400,
-          available_stock: 30,
-        },
-      ];
-      for (var i = 0; i < 15; i++) {
-        itemData.push({
-          id: i + 2,
-          image:
-            "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
-          name: "Jhol Momo",
-          price: 200,
-          available_stock: 30,
-        });
-      }
-      return { ...state, itemData: itemData };
+      return { ...state, itemData: state.originalItemData };
 
     default:
       return state;
@@ -47,7 +31,9 @@ function posReducer(state, action) {
 export const FoodManagementContext = createContext();
 
 function FoodManagement(props) {
+  UseTitle("Food Management");
   const [state, dispatch] = useReducer(posReducer, initialState);
+  const [categories, setCategories] = useState([]);
   const [nullState] = useState(null);
   const [showModal, setShowModal] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
@@ -58,7 +44,7 @@ function FoodManagement(props) {
       rows.push(
         <ItemsCard
           key={index + "itemsCard"}
-          index={value.id}
+          index={value._id}
           value={value}
           setSelectedItem={setSelectedItem}
           setShowModal={setShowModal}
@@ -68,9 +54,36 @@ function FoodManagement(props) {
     });
     return rows;
   }
-  useEffect(() => {
+
+  //eslint-disable-next-line
+  useEffect(async () => {
+    document.querySelectorAll(".food-category-tab-item")[0].classList.add("active");
+    const result = await axios.get("http://localhost:5000/api/food");
+    dispatch({
+      type: "setOriginalItemData",
+      value: result.data,
+    });
     dispatch({ type: "setInitialItemData" });
+    const categories = await axios.get("http://localhost:5000/api/category");
+    setCategories(categories.data);
   }, [nullState]);
+
+  async function handleCategoryChange(e, category, isAll) {
+    if (isAll) {
+      dispatch({ type: "setInitialItemData" });
+    } else {
+      var newArr = state.originalItemData.filter((value) => {
+        return (category === value.category._id) && value;
+      });
+      dispatch({ type: "updateItemData", value: newArr });
+    }
+    var elems = document.querySelectorAll(".food-category-tab-item");
+    elems.forEach(function (el) {
+      el.classList.remove("active");
+    });
+
+    e.target.classList.add("active");
+  }
 
   return (
     <FoodManagementContext.Provider value={{ state, dispatch }}>
@@ -97,11 +110,22 @@ function FoodManagement(props) {
         <hr />
         <Row className="mx-0">
           <div className="header-category-menu  py-2">
-            <Button variant="link" className="active mr-1">
+            <Button
+              variant="link"
+              className="food-category-tab-item mr-1"
+              onClick={(e) => handleCategoryChange(e, 0, true, 0)}
+            >
               All <span className="active-underline"></span>{" "}
             </Button>
-            {categoriesdata.map((category, index) => (
-              <Button variant="link" className="mr-1" key={index}>
+            {categories.map((category, index) => (
+              <Button
+                variant="link"
+                className={"food-category-tab-item mr-1"}
+                key={index}
+                onClick={(e) =>
+                  handleCategoryChange(e, category._id, false, index + 1)
+                }
+              >
                 {category.name} <span className="active-underline"></span>{" "}
               </Button>
             ))}
