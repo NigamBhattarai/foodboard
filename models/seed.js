@@ -143,7 +143,7 @@ const data = {
     {
       _id: "627091aee718b5308cf1a1b9",
       name: "Fast Food",
-      image: "https://www.google.com/url?sa=i&url=https%3A%2F%2Fthetablehuff.com%2Fbody-may-treat-fast-food-like-an-infection-study%2F&psig=AOvVaw1AXpKSWGmiTQyeSrfYvoCo&ust=1651630978096000&source=images&cd=vfe&ved=0CAwQjRxqFwoTCLiw54CjwvcCFQAAAAAdAAAAABAY",
+      image: "https://images.theconversation.com/files/440609/original/file-20220113-25-gp1b39.jpeg?ixlib=rb-1.1.0&q=45&auto=format&w=926&fit=clip",
       status:true,
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -377,7 +377,7 @@ const data = {
       desc:"Small fanta 100ml",
       createdAt: new Date(),
       updatedAt: new Date(),
-      food:"6270955b369ccab46981842b",
+      food:"62709560c536cf674c0cb54b",
     },
     {
       _id:"6270acb10368780e64c6db04",
@@ -388,7 +388,7 @@ const data = {
       desc:"Medium fanta 150ml",
       createdAt: new Date(),
       updatedAt: new Date(),
-      food:"6270955b369ccab46981842b",
+      food:"62709560c536cf674c0cb54b",
     },
     {
       _id:"6270acb6113861cce8603900",
@@ -399,7 +399,7 @@ const data = {
       desc:"Small fanta 250ml",
       createdAt: new Date(),
       updatedAt: new Date(),
-      food:"6270955b369ccab46981842b",
+      food:"62709560c536cf674c0cb54b",
     },
     {
       _id:"6270a0c47a26c94c5f0bc67c",
