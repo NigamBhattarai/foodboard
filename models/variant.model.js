@@ -4,6 +4,7 @@ let variantSchema = new mongoose.Schema({
     name: {type: String},
     image: {type: String},
     price: {type: Number},
+    default: {type: Boolean},
     veg: {type: Boolean},
     desc:{type:String},
     sourLevel: {type: Number},

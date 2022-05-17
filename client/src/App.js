@@ -13,7 +13,7 @@ import AddOns from "./components/dashboard/AddOns";
 import OrderReport from "./components/dashboard/OrderReport";
 import AddFoodPopup from "./components/dashboard/AddFoodPopup";
 
-import React, { createContext, useReducer } from "react";
+import React, { createContext, useEffect, useReducer, useState } from "react";
 import SignIn from "./components/dashboard/SignIn";
 import SignUp from "./components/dashboard/SignUp";
 
@@ -83,10 +83,12 @@ function App() {
   }
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
+  const [nullState] = useState();
 
-  // useEffect(() => {
-  //   state.userData.isLoggedIn ? navigate("/") : navigate("/signin");
-  // }, [state.userData.isLoggedIn]);
+  useEffect(() => {
+    !state.userData.isLoggedIn && navigate("/signin");
+    //eslint-disable-next-line
+  }, [nullState]);
 
   return (
     <AppContext.Provider value={{ state, dispatch }}>
@@ -94,6 +96,7 @@ function App() {
         {state.userData.isLoggedIn ? (
           <>
             <Route index element={<POS />} />
+            <Route path="/pos" element={<POS />} />
             <Route
               path="/orders"
               element={

@@ -119,7 +119,7 @@ function Dashboard(props) {
       <Col md={10} className="p-0">
         <Row className="topbar">
           <Col md={1}  className="topbar-link">
-            <Link to="/dashboard">
+            <Link to="/pos">
               <Col className="text-center mx-1">
                 POS
               </Col>
