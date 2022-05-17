@@ -30,7 +30,7 @@ function adjustPOSPage() {
 }
 
 const initialState = {
-  orderNumber: 0,
+  tokenNumber: 0,
   bill: {
     prices: {
       subTotal: 0,
@@ -48,10 +48,9 @@ const initialState = {
 
 function posReducer(state, action) {
   switch (action.type) {
-
     //Order Number
-    case "setOrderNumber":
-      return {...state, orderNumber:action.value}
+    case "setTokenNumber":
+      return { ...state, tokenNumber: action.value };
 
     //Bill State
     case "addbillItems":
@@ -112,6 +111,11 @@ function posReducer(state, action) {
     case "setItemDataForCategory":
       return { ...state, itemDataForCategory: action.value };
 
+    // //Server Interaction
+    // case "sendOrder":
+
+    // return state;
+
     default:
       return state;
   }
@@ -147,6 +151,35 @@ export default function POS() {
     setSearchKey(value);
   }
 
+  async function sendOrder(extraData) {
+    if (state.bill.billItems.length < 1) {
+      return { err: true, text: "Empty bill not accepted!" };
+    } else if (extraData.customerName.trim() === "") {
+      return { err: true, text: "Customer Name is empty!" };
+    } else {
+      try {
+        const orderResponse = await axios.post(
+          "http://localhost:5000/api/orders/add",
+          {
+            bill: state.bill,
+            customerName: extraData.customerName,
+            tokenNumber: state.tokenNumber,
+            itemPrices: extraData.itemPrices,
+          }
+        );
+        return {
+          err: false,
+          text: "Order placed with token #" + state.tokenNumber,
+        };
+      } catch (err) {
+        return {
+          err: true,
+          text: "Error while entering data, refresh the page and try again.",
+        };
+      }
+    }
+  }
+
   //eslint-disable-next-line
   useEffect(async () => {
     document
@@ -157,6 +190,10 @@ export default function POS() {
     dispatch({ type: "setInitialItemData" });
     const categories = await axios.get("http://localhost:5000/api/category");
     setCategories(categories.data);
+    const newToken = await axios.get(
+      "http://localhost:5000/api/orders/new-token"
+    );
+    dispatch({ type: "setTokenNumber", value: newToken.data });
   }, [nullState]);
 
   useEffect(() => {
@@ -200,7 +237,7 @@ export default function POS() {
   }
 
   return (
-    <POSContext.Provider value={{ state, dispatch }}>
+    <POSContext.Provider value={{ state, dispatch, sendOrder }}>
       <Container fluid className="main-container">
         {/* <Row> */}
         {/* <Col xs={2} className="p-0 m-0">

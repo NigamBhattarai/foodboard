@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from "react";
+import React, { useEffect, useContext, useState } from "react";
 import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
@@ -22,6 +22,9 @@ function adjustOrderBill() {
     "px";
 }
 function OrderBill(props) {
+  //States
+  const [customerName, setCustomerName] = useState("");
+
   useEffect(() => {
     adjustOrderBill();
   });
@@ -58,99 +61,132 @@ function OrderBill(props) {
     posContext.dispatch({ type: "updateBillItems", value: temp_state });
     posContext.dispatch({ type: "updateBillPrices" });
   }
-  
+
   function getAddOnsPriceSum(extras) {
     var sum = 0;
-    for(var i = 0; i < extras.length; i++) {
+    for (var i = 0; i < extras.length; i++) {
       sum += extras[i].price;
     }
     return sum;
   }
+
+  function getAllItemsPriceArray() {
+    const arr = [];
+    for (var i = 0; i < posContext.state.bill.billItems.length; i++) {
+      const value = posContext.state.bill.billItems[i];
+      arr.push(
+        getAddOnsPriceSum(value.extras) + value.variant.price * value.count
+      );
+    }
+    return arr;
+  }
+
+  async function sendOrder(event) {
+    const orderResponse = await posContext.sendOrder({
+      customerName: customerName,
+      itemPrices: getAllItemsPriceArray(),
+    });
+    if (orderResponse.err) {
+      alert("Error: " + orderResponse.text);
+    } else {
+      alert("Success: " + orderResponse.text);
+    }
+  }
+
   return (
     <div className="order-bill py-3">
       <Container>
         <Row>
           <span className="order-bill-token-number my-4 mx-auto">
-            Order #123456
+            Order #{posContext.state.tokenNumber}
           </span>
         </Row>
       </Container>
+      <Container fluid>
+        <Form.Control
+          type="text"
+          placeholder="Customer Name"
+          value={customerName}
+          onChange={(e) => setCustomerName(e.target.value)}
+        />
+      </Container>
       <Container className="order-bill-items">
         {posContext.state.bill.billItems.map((value, i) => {
-          {console.log(posContext.state.bill.billItems)}
-            return (
-              <Row key={i + value.name}>
-                <Row className="order-bill-item">
-                  <Col xs={2}>
-                    <img
-                      src={value.image}
-                      alt="user"
-                      className="img-fluid rounded-circle order-bill-image mr-4"
-                    />
-                  </Col>
-                  <Col xs={5} className="order-bill-food-name">
-                    {value.name} {"("+value.variant.name+")"}
-                  </Col>
-                  <Col xs={2.5}>
-                    <span className="order-bill-item-count">
-                      <RemoveCircleOutlineIcon
-                        className="order-bill-in-out mr-2"
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => {
-                          changeCountItem(i, "-");
-                        }}
-                      />
-                      {value.count}
-                      <AddCircleOutlineIcon
-                        className="order-bill-in-out ml-2"
-                        style={{ cursor: "pointer" }}
-                        onClick={(e) => {
-                          changeCountItem(i, "+");
-                        }}
-                      />
-                    </span>
-                  </Col>
-                  <Col xs={2.5} className="ml-auto order-bill-item-price-col">
-                    <span className="order-bill-item-price">
-                    Rs. {getAddOnsPriceSum(value.extras) + value.variant.price * value.count}
-                    </span>
-                    <CancelIcon
+          return (
+            <Row key={i + value.name}>
+              <Row className="order-bill-item">
+                <Col xs={2}>
+                  <img
+                    src={value.image}
+                    alt="user"
+                    className="img-fluid rounded-circle order-bill-image mr-4"
+                  />
+                </Col>
+                <Col xs={5} className="order-bill-food-name">
+                  {value.name} {"(" + value.variant.name + ")"}
+                </Col>
+                <Col xs={2.5}>
+                  <span className="order-bill-item-count">
+                    <RemoveCircleOutlineIcon
+                      className="order-bill-in-out mr-2"
+                      style={{ cursor: "pointer" }}
                       onClick={(e) => {
-                        removeBillItem(i);
+                        changeCountItem(i, "-");
                       }}
-                      className="ml-2 order-bill-item-cancel"
                     />
-                  </Col>
-                </Row>
-                <Container>
-                  {typeof value.extras !== "undefined" &&
-                    value.extras !== false &&
-                    value.extras.map((extra, subindex) => {
-                      return (
-                        <Row
-                          key={subindex + extra._id.toString() + extra.name}
-                          className="order-bill-addon-row"
-                        >
-                          <Col xs={9} className="order-bill-addon-name">
-                            {"+" + extra.name}
-                          </Col>
-                          <Col xs={3}>
-                            <span className="order-bill-addon-price">
-                              Rs. {extra.price}
-                            </span>
-                            <CancelIcon
-                              onClick={(e) => {
-                                removeAddOnBillItem(i, subindex);
-                              }}
-                              className="ml-2 order-bill-addon-cancel"
-                            />
-                          </Col>
-                        </Row>
-                      );
-                    })}
-                </Container>
+                    {value.count}
+                    <AddCircleOutlineIcon
+                      className="order-bill-in-out ml-2"
+                      style={{ cursor: "pointer" }}
+                      onClick={(e) => {
+                        changeCountItem(i, "+");
+                      }}
+                    />
+                  </span>
+                </Col>
+                <Col xs={2.5} className="ml-auto order-bill-item-price-col">
+                  <span className="order-bill-item-price">
+                    Rs.{" "}
+                    {getAddOnsPriceSum(value.extras) +
+                      value.variant.price * value.count}
+                  </span>
+                  <CancelIcon
+                    onClick={(e) => {
+                      removeBillItem(i);
+                    }}
+                    className="ml-2 order-bill-item-cancel"
+                  />
+                </Col>
               </Row>
-            );
+              <Container>
+                {typeof value.extras !== "undefined" &&
+                  value.extras !== false &&
+                  value.extras.map((extra, subindex) => {
+                    return (
+                      <Row
+                        key={subindex + extra._id.toString() + extra.name}
+                        className="order-bill-addon-row"
+                      >
+                        <Col xs={9} className="order-bill-addon-name">
+                          {"+" + extra.name}
+                        </Col>
+                        <Col xs={3}>
+                          <span className="order-bill-addon-price">
+                            Rs. {extra.price}
+                          </span>
+                          <CancelIcon
+                            onClick={(e) => {
+                              removeAddOnBillItem(i, subindex);
+                            }}
+                            className="ml-2 order-bill-addon-cancel"
+                          />
+                        </Col>
+                      </Row>
+                    );
+                  })}
+              </Container>
+            </Row>
+          );
           // });
         })}
       </Container>
@@ -198,6 +234,9 @@ function OrderBill(props) {
           <Button
             variant="light"
             className="default-button order-bill-place-order-btn"
+            onClick={(e) => {
+              sendOrder(e);
+            }}
           >
             Place Order
           </Button>
