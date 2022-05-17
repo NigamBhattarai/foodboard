@@ -57,7 +57,9 @@ function FoodManagement(props) {
 
   //eslint-disable-next-line
   useEffect(async () => {
-    document.querySelectorAll(".food-category-tab-item")[0].classList.add("active");
+    document
+      .querySelectorAll(".food-category-tab-item")[0]
+      .classList.add("active");
     const result = await axios.get("http://localhost:5000/api/food");
     dispatch({
       type: "setOriginalItemData",
@@ -73,7 +75,7 @@ function FoodManagement(props) {
       dispatch({ type: "setInitialItemData" });
     } else {
       var newArr = state.originalItemData.filter((value) => {
-        return (category === value.category._id) && value;
+        return category === value.category._id && value;
       });
       dispatch({ type: "updateItemData", value: newArr });
     }
@@ -113,7 +115,7 @@ function FoodManagement(props) {
             <Button
               variant="link"
               className="food-category-tab-item mr-1"
-              onClick={(e) => handleCategoryChange(e, 0, true, 0)}
+              onClick={(e) => handleCategoryChange(e, 0, true)}
             >
               All <span className="active-underline"></span>{" "}
             </Button>
@@ -122,9 +124,7 @@ function FoodManagement(props) {
                 variant="link"
                 className={"food-category-tab-item mr-1"}
                 key={index}
-                onClick={(e) =>
-                  handleCategoryChange(e, category._id, false, index + 1)
-                }
+                onClick={(e) => handleCategoryChange(e, category._id, false)}
               >
                 {category.name} <span className="active-underline"></span>{" "}
               </Button>
