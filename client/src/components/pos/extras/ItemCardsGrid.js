@@ -17,18 +17,19 @@ function ItemCardsGrid(props) {
     itemData.forEach((value, index, array) => {
       rows.push(
         <ItemsCard
+          key={"itemData-" + index}
           index={index}
           value={value}
           type={"pos"}
           setSelectedItem={setSelectedItem}
           setShowModal={setShowModal}
-          />
-          );
-        });
-        return rows;
-      }
-      return (
-        <Row className="item-card-row pb-3">
+        />
+      );
+    });
+    return rows;
+  }
+  return (
+    <Row className="item-card-row pb-3">
       <OrderPopup
         show={showModal}
         itemindex={selectedItem}

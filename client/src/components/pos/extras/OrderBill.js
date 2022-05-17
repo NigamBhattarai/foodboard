@@ -38,25 +38,33 @@ function OrderBill(props) {
     temp_state[i].count =
       action === "+"
         ? (temp_state[i].count = temp_state[i].count + 1)
-        : temp_state[i].count-1 > 0
+        : temp_state[i].count - 1 > 0
         ? (temp_state[i].count = temp_state[i].count - 1)
         : 1;
-    posContext.dispatch({type:"updateBillItems",value:temp_state});
+    posContext.dispatch({ type: "updateBillItems", value: temp_state });
     posContext.dispatch({ type: "updateBillPrices" });
   }
 
   function removeBillItem(i) {
     let temp_state = [...posContext.state.bill.billItems];
     temp_state.splice(i, 1);
-    posContext.dispatch({type:"updateBillItems",value:temp_state});
+    posContext.dispatch({ type: "updateBillItems", value: temp_state });
     posContext.dispatch({ type: "updateBillPrices" });
   }
 
   function removeAddOnBillItem(i, si) {
     let temp_state = [...posContext.state.bill.billItems];
     temp_state[i].extras.splice(si, 1);
-    posContext.dispatch({type:"updateBillItems",value:temp_state});
+    posContext.dispatch({ type: "updateBillItems", value: temp_state });
     posContext.dispatch({ type: "updateBillPrices" });
+  }
+  
+  function getAddOnsPriceSum(extras) {
+    var sum = 0;
+    for(var i = 0; i < extras.length; i++) {
+      sum += extras[i].price;
+    }
+    return sum;
   }
   return (
     <div className="order-bill py-3">
@@ -69,64 +77,81 @@ function OrderBill(props) {
       </Container>
       <Container className="order-bill-items">
         {posContext.state.bill.billItems.map((value, i) => {
-          return (
-            <div key={i+value.id.toString()+value.name}>
-              <Row className="order-bill-item">
-                <Col xs={2}>
-                  <img
-                    src={value.image}
-                    alt="user"
-                    className="img-fluid rounded-circle order-bill-image mr-4"
-                  />
-                </Col>
-                <Col xs={5} className="order-bill-food-name">
-                  {value.name}
-                </Col>
-                <Col xs={2.5}>
-                  <span className="order-bill-item-count">
-                    <RemoveCircleOutlineIcon
-                      className="order-bill-in-out mr-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={(e) => {
-                        changeCountItem(i, "-");
-                      }}
+          {console.log(posContext.state.bill.billItems)}
+            return (
+              <Row key={i + value.name}>
+                <Row className="order-bill-item">
+                  <Col xs={2}>
+                    <img
+                      src={value.image}
+                      alt="user"
+                      className="img-fluid rounded-circle order-bill-image mr-4"
                     />
-                    {value.count}
-                    <AddCircleOutlineIcon
-                      className="order-bill-in-out ml-2"
-                      style={{ cursor: "pointer" }}
+                  </Col>
+                  <Col xs={5} className="order-bill-food-name">
+                    {value.name} {"("+value.variant.name+")"}
+                  </Col>
+                  <Col xs={2.5}>
+                    <span className="order-bill-item-count">
+                      <RemoveCircleOutlineIcon
+                        className="order-bill-in-out mr-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          changeCountItem(i, "-");
+                        }}
+                      />
+                      {value.count}
+                      <AddCircleOutlineIcon
+                        className="order-bill-in-out ml-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          changeCountItem(i, "+");
+                        }}
+                      />
+                    </span>
+                  </Col>
+                  <Col xs={2.5} className="ml-auto order-bill-item-price-col">
+                    <span className="order-bill-item-price">
+                    Rs. {getAddOnsPriceSum(value.extras) + value.variant.price * value.count}
+                    </span>
+                    <CancelIcon
                       onClick={(e) => {
-                        changeCountItem(i, "+");
+                        removeBillItem(i);
                       }}
+                      className="ml-2 order-bill-item-cancel"
                     />
-                  </span>
-                </Col>
-                <Col xs={2.5} className="ml-auto order-bill-item-price-col">
-                  <span className="order-bill-item-price">
-                    Rs. {value.price * value.count}
-                  </span>
-                  <CancelIcon onClick={(e)=>{removeBillItem(i)}} className="ml-2 order-bill-item-cancel" />
-                </Col>
+                  </Col>
+                </Row>
+                <Container>
+                  {typeof value.extras !== "undefined" &&
+                    value.extras !== false &&
+                    value.extras.map((extra, subindex) => {
+                      return (
+                        <Row
+                          key={subindex + extra._id.toString() + extra.name}
+                          className="order-bill-addon-row"
+                        >
+                          <Col xs={9} className="order-bill-addon-name">
+                            {"+" + extra.name}
+                          </Col>
+                          <Col xs={3}>
+                            <span className="order-bill-addon-price">
+                              Rs. {extra.price}
+                            </span>
+                            <CancelIcon
+                              onClick={(e) => {
+                                removeAddOnBillItem(i, subindex);
+                              }}
+                              className="ml-2 order-bill-addon-cancel"
+                            />
+                          </Col>
+                        </Row>
+                      );
+                    })}
+                </Container>
               </Row>
-              <Container>
-                {value.extras.map((extra, subindex) => {
-                  return (
-                    <Row key={subindex+extra.id.toString()+extra.name} className="order-bill-addon-row">
-                      <Col xs={9} className="order-bill-addon-name">
-                        {"+" + extra.name}
-                      </Col>
-                      <Col xs={3}>
-                        <span className="order-bill-addon-price">
-                          Rs. {extra.price}
-                        </span>
-                        <CancelIcon onClick={(e)=>{removeAddOnBillItem(i, subindex)}} className="ml-2 order-bill-addon-cancel" />
-                      </Col>
-                    </Row>
-                  );
-                })}
-              </Container>
-            </div>
-          );
+            );
+          // });
         })}
       </Container>
       <Container>
@@ -152,7 +177,7 @@ function OrderBill(props) {
               // type="number"
               placeholder="0%"
               disabled={true}
-              value={posContext.state.bill.prices.discountPercentage+"%"}
+              value={posContext.state.bill.prices.discountPercentage + "%"}
               className="order-bill-discount-percentage"
               max="100"
             />
@@ -164,13 +189,16 @@ function OrderBill(props) {
             Total
           </Col>
           <Col xs={3} className="ml-auto">
-          Rs. {posContext.state.bill.prices.total}
+            Rs. {posContext.state.bill.prices.total}
           </Col>
         </Row>
       </Container>
       <Container>
         <Row className="justify-content-center">
-          <Button variant="light" className="default-button order-bill-place-order-btn">
+          <Button
+            variant="light"
+            className="default-button order-bill-place-order-btn"
+          >
             Place Order
           </Button>
         </Row>

@@ -8,6 +8,8 @@ import ViewModuleIcon from "@mui/icons-material/ViewModule";
 import TableRowsIcon from "@mui/icons-material/TableRows";
 
 import "./pos.scss";
+import axios from "axios";
+import UseTitle from "../../hooks/useTitle";
 function getAbsoluteHeight(el) {
   el = typeof el === "string" ? document.querySelector(el) : el;
 
@@ -28,6 +30,7 @@ function adjustPOSPage() {
 }
 
 const initialState = {
+  orderNumber: 0,
   bill: {
     prices: {
       subTotal: 0,
@@ -38,18 +41,29 @@ const initialState = {
     },
     billItems: [],
   },
+  originalItemData: [],
+  itemDataForCategory: [],
   itemData: [],
 };
 
 function posReducer(state, action) {
   switch (action.type) {
+
+    //Order Number
+    case "setOrderNumber":
+      return {...state, orderNumber:action.value}
+
     //Bill State
     case "addbillItems":
+      var temp_billItems = [...state.bill.billItems];
+      for (var i = 0; i < action.value.length; i++) {
+        temp_billItems.push(action.value[i]);
+      }
       return {
         ...state,
         bill: {
           ...state.bill,
-          billItems: [...state.bill.billItems, action.value],
+          billItems: [...temp_billItems],
         },
       };
     case "updateBillItems":
@@ -57,14 +71,16 @@ function posReducer(state, action) {
     case "updateBillPrices":
       var subTotal = 0,
         tax = 0,
-        discountPercentage = 10,
+        discountPercentage = 0,
         discountValue = 0,
         total = 0;
       state.bill.billItems.forEach((value, index) => {
-        subTotal += value.price * value.count;
-        value.extras.forEach((extrasValue, subindex) => {
-          subTotal += extrasValue.price;
-        });
+        subTotal += value.variant.price * value.count;
+        typeof value.extras !== "undefined" &&
+          value.extras !== false &&
+          value.extras.forEach((extrasValue, subindex) => {
+            subTotal += extrasValue.price;
+          });
       });
       discountValue = (discountPercentage / 100) * subTotal;
       total = subTotal - discountValue;
@@ -87,28 +103,14 @@ function posReducer(state, action) {
       return { ...state, itemData: [...state.itemData, action.value] };
     case "updateItemData":
       return { ...state, itemData: action.value };
+    case "setOriginalItemData":
+      return { ...state, originalItemData: action.value };
     case "setInitialItemData":
-      const itemData = [
-        {
-          id: 1,
-          image:
-            "https://www.rockrecipes.com/wp-content/uploads/2017/12/Tandoori-Grilled-Chicken-close-up-photo-of-finished-dish-on-a-white-platter.jpg",
-          name: "Chicken Tandoori",
-          price: 400,
-          available_stock: 30,
-        },
-      ];
-      for (var i = 0; i < 15; i++) {
-        itemData.push({
-          id: i + 2,
-          image:
-            "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg",
-          name: "Jhol Momo",
-          price: 200,
-          available_stock: 30,
-        });
-      }
-      return { ...state, itemData: itemData };
+      return { ...state, itemData: state.originalItemData };
+    case "setInitialItemDataForCategory":
+      return { ...state, itemDataForCategory: state.originalItemData };
+    case "setItemDataForCategory":
+      return { ...state, itemDataForCategory: action.value };
 
     default:
       return state;
@@ -118,6 +120,8 @@ function posReducer(state, action) {
 export const POSContext = createContext();
 
 export default function POS() {
+  UseTitle("Point Of Sale");
+
   useEffect(() => {
     adjustPOSPage();
   });
@@ -131,6 +135,9 @@ export default function POS() {
   //States
   const [isGridSelected, setIsGridSelected] = useState(true);
   // const [itemDataState, setItemDataState] = useState(itemData);
+  const [categories, setCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState(null);
+  const [isAllSelected, setisAllSelected] = useState(true);
   const [searchKey, setSearchKey] = useState("");
   const [nullState] = useState(null);
 
@@ -140,22 +147,57 @@ export default function POS() {
     setSearchKey(value);
   }
 
-  useEffect(() => {
+  //eslint-disable-next-line
+  useEffect(async () => {
+    document
+      .querySelectorAll(".food-category-tab-item")[0]
+      .classList.add("active");
+    const itemData = await axios.get("http://localhost:5000/api/food");
+    dispatch({ type: "setOriginalItemData", value: itemData.data });
     dispatch({ type: "setInitialItemData" });
+    const categories = await axios.get("http://localhost:5000/api/category");
+    setCategories(categories.data);
   }, [nullState]);
 
   useEffect(() => {
     if (searchKey.trim() !== "") {
-      const newItemData = state.itemData.filter((item) => {
+      const newItemData = state.itemDataForCategory.filter((item) => {
         return Object.values(item.name)
           .join("")
           .toLowerCase()
           .includes(searchKey.toLowerCase());
       });
       dispatch({ type: "updateItemData", value: newItemData });
-    } else dispatch({ type: "setInitialItemData" });
+    } else {
+      setItemsForCategory(selectedCategory, isAllSelected, false);
+    }
     //eslint-disable-next-line
   }, [searchKey]);
+
+  function setItemsForCategory(category, isAll, isCategoryChange) {
+    const all = isCategoryChange ? isAll : isAllSelected;
+    if (all) {
+      dispatch({ type: "setInitialItemDataForCategory" });
+      dispatch({ type: "setInitialItemData" });
+    } else {
+      var newArr = state.originalItemData.filter((value) => {
+        return category === value.category._id && value;
+      });
+      dispatch({ type: "setItemDataForCategory", value: newArr });
+      dispatch({ type: "updateItemData", value: newArr });
+    }
+  }
+
+  function handleCategoryChange(e, category, isAll) {
+    setSelectedCategory(category);
+    setItemsForCategory(category, isAll, true);
+    var elems = document.querySelectorAll(".food-category-tab-item");
+    elems.forEach(function (el) {
+      el.classList.remove("active");
+    });
+
+    e.target.classList.add("active");
+  }
 
   return (
     <POSContext.Provider value={{ state, dispatch }}>
@@ -169,21 +211,29 @@ export default function POS() {
           <Col xs={12} lg={8}>
             <Container>
               <div className="header-category-menu my-4 py-2">
-                <Button variant="link" className="mr-1">
-                  Bread <span className="active-underline"></span>{" "}
+                <Button
+                  variant="link"
+                  className="food-category-tab-item mr-1"
+                  onClick={(e) => {
+                    setisAllSelected(true);
+                    handleCategoryChange(e, 0, true);
+                  }}
+                >
+                  All <span className="active-underline"></span>{" "}
                 </Button>
-                <Button variant="link" className="active mr-1">
-                  Bread <span className="active-underline"></span>{" "}
-                </Button>
-                <Button variant="link" className="mr-1">
-                  Bread <span className="active-underline"></span>{" "}
-                </Button>
-                <Button variant="link" className="mr-1">
-                  Bread <span className="active-underline"></span>{" "}
-                </Button>
-                <Button variant="link" className="mr-1">
-                  Bread <span className="active-underline"></span>{" "}
-                </Button>
+                {categories.map((category, index) => (
+                  <Button
+                    variant="link"
+                    className={"food-category-tab-item mr-1"}
+                    key={index}
+                    onClick={(e) => {
+                      setisAllSelected(false);
+                      handleCategoryChange(e, category._id, false);
+                    }}
+                  >
+                    {category.name} <span className="active-underline"></span>{" "}
+                  </Button>
+                ))}
               </div>
               <Row>
                 <Col xs={12} lg={6}>
