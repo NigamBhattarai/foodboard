@@ -3,8 +3,10 @@ import { Container, Row, Col, Button, Form } from "react-bootstrap";
 import AddCircleOutlineIcon from "@mui/icons-material/AddCircleOutline";
 import RemoveCircleOutlineIcon from "@mui/icons-material/RemoveCircleOutline";
 import CancelIcon from "@mui/icons-material/Cancel";
+import { useAlert, positions } from "react-alert";
 import "./OrderBill.scss";
 import { POSContext } from "../pos";
+import axios from "axios";
 
 function getAbsoluteHeight(el) {
   el = typeof el === "string" ? document.querySelector(el) : el;
@@ -24,6 +26,8 @@ function adjustOrderBill() {
 function OrderBill(props) {
   //States
   const [customerName, setCustomerName] = useState("");
+
+  const alert = useAlert();
 
   useEffect(() => {
     adjustOrderBill();
@@ -87,10 +91,24 @@ function OrderBill(props) {
       itemPrices: getAllItemsPriceArray(),
     });
     if (orderResponse.err) {
-      alert("Error: " + orderResponse.text);
+      alert.error("Error: " + orderResponse.text, {
+        position: positions.BOTTOM_RIGHT,
+      });
     } else {
-      alert("Success: " + orderResponse.text);
+      alert.success("Success: " + orderResponse.text, {
+        position: positions.BOTTOM_RIGHT,
+      });
+      clearBill();
+      const newToken = await axios.get(
+        "http://localhost:5000/api/orders/new-token"
+      );
+      posContext.dispatch({ type: "setTokenNumber", value: newToken.data });
     }
+  }
+
+  async function clearBill() {
+    setCustomerName("");
+    posContext.dispatch({ type: "clearBill" });
   }
 
   return (

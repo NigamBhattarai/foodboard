@@ -45,11 +45,7 @@ function OrderPopup(props) {
   }, [variants]);
 
   useEffect(() => {
-    if (selectedVariants.length === 1) {
-      onSelectedVariantsChange(0);
-    } else if (selectedVariants.length > 1) {
-      onSelectedVariantsChange(selectedVariants.length - 1);
-    }
+    onSelectedVariantsChange(selectedVariants.length - 1);
     //eslint-disable-next-line
   }, [selectedVariants]);
 
@@ -58,7 +54,7 @@ function OrderPopup(props) {
       if (typeof selectedVariants[index] !== "undefined") {
         if (selectedVariants[index].addons.length > 0) {
           let temp_addons = [...addOns];
-          temp_addons[index] = selectedVariants[index].addons;
+          temp_addons[index] = structuredClone(selectedVariants[index].addons);
           setAddOns(temp_addons);
         } else {
           let temp_addons = [...addOns];
@@ -87,7 +83,9 @@ function OrderPopup(props) {
     setselectedVariants(temp_selected_variants);
     if (temp_selected_variants[itemIndex].addons.length > 0) {
       let temp_addons = [...addOns];
-      temp_addons[itemIndex] = temp_selected_variants[itemIndex].addons;
+      temp_addons[itemIndex] = structuredClone(
+        temp_selected_variants[itemIndex].addons
+      );
       setAddOns(temp_addons);
     } else {
       let temp_addons = [...addOns];
@@ -163,7 +161,6 @@ function OrderPopup(props) {
   function checkHandler(item, i) {
     const temp_state = [...addOns];
     temp_state[item][i].selected = !temp_state[item][i].selected;
-
     setAddOns(temp_state);
   }
 
@@ -218,8 +215,9 @@ function OrderPopup(props) {
                     aria-label="Default select"
                     className="order-popup-item-dropdown"
                     title={
-                      typeof selectedVariants[itemIndex] !== "undefined" &&
-                      selectedVariants[itemIndex].desc
+                      typeof selectedVariants[itemIndex] !== "undefined"
+                        ? selectedVariants[itemIndex].desc.toString()
+                        : ""
                     }
                     onChange={(e) => {
                       variantChangeHandler(e);
@@ -285,27 +283,6 @@ function OrderPopup(props) {
                   </Row>
                 </Col>
               </Row>
-              {/* {typeof selectedVariants[itemIndex] !== "undefined" &&
-                selectedVariants[itemIndex].desc !== null &&
-                selectedVariants[itemIndex].desc.trim() !== "" && (
-                  <Container fluid>
-                    <Row>
-                      <Col
-                        md={5}
-                        className="mx-auto"
-                        style={{
-                          color: "#777",
-                          fontSize: "13px",
-                          letterSpacing: 1,
-                          textAlign: "center",
-                        }}
-                      >
-                        {typeof selectedVariants[itemIndex] !== "undefined" &&
-                          selectedVariants[itemIndex].desc}
-                      </Col>
-                    </Row>
-                  </Container>
-                )} */}
               {typeof addOns[itemIndex] !== "undefined" &&
               addOns[itemIndex].length > 0 ? (
                 <Container className="mt-4">
