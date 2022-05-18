@@ -96,6 +96,12 @@ function posReducer(state, action) {
           },
         },
       };
+    case "clearBill":
+      return {
+        ...state,
+        bill: initialState.bill,
+        tokenNumber: initialState.tokenNumber,
+      };
 
     //Item Data State
     case "addItemData":
