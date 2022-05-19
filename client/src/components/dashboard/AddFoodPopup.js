@@ -10,20 +10,7 @@ import axios from "axios";
 function AddFoodPopup(props) {
   const foodManagementContext = useContext(FoodManagementContext);
   const itemID = props.itemID;
-  const initialAddOns = [
-    {
-      name: "extra cheese",
-      price: 10,
-    },
-    {
-      name: "extra jhol",
-      price: 5,
-    },
-    {
-      name: "extra piece",
-      price: 20,
-    },
-  ];
+  const initialAddOns = [[]];
   const initialFoodState = {
     name: "",
     image:
@@ -31,7 +18,7 @@ function AddFoodPopup(props) {
     imageFile: "",
     category: "",
     code: "",
-    description: "",
+    desc: "",
     status: "",
     veg: false,
   };
@@ -41,7 +28,8 @@ function AddFoodPopup(props) {
     image:
       "https://media.istockphoto.com/vectors/fresh-tasty-grilled-roasted-chicken-turkey-legs-with-vegetables-vector-id943483254?k=20&m=943483254&s=612x612&w=0&h=QcqcSxs0OA7BBdsSKkGB1rdA4aExrfPnqa0H14SgiVc=",
     imageFile: "",
-    price: 0,
+    desc: "",
+    price: "",
     sourLevel: 0,
   };
 
@@ -49,22 +37,18 @@ function AddFoodPopup(props) {
   const [food, setFood] = useState({ ...initialFoodState });
   const [addOns, setAddOns] = useState([...initialAddOns]);
   const [categories, setCategories] = useState([]);
-  //eslint-disable-next-line
-  const [nullState, setNullState] = useState();
+  const [fieldAddOn, setFieldAddOn] = useState([{ name: "", price: "" }]);
+  const [nullState] = useState();
   const [isEdit, setIsEdit] = useState(false);
   const [variants, setVariants] = useState([
     { ...initialVariantsState, default: true },
   ]);
 
   //eslint-disable-next-line
-  function addToBillClicked(e) {
-    props.onHide(e);
-  }
-
-  function checkHandler(i) {
-    let temp_state = [...addOns];
-    temp_state[i].selected = !temp_state[i].selected;
-    setAddOns(temp_state);
+  function addFood() {
+    console.log(food);
+    console.log(variants);
+    // props.onHide(e);
   }
 
   function handleCategoryChange(event) {
@@ -76,13 +60,23 @@ function AddFoodPopup(props) {
   }
 
   function addVariant() {
+    setAddOns([...addOns, []]);
     setVariants([...variants, initialVariantsState]);
+    let temp_field_addOn = [...fieldAddOn];
+    temp_field_addOn.push({ name: "", price: "" });
+    setFieldAddOn(temp_field_addOn);
   }
 
   function removeVariant(index) {
-    var temp_variants = [...variants];
+    let temp_variants = [...variants];
     temp_variants.splice(index, 1);
     setVariants([...temp_variants]);
+    let temp_addOns = [...addOns];
+    temp_addOns.splice(index, 1);
+    setAddOns(temp_addOns);
+    let temp_field_addOn = [...fieldAddOn];
+    temp_field_addOn.splice(index, 1);
+    setFieldAddOn(temp_field_addOn);
   }
 
   function textChangeHandlerVariants(event, index, textHandle) {
@@ -146,6 +140,7 @@ function AddFoodPopup(props) {
     setFood(initialFoodState);
     setVariants([{ ...initialVariantsState, default: true }]);
     setAddOns([...initialAddOns]);
+    setFieldAddOn([]);
   }
 
   //eslint-disable-next-line
@@ -165,7 +160,12 @@ function AddFoodPopup(props) {
       )[0];
       setFood(selectedFood);
       selectedFood.variants && setVariants(selectedFood.variants);
-      selectedFood.addOns && setAddOns(selectedFood.addons);
+      let addons = [];
+      selectedFood.variants.forEach((value, index) => {
+        addons.push(value.addons);
+        setAddOns(addons);
+        setFieldAddOn([...fieldAddOn, { name: "", price: "" }]);
+      });
     } else {
       setIsEdit(false);
       setFood(initialFoodState);
@@ -173,6 +173,57 @@ function AddFoodPopup(props) {
     }
     //eslint-disable-next-line
   }, [props.show]);
+
+  function addonFieldChange(e, varInd, type) {
+    let temp_field_addOn = [...fieldAddOn];
+    switch (type) {
+      case "name":
+        temp_field_addOn[varInd].name = e.target.value;
+        break;
+      case "price":
+        !Number.isNaN(Number.parseInt(e.target.value))
+          ? (temp_field_addOn[varInd].price = Number.parseInt(e.target.value))
+          : (temp_field_addOn[varInd].price = "");
+        break;
+    }
+    setFieldAddOn(temp_field_addOn);
+  }
+
+  function addNewAddon(e, varInd, type) {
+    let temp_field_addOn = [...fieldAddOn];
+    if (e.keyCode === 13) {
+      if (temp_field_addOn[varInd].name.trim().length > 0) {
+        if (!Number.isNaN(Number.parseInt(temp_field_addOn[varInd].price))) {
+          document
+            .getElementById("addon-name-" + varInd)
+            .classList.remove("error-field-addon");
+          document
+            .getElementById("addon-price-" + varInd)
+            .classList.remove("error-field-addon");
+          var temp_addOns = [...addOns];
+          temp_addOns[varInd].push(structuredClone(temp_field_addOn[varInd]));
+          setAddOns(temp_addOns);
+          temp_field_addOn[varInd].name = "";
+          temp_field_addOn[varInd].price = "";
+        } else {
+          document
+            .getElementById("addon-price-" + varInd)
+            .classList.add("error-field-addon");
+        }
+      } else {
+        document
+          .getElementById("addon-name-" + varInd)
+          .classList.add("error-field-addon");
+      }
+    }
+    setFieldAddOn(temp_field_addOn);
+  }
+
+  function removeAddOn(varInd, addonIndex) {
+    let temp_addOns = [...addOns];
+    temp_addOns[varInd].splice(addonIndex, 1);
+    setAddOns(temp_addOns);
+  }
 
   return (
     <Modal
@@ -238,21 +289,22 @@ function AddFoodPopup(props) {
           <Col md={9}>
             <Row className="mb-4">
               <Col md={4}>
-                <Form.Control
+                {/* <Form.Control
                   onChange={(e) => {
                     textChangeHandlerFood(e, "code");
                   }}
                   type="text"
                   className="add-food-input code-input"
                   placeholder="#Code"
-                ></Form.Control>
+                ></Form.Control> */}
               </Col>
               <Col md={8}>
                 <Form.Control
                   onChange={(e) => {
-                    textChangeHandlerFood(e, "description");
+                    textChangeHandlerFood(e, "desc");
                   }}
                   as="textarea"
+                  value={food.desc}
                   className="add-food-input description-input"
                   placeholder="Description"
                 ></Form.Control>
@@ -297,30 +349,6 @@ function AddFoodPopup(props) {
             />
           </Col>
         </Row>
-        <Container className="mt-4">
-          Addons:
-          <Row>
-            {addOns.map((value, index, array) => {
-              return (
-                <Col
-                  xs={4}
-                  key={value.id + value.name}
-                  className="p-2 order-popup-variant-checkbox"
-                >
-                  <Form.Check
-                    type={"checkbox"}
-                    id={``}
-                    checked={value.selected}
-                    onChange={(e) => {
-                      checkHandler(index);
-                    }}
-                    label={value.name}
-                  />
-                </Col>
-              );
-            })}
-          </Row>
-        </Container>
         <hr style={{ borderTop: "1px dashed #8F8F8F" }} />
         {variants.map((value, varInd, array) => {
           return (
@@ -388,6 +416,17 @@ function AddFoodPopup(props) {
                     placeholder="Price"
                   ></Form.Control>
                 </Col>
+                <Col md={5}>
+                  <Form.Control
+                    onChange={(e) => {
+                      textChangeHandlerVariants(e, varInd, "desc");
+                    }}
+                    as="textarea"
+                    value={value.desc}
+                    className="add-food-input description-input"
+                    placeholder="Description"
+                  ></Form.Control>
+                </Col>
                 <Col md={3} className="ml-auto">
                   <img
                     src={value.image}
@@ -396,10 +435,71 @@ function AddFoodPopup(props) {
                   />
                 </Col>
               </Row>
+              <Container fluid>
+                Addons:
+                <Row>
+                  <Col xs={9}>
+                    <Row>
+                      {typeof addOns[varInd] !== "undefined" &&
+                        addOns[varInd].map((addon, addonIndex, array) => {
+                          return (
+                            <Col
+                              xs={4}
+                              key={addon.id + addon.name}
+                              className="p-2 order-popup-variant-checkbox"
+                            >
+                              {addon.name + ", " + addon.price}
+                              <CancelIcon
+                                className="ml-2 order-popup-close-btn"
+                                onClick={(e) => removeAddOn(varInd, addonIndex)}
+                              />
+                            </Col>
+                          );
+                        })}
+                    </Row>
+                  </Col>
+                  <Col xs={3}>
+                    <Row>
+                      <Form.Control
+                        type="text"
+                        placeholder="new addon"
+                        className="add-food-input"
+                        id={"addon-name-" + varInd}
+                        value={
+                          typeof fieldAddOn[varInd] !== "undefined"
+                            ? fieldAddOn[varInd].name
+                            : ""
+                        }
+                        onChange={(e) => {
+                          addonFieldChange(e, varInd, "name");
+                        }}
+                        onKeyDown={(e) => addNewAddon(e, varInd, "name")}
+                      ></Form.Control>
+                    </Row>
+                    <Row className="mt-2">
+                      <Form.Control
+                        type="text"
+                        placeholder="price"
+                        id={"addon-price-" + varInd}
+                        className="add-food-input"
+                        value={
+                          typeof fieldAddOn[varInd] !== "undefined"
+                            ? fieldAddOn[varInd].price
+                            : ""
+                        }
+                        onChange={(e) => {
+                          addonFieldChange(e, varInd, "price");
+                        }}
+                        onKeyDown={(e) => addNewAddon(e, varInd, "price")}
+                      ></Form.Control>
+                    </Row>
+                  </Col>
+                </Row>
+              </Container>
             </Container>
           );
         })}
-        <Container>
+        <Container className="mt-4">
           <Row>
             <Button
               variant="primary"
@@ -412,7 +512,11 @@ function AddFoodPopup(props) {
         </Container>
       </Modal.Body>
       <Modal.Footer>
-        <Button variant="primary" className="default-button px-5">
+        <Button
+          variant="primary"
+          className="default-button px-5"
+          onClick={(e) => addFood()}
+        >
           {isEdit ? "Update" : "Add"}
         </Button>
       </Modal.Footer>
