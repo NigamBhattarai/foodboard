@@ -5,7 +5,6 @@ let variantSchema = new mongoose.Schema({
     image: {type: String},
     price: {type: Number},
     default: {type: Boolean},
-    veg: {type: Boolean},
     desc:{type:String},
     sourLevel: {type: Number},
     createdAt: {type:Date, default:Date.now()},
