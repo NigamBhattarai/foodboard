@@ -165,7 +165,7 @@ export default function POS() {
     } else {
       try {
         const orderResponse = await axios.post(
-          "http://localhost:5000/api/orders/add",
+          process.env.REACT_APP_API_URL+"api/orders/add",
           {
             bill: state.bill,
             customerName: extraData.customerName,
@@ -191,13 +191,13 @@ export default function POS() {
     document
       .querySelectorAll(".food-category-tab-item")[0]
       .classList.add("active");
-    const itemData = await axios.get("http://localhost:5000/api/food");
+    const itemData = await axios.get(process.env.REACT_APP_API_URL+"api/food/active");
     dispatch({ type: "setOriginalItemData", value: itemData.data });
     dispatch({ type: "setInitialItemData" });
-    const categories = await axios.get("http://localhost:5000/api/category");
+    const categories = await axios.get(process.env.REACT_APP_API_URL+"api/category");
     setCategories(categories.data);
     const newToken = await axios.get(
-      "http://localhost:5000/api/orders/new-token"
+      process.env.REACT_APP_API_URL+"api/orders/new-token"
     );
     dispatch({ type: "setTokenNumber", value: newToken.data });
   }, [nullState]);
