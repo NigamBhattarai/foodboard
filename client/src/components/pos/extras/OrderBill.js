@@ -18,10 +18,11 @@ function getAbsoluteHeight(el) {
   return Math.ceil(el.offsetHeight + margin);
 }
 function adjustOrderBill() {
-  document.querySelector(".order-bill").style.height =
-    window.innerHeight -
-    getAbsoluteHeight(document.querySelector(".dashboard-top-bar")) +
-    "px";
+  document.querySelector(".order-bill") !== null &&
+    (document.querySelector(".order-bill").style.height =
+      window.innerHeight -
+      getAbsoluteHeight(document.querySelector(".dashboard-top-bar")) +
+      "px");
 }
 function OrderBill(props) {
   //States
@@ -100,7 +101,7 @@ function OrderBill(props) {
       });
       clearBill();
       const newToken = await axios.get(
-        "http://localhost:5000/api/orders/new-token"
+        process.env.REACT_APP_API_URL + "api/orders/new-token"
       );
       posContext.dispatch({ type: "setTokenNumber", value: newToken.data });
     }
