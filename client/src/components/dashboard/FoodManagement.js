@@ -1,5 +1,5 @@
 import React, { useState, createContext, useReducer, useEffect } from "react";
-import { Row, Col, Container, Button, Card } from "react-bootstrap";
+import { Row, Col, Container, Button, Card, Spinner } from "react-bootstrap";
 import "./FoodManagement.scss";
 import ItemsCard from "../pos/extras/ItemsCard";
 import AddFoodPopup from "./AddFoodPopup";
@@ -7,7 +7,6 @@ import axios from "axios";
 import UseTitle from "../../hooks/useTitle";
 
 const initialState = {
-  
   itemData: [],
   originalItemData: [],
 };
@@ -37,6 +36,7 @@ function FoodManagement(props) {
   const [categories, setCategories] = useState([]);
   const [nullState] = useState(null);
   const [showModal, setShowModal] = useState(false);
+  const [loading, setLoading] = useState(false);
   const [selectedItem, setSelectedItem] = useState();
 
   function itemCardsGrid(itemData) {
@@ -61,14 +61,18 @@ function FoodManagement(props) {
     document
       .querySelectorAll(".food-category-tab-item")[0]
       .classList.add("active");
-    const result = await axios.get("http://localhost:5000/api/food");
+    setLoading(true);
+    const result = await axios.get(process.env.REACT_APP_API_URL + "api/food");
     dispatch({
       type: "setOriginalItemData",
       value: result.data,
     });
     dispatch({ type: "setInitialItemData" });
-    const categories = await axios.get("http://localhost:5000/api/category");
+    const categories = await axios.get(
+      process.env.REACT_APP_API_URL + "api/category"
+    );
     setCategories(categories.data);
+    setLoading(false);
   }, [nullState]);
 
   async function handleCategoryChange(e, category, isAll) {
@@ -89,7 +93,25 @@ function FoodManagement(props) {
   }
 
   return (
-    <FoodManagementContext.Provider value={{ state, dispatch }}>
+    <FoodManagementContext.Provider value={{ state, dispatch, setLoading }}>
+      {loading ? (
+        <Container fluid>
+          <Row className="food-popup-loading">
+            <Col
+              md={4}
+              className="mx-auto my-auto d-flex justify-content-center"
+            >
+              <Spinner
+                className="food-popup-spinner"
+                animation="border"
+                role="status"
+              />
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        ""
+      )}
       <AddFoodPopup
         show={showModal}
         itemID={selectedItem}
