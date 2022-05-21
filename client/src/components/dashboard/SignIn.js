@@ -8,7 +8,6 @@ import { AppContext } from "../../App";
 import UseTitle from "../../hooks/useTitle";
 
 function SignIn() {
-
   UseTitle("Sign In");
 
   const appContext = useContext(AppContext);
@@ -35,7 +34,7 @@ function SignIn() {
   function submitLoginForm(e) {
     e.preventDefault();
     axios
-      .post("http://localhost:5000/users/login", {
+      .post(process.env.REACT_APP_API_URL + "users/login", {
         username: loginDetails.username,
         password: loginDetails.password,
       })
@@ -47,6 +46,7 @@ function SignIn() {
           type: "login",
           value: { accessToken: res.data.accessToken, user: res.data.user },
         });
+        appContext.dispatch({ type: "setOriginalURL", value: "" });
       })
       .catch((err, data) => {
         var status = err.toJSON().status;
