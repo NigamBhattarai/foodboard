@@ -39,7 +39,7 @@ function Order(props) {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("http://localhost:5000/api/orders");
+        const result = await axios.get(process.env.REACT_APP_API_URL+"api/orders");
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });

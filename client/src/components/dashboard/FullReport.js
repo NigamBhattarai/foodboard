@@ -113,7 +113,7 @@ function FullReport(props) {
                     return (
                       <OrderListTable
                         order={order}
-                        key={order.id}
+                        key={order._id}
                         id={order.id}
                         handleClick={() => handleClick(order)}
                         selected={order.id === selected.id}

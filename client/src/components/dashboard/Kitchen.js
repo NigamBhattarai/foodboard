@@ -11,7 +11,7 @@ function Kitchen(props) {
   const [orders, setOrders] = useState([]);
   useEffect(() => {
     const fetchData = async () => {
-      const result = await axios.get("http://localhost:5000/api/orders");
+      const result = await axios.get(process.env.REACT_APP_API_URL+"api/orders");
       setOrders(result.data);
     };
     fetchData();

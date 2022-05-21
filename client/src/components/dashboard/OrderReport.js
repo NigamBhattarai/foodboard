@@ -33,7 +33,9 @@ function OrderReport() {
     const fetchData = async () => {
       dispatch({ type: "FETCH_REQUEST" });
       try {
-        const result = await axios.get("http://localhost:5000/api/orders");
+        const result = await axios.get(
+          process.env.REACT_APP_API_URL + "api/orders"
+        );
         dispatch({ type: "FETCH_SUCCESS", payload: result.data });
       } catch (err) {
         dispatch({ type: "FETCH_FAIL", payload: err.message });
@@ -63,56 +65,57 @@ function OrderReport() {
       </Row>
       <hr />
       <div className="main-body">
-      {loading ? (
+        {loading ? (
           <center>
             <LoadingBox />
           </center>
         ) : error ? (
           <MessageBox variant="danger">{error}</MessageBox>
         ) : (
-        <Row>
-          <Col md="12">
-            <Table
-              className="table-borderless align-middle"
-              Visibility
-              hover
-              size="sm"
-            >
-              <thead>
-                <tr>
-                  <th>Date</th>
-                  <th>Time</th>
-                  <th>Token</th>
-                  <th>No. Of Items</th>
-                  <th>Status</th>
-                  <th>Action</th>
-                </tr>
-              </thead>
-              <tbody>
-                {orders.map((order) => {
-                  const classname = "pill-" + order.status;
-                  return (
-                    <tr>
-                      <td>{order.ordered_time}</td>
-                      <td>12:40</td>
-                      <td>{order.token_number}</td>
-                      <td>3</td>
-                      <td>
-                        <Badge pill bg="primary" className={classname}>
-                          {order.status}
-                        </Badge>
-                      </td>
-                      <td>
-                        <VisibilityIcon className="mr-2 icon"></VisibilityIcon>
-                        <PrintIcon className="mr-2 icon"></PrintIcon>
-                      </td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </Table>
-          </Col>
-        </Row>)}
+          <Row>
+            <Col md="12">
+              <Table
+                className="table-borderless align-middle"
+                Visibility
+                hover
+                size="sm"
+              >
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Token</th>
+                    <th>No. Of Items</th>
+                    <th>Status</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {orders.map((order, index) => {
+                    const classname = "pill-" + order.status;
+                    return (
+                      <tr key={"order-" + index}>
+                        <td>{order.ordered_time}</td>
+                        <td>12:40</td>
+                        <td>{order.token_number}</td>
+                        <td>3</td>
+                        <td>
+                          <Badge pill bg="primary" className={classname}>
+                            {order.status}
+                          </Badge>
+                        </td>
+                        <td>
+                          <VisibilityIcon className="mr-2 icon"></VisibilityIcon>
+                          <PrintIcon className="mr-2 icon"></PrintIcon>
+                        </td>
+                      </tr>
+                    );
+                  })}
+                </tbody>
+              </Table>
+            </Col>
+          </Row>
+        )}
       </div>
     </Container>
   );

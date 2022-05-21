@@ -104,9 +104,9 @@ function AddOns() {
                 </tr>
               </thead>
               <tbody>
-                {categories.map((category) => {
+                {categories.map((category, index) => {
                   return (
-                    <tr>
+                    <tr key={"category-"+index}>
                       <td>
                         <img
                           src={category.image}
