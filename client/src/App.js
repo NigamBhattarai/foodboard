@@ -29,6 +29,7 @@ const initialState = {
     user: cookies.get("user"),
   },
   loginError: { isError: false, errorField: "", errorText: "" },
+  originalURL: "",
 };
 
 const options = {
@@ -53,7 +54,9 @@ function App() {
           path: "*",
           expires: new Date(Date.now() + 2592000),
         });
-        navigate("/");
+        state.originalURL.length > 0
+          ? navigate(state.originalURL.split(process.env.REACT_APP_BASE_URL)[1])
+          : navigate("/");
         return {
           ...state,
           userData: {
@@ -68,7 +71,7 @@ function App() {
         navigate("/signin");
         return {
           ...state,
-          userData: initialState.userData,
+          userData: { ...state.userData, isLoggedIn: false, user: {} },
         };
       case "loginError":
         return {
@@ -84,6 +87,8 @@ function App() {
           ...state,
           loginError: initialState.loginError,
         };
+      case "setOriginalURL":
+        return { ...state, originalURL: action.value };
       default:
         return state;
     }
@@ -93,7 +98,13 @@ function App() {
   const [nullState] = useState();
 
   useEffect(() => {
-    !state.userData.isLoggedIn && navigate("/signin");
+    if (
+      !state.userData.isLoggedIn &&
+      window.location.href !== process.env.REACT_APP_BASE_URL + "signin"
+    ) {
+      dispatch({ type: "setOriginalURL", value: window.location.href });
+      navigate("/signin");
+    }
     //eslint-disable-next-line
   }, [nullState]);
 
