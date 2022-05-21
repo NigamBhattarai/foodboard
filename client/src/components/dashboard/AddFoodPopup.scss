@@ -87,3 +87,11 @@
 .error-field-addon {
   border: 1px solid #d44;
 }
+.food-popup-loading {
+  position: absolute;
+  height: 100%;
+  width: 100%;
+  background: white;
+  opacity: 0.6;
+  z-index: 99999;
+}

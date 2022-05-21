@@ -1,8 +1,17 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Col, Modal, Row, Button, Form, Container } from "react-bootstrap";
+import {
+  Col,
+  Modal,
+  Row,
+  Button,
+  Form,
+  Container,
+  Spinner,
+} from "react-bootstrap";
 import AddIcon from "@mui/icons-material/Add";
 import CancelIcon from "@mui/icons-material/Cancel";
 import UploadFileIcon from "@mui/icons-material/UploadFile";
+import { useAlert, positions } from "react-alert";
 import "./AddFoodPopup.scss";
 import { FoodManagementContext } from "./FoodManagement";
 import axios from "axios";
@@ -16,10 +25,10 @@ function AddFoodPopup(props) {
     image:
       "https://media.istockphoto.com/vectors/fresh-tasty-grilled-roasted-chicken-turkey-legs-with-vegetables-vector-id943483254?k=20&m=943483254&s=612x612&w=0&h=QcqcSxs0OA7BBdsSKkGB1rdA4aExrfPnqa0H14SgiVc=",
     imageFile: "",
-    category: "",
+    category: "none",
     code: "",
     desc: "",
-    status: "",
+    status: "active",
     veg: false,
   };
   const initialVariantsState = {
@@ -33,22 +42,113 @@ function AddFoodPopup(props) {
     sourLevel: 0,
   };
 
+  const alert = useAlert();
+
   //States
   const [food, setFood] = useState({ ...initialFoodState });
   const [addOns, setAddOns] = useState([...initialAddOns]);
+  const [loading, setLoading] = useState(false);
+  const [foodFileError, setFoodFileError] = useState("");
+  const [variantFileError, setVariantFileError] = useState([]);
+  const [submitError, setSubmitError] = useState("");
   const [categories, setCategories] = useState([]);
   const [fieldAddOn, setFieldAddOn] = useState([{ name: "", price: "" }]);
+  const [variantsToDelete, setVariantsToDelete] = useState([]);
+  const [addonsToDelete, setAddonsToDelete] = useState([]);
   const [nullState] = useState();
+  // const [loading, setLoading] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [variants, setVariants] = useState([
     { ...initialVariantsState, default: true },
   ]);
 
-  //eslint-disable-next-line
-  function addFood() {
-    console.log(food);
-    console.log(variants);
-    // props.onHide(e);
+  async function addFood(e) {
+    if (food.name.trim() === "") {
+      setSubmitError("* Enter food name before you proceed");
+    } else if (food.category === "none") {
+      setSubmitError("* Select a food category before you proceed");
+    } else if (food.imageFile === "") {
+      setSubmitError("* Select an image for food");
+    } else {
+      try {
+        variants.forEach((variantForError, variantIndex) => {
+          if (variantForError.name.trim() === "") {
+            setSubmitError("* Enter name for added variant before you proceed");
+            throw new Error("break");
+          } else if (
+            Number.isNaN(
+              Number.parseInt(variantForError.price.toString().trim())
+            )
+          ) {
+            setSubmitError(
+              "* Enter a valid price for added variant before you proceed"
+            );
+            throw new Error("break");
+          } else if (variantForError.imageFile === "") {
+            setSubmitError(
+              "* Select an image for added variant before you proceed"
+            );
+            throw new Error("break");
+          }
+        });
+        setSubmitError("");
+        try {
+          var formData = new FormData();
+          formData.append("foodImageFile", food.imageFile);
+          var dataToSend = { ...food, image: "" };
+          dataToSend.variants = [];
+          dataToSend.variantsToDelete = [...variantsToDelete];
+          dataToSend.addonsToDelete = [...addonsToDelete];
+          variants.forEach((variant, index) => {
+            dataToSend.variants.push({ ...variant, image: "" });
+            formData.append("variantImageFile" + index, variant.imageFile);
+            dataToSend.variants[index].addons = [];
+            addOns[index].forEach((addon, addonIndex) => {
+              dataToSend.variants[index].addons.push(addon);
+            });
+          });
+          formData.append("textData", JSON.stringify(dataToSend));
+          setLoading(true);
+          await axios.post(
+            process.env.REACT_APP_API_URL + "api/food/add",
+            formData,
+            {
+              headers: {
+                "Content-Type": "multipart/form-data",
+              },
+            }
+          );
+          setLoading(false);
+          props.onHide(e);
+          alert.success(isEdit ? "Updated !" : "Added !", {
+            position: positions.TOP_CENTER,
+          });
+          foodManagementContext.setLoading(true);
+          var tempFoodData = await axios.get(
+            process.env.REACT_APP_API_URL + "api/food/"
+          );
+          var newFoodData = tempFoodData.data;
+          foodManagementContext.dispatch({
+            type: "updateItemData",
+            value: newFoodData,
+          });
+          foodManagementContext.setLoading(false);
+        } catch (err) {
+          if (err.statusCode === 406)
+            setSubmitError(
+              "Error occured while uploading file, please check your file and try again."
+            );
+          else
+            setSubmitError(
+              "Error occured during the process, please check your details and try again."
+            );
+        }
+      } catch (e) {
+        if (e !== "break") {
+          throw e;
+        }
+      }
+    }
   }
 
   function handleCategoryChange(event) {
@@ -68,6 +168,16 @@ function AddFoodPopup(props) {
   }
 
   function removeVariant(index) {
+    let temp_variantsToDelete = [...variantsToDelete];
+    typeof variants[index]._id !== "undefined" &&
+      temp_variantsToDelete.push(variants[index]);
+    setVariantsToDelete(temp_variantsToDelete);
+    let temp_addonsToDelete = [...addonsToDelete];
+    addOns[index].forEach((addon, index, array) => {
+      typeof addon._id !== "undefined" && temp_addonsToDelete.push(addon);
+    });
+    setAddonsToDelete(temp_addonsToDelete);
+
     let temp_variants = [...variants];
     temp_variants.splice(index, 1);
     setVariants([...temp_variants]);
@@ -111,50 +221,77 @@ function AddFoodPopup(props) {
     if (!file) {
       temp_food["imageFile"] = "";
       temp_food["image"] = initialFoodState.image;
+      setFoodFileError("");
       setFood({ ...temp_food });
     } else {
-      fileToDataUri(file).then((dataUri) => {
-        temp_food["imageFile"] = file;
-        temp_food["image"] = dataUri;
+      if (typeof file.type.split("image/")[1] === "undefined") {
+        temp_food["imageFile"] = "";
+        temp_food["image"] = "/images/invalid-file.png";
+        setFoodFileError("File Type Not Accepted");
         setFood({ ...temp_food });
-      });
+      } else {
+        fileToDataUri(file).then((dataUri) => {
+          temp_food["imageFile"] = file;
+          temp_food["image"] = dataUri;
+          setFoodFileError("");
+          setFood({ ...temp_food });
+        });
+      }
     }
   }
 
   function variantImageHandler(file, index) {
     var temp_variants = [...variants];
+    var temp_variants_error = [...variantFileError];
     if (!file) {
       temp_variants[index]["imageFile"] = "";
       temp_variants[index]["image"] = initialVariantsState[0].image;
+      temp_variants_error[index] = "";
+      setVariantFileError(temp_variants_error);
       setVariants([...temp_variants]);
     } else {
-      fileToDataUri(file).then((dataUri) => {
-        temp_variants[index]["imageFile"] = file;
-        temp_variants[index]["image"] = dataUri;
+      if (typeof file.type.split("image/")[1] === "undefined") {
+        temp_variants[index]["imageFile"] = "";
+        temp_variants[index]["image"] = "/images/invalid-file.png";
+        temp_variants_error[index] = "File Type Not Accepted";
+        setVariantFileError(temp_variants_error);
         setVariants([...temp_variants]);
-      });
+      } else {
+        fileToDataUri(file).then((dataUri) => {
+          temp_variants[index]["imageFile"] = file;
+          temp_variants[index]["image"] = dataUri;
+          temp_variants_error[index] = "";
+          setVariantFileError(temp_variants_error);
+          setVariants([...temp_variants]);
+        });
+      }
     }
   }
 
   function clearPopup() {
+    setSubmitError("");
     setFood(initialFoodState);
     setVariants([{ ...initialVariantsState, default: true }]);
-    setAddOns([...initialAddOns]);
-    setFieldAddOn([]);
+    setAddOns(initialAddOns);
+    setFieldAddOn([{ name: "", price: "" }]);
+    setFoodFileError("");
+    setVariantFileError([]);
   }
 
   //eslint-disable-next-line
   useEffect(async () => {
-    const result = await axios.get("http://localhost:5000/api/category");
+    const result = await axios.get(
+      process.env.REACT_APP_API_URL + "api/category"
+    );
     setCategories(result.data);
   }, [nullState]);
 
   useEffect(() => {
+    clearPopup();
     if (typeof itemID != "undefined" && itemID !== -1) {
       setIsEdit(true);
-      clearPopup();
       var selectedFood = foodManagementContext.state.itemData.filter(
-        (value, index, array) => {
+        (value) => {
           return value._id === itemID;
         }
       )[0];
@@ -168,8 +305,6 @@ function AddFoodPopup(props) {
       });
     } else {
       setIsEdit(false);
-      setFood(initialFoodState);
-      setVariants([{ ...initialVariantsState, default: true }]);
     }
     //eslint-disable-next-line
   }, [props.show]);
@@ -184,6 +319,8 @@ function AddFoodPopup(props) {
         !Number.isNaN(Number.parseInt(e.target.value))
           ? (temp_field_addOn[varInd].price = Number.parseInt(e.target.value))
           : (temp_field_addOn[varInd].price = "");
+        break;
+      default:
         break;
     }
     setFieldAddOn(temp_field_addOn);
@@ -220,6 +357,11 @@ function AddFoodPopup(props) {
   }
 
   function removeAddOn(varInd, addonIndex) {
+    let temp_addonsToDelete = [...addonsToDelete];
+    typeof addOns[varInd][addonIndex]._id !== "undefined" &&
+      temp_addonsToDelete.push(addOns[varInd][addonIndex]);
+    setAddonsToDelete(temp_addonsToDelete);
+
     let temp_addOns = [...addOns];
     temp_addOns[varInd].splice(addonIndex, 1);
     setAddOns(temp_addOns);
@@ -233,6 +375,24 @@ function AddFoodPopup(props) {
       centered
       className="order-popup-modal"
     >
+      {loading ? (
+        <Container fluid className="food-popup-loading">
+          <Row>
+            <Col
+              md={4}
+              className="mx-auto my-auto d-flex justify-content-center"
+            >
+              <Spinner
+                className="food-popup-spinner"
+                animation="border"
+                role="status"
+              />
+            </Col>
+          </Row>
+        </Container>
+      ) : (
+        ""
+      )}
       <Modal.Header>
         <Modal.Title id="contained-modal-title-vcenter">
           {isEdit ? "Update" : "Add New"} Food Item
@@ -245,14 +405,14 @@ function AddFoodPopup(props) {
             <Form.Control
               as="select"
               className="form-select"
-              value={food.category.name}
+              defaultValue={food.category.name}
               name="status"
               onChange={handleCategoryChange}
             >
               <option value="none">Select Category</option>
               {categories.map((value, index, array) => {
                 return (
-                  <option key={"categories-" + index} value={value.name}>
+                  <option key={"categories-" + index} value={value._id}>
                     {value.name}
                   </option>
                 );
@@ -335,8 +495,8 @@ function AddFoodPopup(props) {
                   }}
                   name="status"
                 >
-                  <option value="active">Active</option>
-                  <option value="inactive">Inactive</option>
+                  <option value={true}>Active</option>
+                  <option value={false}>Inactive</option>
                 </Form.Control>
               </Col>
             </Row>
@@ -347,6 +507,8 @@ function AddFoodPopup(props) {
               className="rounded-circle img-fluid px-4"
               alt="food"
             />
+            <br />
+            <span style={{ color: "red" }}>{foodFileError}</span>
           </Col>
         </Row>
         <hr style={{ borderTop: "1px dashed #8F8F8F" }} />
@@ -433,6 +595,10 @@ function AddFoodPopup(props) {
                     className="rounded-circle img-fluid px-4"
                     alt="food"
                   />
+                  <br />
+                  <span style={{ color: "red" }}>
+                    {variantFileError[varInd]}
+                  </span>
                 </Col>
               </Row>
               <Container fluid>
@@ -509,13 +675,15 @@ function AddFoodPopup(props) {
               <AddIcon /> Add Variant
             </Button>
           </Row>
+          <br />
+          <span style={{ color: "red" }}>{submitError}</span>
         </Container>
       </Modal.Body>
       <Modal.Footer>
         <Button
           variant="primary"
           className="default-button px-5"
-          onClick={(e) => addFood()}
+          onClick={addFood}
         >
           {isEdit ? "Update" : "Add"}
         </Button>
