@@ -93,31 +93,31 @@ function AddFoodPopup(props) {
         });
         setSubmitError("");
         try {
-          var formData = new FormData();
-          formData.append("foodImageFile", food.imageFile);
+          const form = new FormData();
+          form.append("foodImageFile", food.imageFile);
           var dataToSend = { ...food, image: "" };
           dataToSend.variants = [];
           dataToSend.variantsToDelete = [...variantsToDelete];
           dataToSend.addonsToDelete = [...addonsToDelete];
           variants.forEach((variant, index) => {
             dataToSend.variants.push({ ...variant, image: "" });
-            formData.append("variantImageFile" + index, variant.imageFile);
+            form.append("variantImageFile" + index, variant.imageFile);
             dataToSend.variants[index].addons = [];
             addOns[index].forEach((addon, addonIndex) => {
               dataToSend.variants[index].addons.push(addon);
             });
           });
-          formData.append("textData", JSON.stringify(dataToSend));
+          form.append("textData", JSON.stringify(dataToSend));
           setLoading(true);
-          await axios.post(
-            process.env.REACT_APP_API_URL + "api/food/add",
-            formData,
-            {
-              headers: {
-                "Content-Type": "multipart/form-data",
-              },
-            }
-          );
+          await axios({
+            method: "post",
+            url: process.env.REACT_APP_API_URL + "api/food/add",
+            data: form,
+            headers: {
+              "Content-Type": `multipart/form-data`,
+            },
+          });
+
           setLoading(false);
           props.onHide(e);
           alert.success(isEdit ? "Updated !" : "Added !", {
@@ -269,6 +269,7 @@ function AddFoodPopup(props) {
   }
 
   function clearPopup() {
+    setLoading(false);
     setSubmitError("");
     setFood(initialFoodState);
     setVariants([{ ...initialVariantsState, default: true }]);
@@ -376,12 +377,9 @@ function AddFoodPopup(props) {
       className="order-popup-modal"
     >
       {loading ? (
-        <Container fluid className="food-popup-loading">
-          <Row>
-            <Col
-              md={4}
-              className="mx-auto my-auto d-flex justify-content-center"
-            >
+        <Container fluid>
+          <Row className="food-popup-loading">
+            <Col className="mx-auto my-auto d-flex justify-content-center">
               <Spinner
                 className="food-popup-spinner"
                 animation="border"

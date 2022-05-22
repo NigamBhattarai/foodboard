@@ -1,6 +1,14 @@
 var express = require("express");
 var router = express.Router();
 const foodController = require("../controllers/food.controller");
+var cors = require("cors");
+
+//CORS
+// const corsOptions = {
+//   origin: "http://localhost:3000",
+//   optionsSuccessStatus: 200,
+// };
+
 
 /* GET food api. */
 router.get("/", function (req, res, next) {
