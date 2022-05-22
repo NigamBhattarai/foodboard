@@ -35,7 +35,7 @@ function OrderPopup(props) {
   useEffect(() => {
     setItems([baseItem]);
     setselectedVariants([]);
-    setVariants(baseItem.variants);
+    typeof baseItem !== "undefined" && setVariants(baseItem.variants);
     setAddOns([]);
   }, [baseItem]);
 
@@ -131,9 +131,10 @@ function OrderPopup(props) {
 
   function getDefaultVariant() {
     //eslint-disable-next-line
-    return variants.filter((value) => {
-      if (value.default === true) return value;
-    })[0];
+    if (typeof variants !== "undefined")
+      return variants.filter((value) => {
+        if (value.default === true) return value;
+      })[0];
   }
 
   function addToBillClicked(e) {
@@ -190,136 +191,138 @@ function OrderPopup(props) {
       </Modal.Header>
       <Modal.Body>
         {items.map((itemInside, itemIndex) => {
-          return (
-            <Row key={itemInside._id + "-item-" + itemIndex}>
-              <Row className="order-popup-item-row">
-                <Col xs={2}>
-                  <img
-                    src={
-                      typeof selectedVariants[itemIndex] !== "undefined"
-                        ? selectedVariants[itemIndex].image
-                        : itemInside.image
-                    }
-                    alt="item"
-                    className="img-fluid rounded-circle"
-                    style={{ padding: 10 }}
-                  />
-                </Col>
-                <Col xs={3} className="my-auto">
-                  <span className="order-popup-item-name">
-                    {itemInside.name}
-                  </span>
-                </Col>
-                <Col xs={2} className="my-auto">
-                  <Form.Select
-                    aria-label="Default select"
-                    className="order-popup-item-dropdown"
-                    title={
-                      typeof selectedVariants[itemIndex] !== "undefined"
-                        ? selectedVariants[itemIndex].desc.toString()
-                        : ""
-                    }
-                    onChange={(e) => {
-                      variantChangeHandler(e);
-                    }}
-                  >
-                    {typeof variants !== "undefined" && variants.length > 0 ? (
-                      variants.map((value, index, array) => {
-                        return (
-                          <option
-                            key={value._id + index + value.name}
-                            value={value._id + "||" + itemIndex}
-                          >
-                            {value.name}
-                          </option>
-                        );
-                      })
-                    ) : (
-                      <option value="1">Default</option>
-                    )}
-                  </Form.Select>
-                </Col>
-                <Col xs={2} className="px-4 my-auto">
-                  <span
-                    className="order-popup-item-count"
-                    style={{ alignItems: "center" }}
-                  >
-                    <RemoveCircleOutlineIcon
-                      className="order-popup-in-out mr-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={(e) => {
-                        changeCountItem(itemIndex, "-");
-                      }}
+          if (typeof itemInside != "undefined")
+            return (
+              <Row key={itemInside._id + "-item-" + itemIndex}>
+                <Row className="order-popup-item-row">
+                  <Col xs={2}>
+                    <img
+                      src={
+                        typeof selectedVariants[itemIndex] !== "undefined"
+                          ? selectedVariants[itemIndex].image
+                          : itemInside.image
+                      }
+                      alt="item"
+                      className="img-fluid rounded-circle"
+                      style={{ padding: 10 }}
                     />
-                    {count[itemIndex]}
-                    <AddCircleOutlineIcon
-                      className="order-popup-in-out ml-2"
-                      style={{ cursor: "pointer" }}
-                      onClick={(e) => {
-                        changeCountItem(itemIndex, "+");
+                  </Col>
+                  <Col xs={3} className="my-auto">
+                    <span className="order-popup-item-name">
+                      {itemInside.name}
+                    </span>
+                  </Col>
+                  <Col xs={2} className="my-auto">
+                    <Form.Select
+                      aria-label="Default select"
+                      className="order-popup-item-dropdown"
+                      title={
+                        typeof selectedVariants[itemIndex] !== "undefined"
+                          ? selectedVariants[itemIndex].desc.toString()
+                          : ""
+                      }
+                      onChange={(e) => {
+                        variantChangeHandler(e);
                       }}
-                    />
-                  </span>
-                </Col>
-                <Col xs={3} className="my-auto">
-                  <Row>
-                    <Col xs={7}>
-                      {typeof selectedVariants[itemIndex] !== "undefined"
-                        ? getAddOnsPriceSum(addOns[itemIndex]) +
-                          selectedVariants[itemIndex].price * count[itemIndex]
-                        : () => {}}
-                    </Col>
-                    <Col xs={2}>
-                      {itemIndex > 0 ? (
-                        <HighlightOffIcon
-                          style={{ cursor: "pointer" }}
-                          onClick={(e) => removeItem(itemIndex)}
-                          className="mr-auto order-popup-cancel-icon"
-                        />
-                      ) : (
-                        ""
-                      )}
-                    </Col>
-                  </Row>
-                </Col>
-              </Row>
-              {typeof addOns[itemIndex] !== "undefined" &&
-              addOns[itemIndex].length > 0 ? (
-                <Container className="mt-4">
-                  <span style={{ fontSize: "18px", fontWeight: "bold" }}>
-                    Add-Ons
-                  </span>
-                  <Form>
-                    <Container className="m-4">
-                      <Row>
-                        {addOns[itemIndex].map((addon, addonIndex, array) => {
+                    >
+                      {typeof variants !== "undefined" &&
+                      variants.length > 0 ? (
+                        variants.map((value, index, array) => {
                           return (
-                            <Col
-                              xs={4}
-                              key={addon._id + addonIndex}
-                              className="p-2 order-popup-variant-checkbox"
+                            <option
+                              key={value._id + index + value.name}
+                              value={value._id + "||" + itemIndex}
                             >
-                              <Form.Check
-                                type={"checkbox"}
-                                id={`addon` + itemIndex + "_" + addonIndex}
-                                checked={addon.selected}
-                                onChange={(e) => {
-                                  checkHandler(itemIndex, addonIndex);
-                                }}
-                                label={addon.name}
-                              />
-                            </Col>
+                              {value.name}
+                            </option>
                           );
-                        })}
-                      </Row>
-                    </Container>
-                  </Form>
-                </Container>
-              ) : (
-                ""
-              )}
-            </Row>
-          );
+                        })
+                      ) : (
+                        <option value="1">Default</option>
+                      )}
+                    </Form.Select>
+                  </Col>
+                  <Col xs={2} className="px-4 my-auto">
+                    <span
+                      className="order-popup-item-count"
+                      style={{ alignItems: "center" }}
+                    >
+                      <RemoveCircleOutlineIcon
+                        className="order-popup-in-out mr-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          changeCountItem(itemIndex, "-");
+                        }}
+                      />
+                      {count[itemIndex]}
+                      <AddCircleOutlineIcon
+                        className="order-popup-in-out ml-2"
+                        style={{ cursor: "pointer" }}
+                        onClick={(e) => {
+                          changeCountItem(itemIndex, "+");
+                        }}
+                      />
+                    </span>
+                  </Col>
+                  <Col xs={3} className="my-auto">
+                    <Row>
+                      <Col xs={7}>
+                        {typeof selectedVariants[itemIndex] !== "undefined"
+                          ? getAddOnsPriceSum(addOns[itemIndex]) +
+                            selectedVariants[itemIndex].price * count[itemIndex]
+                          : () => {}}
+                      </Col>
+                      <Col xs={2}>
+                        {itemIndex > 0 ? (
+                          <HighlightOffIcon
+                            style={{ cursor: "pointer" }}
+                            onClick={(e) => removeItem(itemIndex)}
+                            className="mr-auto order-popup-cancel-icon"
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </Col>
+                    </Row>
+                  </Col>
+                </Row>
+                {typeof addOns[itemIndex] !== "undefined" &&
+                addOns[itemIndex].length > 0 ? (
+                  <Container className="mt-4">
+                    <span style={{ fontSize: "18px", fontWeight: "bold" }}>
+                      Add-Ons
+                    </span>
+                    <Form>
+                      <Container className="m-4">
+                        <Row>
+                          {addOns[itemIndex].map((addon, addonIndex, array) => {
+                            return (
+                              <Col
+                                xs={4}
+                                key={addon._id + addonIndex}
+                                className="p-2 order-popup-variant-checkbox"
+                              >
+                                <Form.Check
+                                  type={"checkbox"}
+                                  id={`addon` + itemIndex + "_" + addonIndex}
+                                  checked={addon.selected}
+                                  onChange={(e) => {
+                                    checkHandler(itemIndex, addonIndex);
+                                  }}
+                                  label={addon.name}
+                                />
+                              </Col>
+                            );
+                          })}
+                        </Row>
+                      </Container>
+                    </Form>
+                  </Container>
+                ) : (
+                  ""
+                )}
+              </Row>
+            );
         })}
       </Modal.Body>
       <Modal.Footer>
