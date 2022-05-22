@@ -96,13 +96,13 @@ function FoodManagement(props) {
     <FoodManagementContext.Provider value={{ state, dispatch, setLoading }}>
       {loading ? (
         <Container fluid>
-          <Row className="food-popup-loading">
+          <Row className="food-management-loading">
             <Col
               md={4}
               className="mx-auto my-auto d-flex justify-content-center"
             >
               <Spinner
-                className="food-popup-spinner"
+                className="food-management-spinner"
                 animation="border"
                 role="status"
               />

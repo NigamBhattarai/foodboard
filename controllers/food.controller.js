@@ -105,6 +105,8 @@ exports.addFood = async (req, res) => {
   // 406: FILE ERROR
   // 400: DATABASE ERROR
 
+  // console.log(req.body.textData);
+
   const receivedData = JSON.parse(req.body.textData);
   const receivedFiles = req.files;
   const isEdit = typeof receivedData._id !== "undefined";
