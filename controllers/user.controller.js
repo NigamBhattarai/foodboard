@@ -22,7 +22,7 @@ exports.login = async (req, res) => {
         process.env.ACCESS_TOKEN_SECRET,
         { expiresIn: "24h" }
       );
-      res.status(200).send({ accessToken:accessToken, user:{...requestedUser, password:""} });
+      res.status(200).send({ accessToken:accessToken, user:{...loggedInUser._doc, password:""} });
     } else {
       console.log("HERE");
       res.sendStatus(406);
