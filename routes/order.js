@@ -17,6 +17,6 @@ router.post('/add', function(req, res, next) {
   orderController.addNewOrder(req, res);
 });
 
-
+router.post('/updateStatus',(req,res)=>orderController.updateStatus(req,res))
 
 module.exports = router;

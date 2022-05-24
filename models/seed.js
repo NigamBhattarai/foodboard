@@ -484,7 +484,7 @@ const data = {
       token_number:"246",
       customer_name:"Customer 1",
       ordered_time:new Date("May 1, 2022 12:12:36"),
-      status:0,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled
+      status:0,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled, 4: ready
       completed_time: null,
       payment:true,
       payment_method:"cash",
@@ -499,7 +499,7 @@ const data = {
       token_number:"247",
       customer_name:"Customer 2",
       ordered_time:new Date("May 1, 2022 12:18:20"),
-      status:1,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled
+      status:1,//statuses: 0: pending, 1: preparing, 2: served, 3: canceled, 4: ready
       completed_time:null,
       payment:true,
       payment_method:"card",
