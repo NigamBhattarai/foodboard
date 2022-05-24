@@ -1,6 +1,7 @@
 @import "../../App.scss";
 
-.categories table th,td{
+.categories table th,
+td {
   padding: 12px !important;
 }
 body {
@@ -17,30 +18,37 @@ body {
 .pill-active {
   background: rgba(45, 156, 219, 0.2) !important;
   border-radius: 30px !important;
-  color: #2D9CDB;
+  color: #2d9cdb;
 }
 
 .pill-inactive {
   background: rgba(235, 87, 87, 0.2) !important;
   border-radius: 30px !important;
-  color: #EB5757 !important;
+  color: #eb5757 !important;
 }
 
 .icon {
   color: #6fcf97;
   border: solid #6fcf97 1px;
-  margin:1px;
-  height: 18px !important;
-  width:18px !important;
+  margin: 1px;
+  height: 30px !important;
+  width: 30px !important;
+  cursor: pointer;
+  &:hover {
+    transition: 0.2s ease;
+    background: #6fcf97;
+    color: white;
+    transform: scale(1.2);
+  }
 }
 
 .icon2 {
   color: #eb5757;
   border: solid #eb5757 1px;
   border-radius: 100%;
-  margin:1px;
+  margin: 1px;
   height: 18px !important;
-  width:18px !important;
+  width: 18px !important;
 }
 
 .table {
@@ -66,24 +74,26 @@ body {
   color: #4f4f4f;
 }
 
-
-
-.edit{
+.edit {
   background-color: white;
-  height:100vh;
 }
 
-select{
+select {
   background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3E%3C/svg%3E");
-background-repeat: no-repeat;
-background-position: right .75rem center;
-background-size: 16px 12px;
-appearance:none;
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 16px 12px;
+  appearance: none;
 
-box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-border: 0px !important;
-background-color: white;
-color: #4f4f4f;
-border-radius: 8px;
-
+  box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  border: 0px !important;
+  background-color: white;
+  color: #4f4f4f;
+  border-radius: 8px;
+}
+.selected {
+  background-color: rgba(0, 0, 0, 0.075);
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.2) !important;
+  }
 }
