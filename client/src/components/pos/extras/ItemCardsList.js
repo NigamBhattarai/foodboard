@@ -28,16 +28,13 @@ function ItemCardsList(props) {
               </Col>
               <Col xs={6}>
                 <div className="item-card-list-title"> {value.name}</div>
-                <div className="item-card-list-desc">
-                  {" "}
-                  Rs. {value.price} &nbsp; &nbsp; {value.available_stock} Plts
-                </div>
+                <div className="item-card-list-desc"></div>
               </Col>
               <Col xs={3}>
                 <Button
                   className="default-button item-card-list-btn"
                   onClick={(e) => {
-                    setSelectedItem(index)
+                    setSelectedItem(index);
                     setShowModal(true);
                   }}
                 >
