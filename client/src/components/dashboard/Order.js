@@ -1,8 +1,8 @@
 import React, { useReducer, useEffect } from "react";
+import {Link} from "react-router-dom";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import ListAltIcon from "@mui/icons-material/ListAlt";
 import axios from "axios";
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import "./Order.scss";
 import OrderCard from "../pos/extras/OrderCard";
 import LoadingBox from "./components/LoadingBox";
@@ -11,6 +11,25 @@ import MessageBox from "./components/MessageBox";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 import UseTitle from "../../hooks/useTitle";
+function renderStatus(status) {
+  switch (status) {
+    case 0:
+      return "pending";
+
+    case 1:
+      return "preparing";
+    case 2:
+      return "served"
+    case 3:
+      return "canceled";
+
+    case 4:
+      return "ready";
+
+    default:
+      return "canceled";
+  }
+}
 function reducer(state, action) {
   switch (action.type) {
     case "FETCH_REQUEST":
@@ -56,14 +75,14 @@ function Order(props) {
         </Col>
         <Col></Col>
         <Col lg={4}>
-          <Button variant="light" className="titleButton">
+          <Button as={Link} to="/fullreport" variant="light" className="titleButton">
             <ListAltIcon className="mr-2" />
             Full Report{" "}
           </Button>{" "}
-          <Button variant="light" className="titleButton">
+          {/* <Button variant="light" className="titleButton">
             <AddBusinessIcon className="mr-2" />
             Filter Order
-          </Button>{" "}
+          </Button>{" "} */}
         </Col>
       </Row>
       <hr />
@@ -79,10 +98,10 @@ function Order(props) {
             <Row className="orderSummary mr-3">
               <Col>
                 {orders.map((order, index) => (
-                  <Button className={`${order.status}`} key={"Order"+index}>
-                    {order.status === "served" || order.status === "pending" ? (
+                  <Button className={renderStatus(order.status)} key={"Order"+index} title={renderStatus(order.status)}>
+                    {order.status === 2  ? (
                       <DoneIcon />
-                    ) : order.status === "canceled" ? (
+                    ) : order.status === 3 ? (
                       <ClearIcon />
                     ) : (
                       <></>

@@ -1,0 +1,28 @@
+@import "../../../App.scss";
+.order-display-card{
+  user-select: none;
+}
+.order-pending {
+  border: 1px solid rgba(255, 181, 114) !important;
+  background-color: rgba(255, 181, 114, 0.45);
+  color: white;
+}
+.order-preparing {
+  border: 1px solid #9290fe !important;
+  background-color: #9290fe33;
+  color: white;
+}
+.order-canceled {
+  border: 1px solid #eb5757 !important;
+  background-color: rgba(235, 87, 87, 0.2);
+  color: white;
+}
+.order-ready {
+  border: 1px solid #50d1aa !important;
+  background-color: rgba(107, 226, 190, 0.5);
+  color: white;
+}
+.order-display-customer-name {
+  text-align: center;
+  color: $gray_2;
+}

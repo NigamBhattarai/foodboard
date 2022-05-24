@@ -38,6 +38,25 @@ exports.getAllOrders = (req, res) => {
     });
 };
 
+getOneOrder = async (id) => {
+  var result = await orderModel
+    .findOne({ _id: id })
+    .lean()
+    .sort({ createdAt: -1 })
+    .populate("coupon_details")
+    .exec();
+  if (result) {
+    result.foodItems = await orderDetailsModel
+      .find({ order: result._id })
+      .populate("addons")
+      .populate({ path: "variant", populate: { path: "food" } })
+      .exec();
+  } else {
+    console.log(err);
+  }
+  return result;
+};
+
 exports.getNewTokenNumber = (req, res) => {
   orderModel
     .findOne({})
@@ -90,6 +109,7 @@ exports.addNewOrder = (req, res) => {
             await orderModel.deleteOne({ _id: newOrderDetail._id });
             res.status(400).send(err);
           } else {
+            global.io.emit("newOrder", null);
             dataToSend.orderDetails.push(newOrderDetail);
           }
         });
@@ -97,4 +117,20 @@ exports.addNewOrder = (req, res) => {
       res.send(dataToSend);
     }
   });
+};
+
+exports.updateStatus = async (req, res) => {
+  var order = await orderModel.findOne({ _id: req.body.id });
+
+  if (order !== null) {
+    order.status = req.body.status;
+    order.updatedAt = new Date();
+    try {
+      await order.save();
+      global.io.emit("updateOrderStatus", null);
+      res.status(200).send(await getOneOrder(order._id));
+    } catch (error) {
+      console.log(error);
+    }
+  }
 };

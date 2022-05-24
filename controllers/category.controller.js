@@ -7,9 +7,9 @@ exports.getAllCategories = (req, res) => {
     .lean()
     .exec(async (err, result) => {
       if (result) {
-          for(var i = 0; i < result.length; i ++) {
-            const foodCount = await foodModel.count({category:result[i]._id});
-            result[i].foodCount = foodCount;
+        for (var i = 0; i < result.length; i++) {
+          const foodCount = await foodModel.count({ category: result[i]._id });
+          result[i].foodCount = foodCount;
         }
         res.send(result);
       } else {
@@ -17,4 +17,15 @@ exports.getAllCategories = (req, res) => {
         res.send(err);
       }
     });
+};
+
+exports.addCategory = (req, res) => {
+  const receivedData = JSON.parse(req.body.textData);
+  const receivedFiles = req.files;
+  const isEdit = typeof receivedData._id !== "undefined";
+  if(isEdit) {
+
+  } else {
+
+  }
 };

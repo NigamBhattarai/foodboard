@@ -19,6 +19,15 @@
   background: #ffffff !important;
   margin-right: 3px !important;
 }
+.ready{
+  border: 1px solid #219653;
+  color:#219653;
+  box-sizing: border-box;
+  border-radius: 0px 15px 15px 0px !important;
+  border-left: 15px solid #219653;
+  background: #ffffff;
+  margin-right: 3px;
+}
 .btn.preparing {
   border: 1px solid #9b51e0;
   border-radius: 0px 15px 15px 0px !important;
@@ -38,11 +47,11 @@
   margin-right: 3px;
 }
 .canceled {
-  border: 1px solid #eb5757;
-  color:#eb5757;
-  border-radius: 15px;
-  box-sizing: border-box;
-  border-radius: 15px;
-  background: #ffffff;
-  margin-right: 3px;
+  border: 1px solid #eb5757 !important;
+  color:#eb5757 !important;
+  border-radius: 15px !important;
+  box-sizing: border-box !important;
+  border-radius: 15px !important;
+  background: #ffffff !important;
+  margin-right: 3px !important;
 }

@@ -4,11 +4,19 @@
   background: #ffffff;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   border-radius: 15px;
+  
 }
 .orderCard .top-row {
   color: #4f4f4f;
 }
 .orderCard .order-items {
   overflow-y: auto;
+  max-height: 350px;
   scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+.bottom-row{
+  margin-top: 5px;
 }

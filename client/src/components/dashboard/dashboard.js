@@ -128,8 +128,12 @@ function Dashboard(props) {
           <Col md={1} className="topbar-link text-center mx-1">
             Order
           </Col>
-          <Col md={1} className="topbar-link text-center mx-1">
-            Kitchen
+          <Col md={1}  className="topbar-link">
+            <Link to="/kitchen">
+              <Col className="text-center mx-1">
+                Kitchen
+              </Col>
+            </Link>
           </Col>
           <Col md={1} className="topbar-link text-center mx-1">
             Order

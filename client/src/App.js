@@ -21,6 +21,8 @@ import SignUp from "./components/dashboard/SignUp";
 
 import Cookies from "universal-cookie";
 import Err404 from "./Err404";
+import OrderDisplay from "./components/pos/extras/OrderDisplay";
+import TopBar from "./components/pos/extras/TopBar";
 const cookies = new Cookies();
 
 const initialState = {
@@ -171,13 +173,15 @@ function App() {
                     <FullReport />
                   </Dashboard>
                 }
-              />
+              />{" "}
+              <Route path="/orderdisplay" element={<OrderDisplay />} />
               <Route
                 path="/orderreport"
                 element={
-                  <Dashboard>
+                  <>
+                    <TopBar />
                     <OrderReport />
-                  </Dashboard>
+                  </>
                 }
               />
               <Route path="/temp" element={<AddFoodPopup show={true} />} />
