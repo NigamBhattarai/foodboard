@@ -8,9 +8,4 @@ const CategoryRouter = require("./category");
 router.use("/api/orders", OrderRouter);
 router.use("/api/food", FoodRouter);
 router.use("/api/category", CategoryRouter);
-router.get("/socket", (req, res, next) => {
-  global.io.emit("newOrder", null);
-  res.send("Hi");
-});
-
 module.exports = router;
