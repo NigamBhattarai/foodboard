@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { Row, Col, Container, Button } from "react-bootstrap";
 
 import AddBusinessIcon from "@mui/icons-material/AddBusiness";
@@ -6,61 +6,48 @@ import OrderCard from "../pos/extras/OrderCard";
 import axios from "axios";
 import UseTitle from "../../hooks/useTitle";
 
+export const KitchenContext = createContext();
 function Kitchen(props) {
   UseTitle("Kitchen");
   const [orders, setOrders] = useState([]);
-  useEffect(() => {
-    const fetchData = async () => {
-      const result = await axios.get(process.env.REACT_APP_API_URL+"api/orders");
-      setOrders(result.data);
-    };
-    fetchData();
-  }, []);
-  function handleCallback(foodItems, id) {
-    setOrders((prevOrders) => {
-      // console.log(prevOrders)
-      return prevOrders.map((order) => {
-        return order.id === id ? { ...order, foodItems: foodItems } : order;
-      });
-    });
-  }
-  return (
-    <Container fluid className="mx-2">
-      <Row className="title align-items-center">
-        <Col lg={3}>
-          <h2>Kitchen</h2>
-          <small className="text-muted">Tuesday 2,Feb,2021</small>
-        </Col>
-        <Col></Col>
-        <Col lg={4}>
-          <Button variant="light" className="titleButton">
-            <AddBusinessIcon className="mr-2" />
-            Filter Order
-          </Button>{" "}
-          <Button variant="light" className="titleButton">
-            <AddBusinessIcon className="mr-2" />
-            Order List
-          </Button>{" "}
-        </Col>
-      </Row>
-      <hr />
-      <div className="main-body">
+  const [nullState] = useState();
 
-      <Row className="mt-3">
-        {orders.map((order) => (
-          <Col lg={4}>
-            <OrderCard
-              page="kitchen"
-              order={order}
-              key={order.id}
-              id={order.id}
-              handleCallback={handleCallback}
-            />
+  const fetchData = async () => {
+    const result = await axios.get(
+      process.env.REACT_APP_API_URL + "api/orders"
+    );
+    setOrders(result.data);
+  };
+  useEffect(() => {
+    fetchData();
+  }, [nullState]);
+
+  return (
+    <KitchenContext.Provider value={{ fetchData }}>
+      <Container fluid className="mx-2">
+        <Row className="title align-items-center">
+          <Col lg={3}>
+            <h2>Kitchen</h2>
+            <small className="text-muted">Tuesday 2,Feb,2021</small>
           </Col>
-        ))}
-      </Row>
-      </div>
-    </Container>
+        </Row>
+        <hr />
+        <div className="main-body">
+          <Row className="mt-3">
+            {orders.map((order) => (
+              <Col lg={4} key={order._id}>
+                <OrderCard
+                  page="kitchen"
+                  order={order}
+                  // fetchData={fetchData()}
+                  id={order.id}
+                />
+              </Col>
+            ))}
+          </Row>
+        </div>
+      </Container>
+    </KitchenContext.Provider>
   );
 }
 
