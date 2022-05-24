@@ -13,4 +13,8 @@
     max-height:77vh;
     overflow-y: scroll;
     scrollbar-width: none;
+    
+}
+.main-body::-webkit-scrollbar {
+    display: none;
 }
