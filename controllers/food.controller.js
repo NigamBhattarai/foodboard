@@ -110,7 +110,8 @@ exports.addFood = async (req, res) => {
   const receivedData = JSON.parse(req.body.textData);
   const receivedFiles = req.files;
   const isEdit = typeof receivedData._id !== "undefined";
-  if (!fs.existsSync(uploadDir)) fs.mkdirSync(uploadDir, { recursive: true });
+  if (!fs.existsSync("public/" + uploadDir))
+    fs.mkdirSync("public/" + uploadDir, { recursive: true });
   if (isEdit) {
     var isFoodFile = false;
     receivedFiles !== null &&
