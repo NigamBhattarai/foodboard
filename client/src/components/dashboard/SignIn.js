@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Form } from "react-bootstrap";
+import { Form, InputGroup } from "react-bootstrap";
 import "./auth.scss";
 import { Link } from "react-router-dom";
 import axios from "axios";
@@ -105,6 +105,7 @@ function SignIn() {
           </Form.Group>
           <Form.Group>
             <Form.Label>Password</Form.Label>
+            <InputGroup>
             <Form.Control
               value={loginDetails.password}
               onChange={(e) => bindText(e)}
@@ -114,6 +115,7 @@ function SignIn() {
               style={isPasswordError() ? errorInput : {}}
               placeholder="Enter password"
             />
+            </InputGroup>
           </Form.Group>
           <Form.Group>
             <div className="custom-control custom-checkbox">
@@ -140,9 +142,6 @@ function SignIn() {
           </button>
           <p className="forgot-password text-right">
             Forgot <Link to="#">password?</Link>
-          </p>
-          <p className="forgot-password text-left">
-            New User <Link to={`/signup`}>Register</Link>
           </p>
         </Form>
       </div>
