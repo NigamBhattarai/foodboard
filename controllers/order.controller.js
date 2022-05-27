@@ -119,6 +119,20 @@ exports.addNewOrder = (req, res) => {
   });
 };
 
+exports.getTotalOrderCount = async (req, res) => {
+  var orderCount = await orderModel.count({ status: { $ne: 3 } });
+  res.send(orderCount.toString());
+};
+
+exports.getTotalRevenue = async (req, res) => {
+  console.log("Here");
+  var revenue = await orderModel.aggregate([
+    { $match: { status: { $ne: 3 } } },
+    { $group: { _id: null, revenue: { $sum: "$grand_total" } } },
+  ]);
+  res.send(revenue[0].revenue.toString());
+};
+
 exports.updateStatus = async (req, res) => {
   var order = await orderModel.findOne({ _id: req.body.id });
 

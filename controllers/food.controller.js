@@ -3,6 +3,7 @@ const variantModel = require("../models/variant.model");
 const addOnModel = require("../models/addon.model");
 const fs = require("fs");
 const addonModel = require("../models/addon.model");
+const orderDetailModel = require("../models/orderDetail.model");
 const uploadDir = "images/uploads/food/";
 require("../models/category.model");
 
@@ -74,18 +75,22 @@ exports.getAllActiveFoods = (req, res) => {
     .exec(async (err, result) => {
       if (result) {
         for (var i = 0; i < result.length; i++) {
-          result[i].variants = await variantModel
-            .find({ food: result[i]._id })
-            .lean()
-            .exec();
-          for (var j = 0; j < result[i].variants.length; j++) {
-            result[i].variants[j].addons = await addOnModel
-              .find({ variant: result[i].variants[j]._id })
+          if (result[i].category.status) {
+            result[i].variants = await variantModel
+              .find({ food: result[i]._id })
               .lean()
               .exec();
-            for (var k = 0; k < result[i].variants[j].addons.length; k++) {
-              result[i].variants[j].addons[k].selected = false;
+            for (var j = 0; j < result[i].variants.length; j++) {
+              result[i].variants[j].addons = await addOnModel
+                .find({ variant: result[i].variants[j]._id })
+                .lean()
+                .exec();
+              for (var k = 0; k < result[i].variants[j].addons.length; k++) {
+                result[i].variants[j].addons[k].selected = false;
+              }
             }
+          } else {
+            result.splice(i, 1);
           }
         }
         res.send(result);
@@ -99,6 +104,49 @@ exports.getAllActiveFoods = (req, res) => {
 async function getAllVariantsOfFood(id) {
   return await variantModel.find({ food: id }).lean();
 }
+
+exports.getTrendingFoods = async (req, res) => {
+  orderDetailModel
+    .aggregate([
+      {
+        $group: {
+          _id: {
+            variant: "$variant",
+          },
+          count: {
+            $sum: 1,
+          },
+        },
+      },
+      {
+        $group: {
+          _id: {
+            variant: "$_id.variant",
+          },
+          count: {
+            $first: "$count",
+          },
+        },
+      },
+    ])
+    .sort({ count: -1 })
+    .limit(7)
+    .exec(async (err, data) => {
+      var dataToSend = [];
+      for (var i = 0; i < data.length; i++) {
+        var variant = await variantModel
+          .findOne({ _id: data[i]._id.variant })
+          .populate("food");
+        dataToSend.push(variant);
+      }
+      res.send(dataToSend);
+    });
+};
+
+exports.getTotalFoodCount = async (req, res) => {
+  var foodCount = await foodModel.count();
+  res.send(foodCount.toString());
+};
 
 exports.addFood = async (req, res) => {
   //ERRORS:
