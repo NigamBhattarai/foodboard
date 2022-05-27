@@ -1,12 +1,8 @@
 import React from "react";
-import { Col, Row, Form, Badge } from "react-bootstrap";
+import { Col, Row, Badge } from "react-bootstrap";
 import "./OrderItems.scss";
 export default function OrderItems(props) {
   const foodItems = props.foodItems;
-  function onChange(event) {
-    console.log(props.id + " checked");
-    props.handleCallBack(event.target.checked, foodItems.id);
-  }
   function renderStatus(status) {
     switch (status) {
       case 0:

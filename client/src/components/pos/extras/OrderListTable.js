@@ -30,6 +30,12 @@ export default function OrderListTable(props) {
             Canceled
           </Badge>
         );
+      case 4:
+        return (
+          <Badge pill className="pill-ready">
+            Ready
+          </Badge>
+        );
       default:
         break;
     }
@@ -42,15 +48,15 @@ export default function OrderListTable(props) {
     <tr
       onClick={props.handleClick}
       style={{
-        backgroundColor: props.selected ? "rgba(0,0,0,.075)" : "transparent",
+        backgroundColor:
+          props.selected !== props.id ? "transparent" : "rgba(0,0,0,.075)",
+        cursor: "pointer",
       }}
     >
       <td>{convertTime(props.order.ordered_time)}</td>
       <td>{props.order.token_number}</td>
       <td>Rs.{props.order.grand_total}</td>
-      <td>
-        {renderStatus(props.order.status)}
-      </td>
+      <td>{renderStatus(props.order.status)}</td>
     </tr>
   );
 }

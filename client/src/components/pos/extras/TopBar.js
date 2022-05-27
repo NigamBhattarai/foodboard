@@ -37,15 +37,25 @@ function TopBar() {
             {" "}
             Dashboard{" "}
           </Button>
-          <Button as={Link} to="/orderreport" variant="link" className="top-bar-link">
+          <Button
+            as={Link}
+            to="/orderreport"
+            variant="link"
+            className="top-bar-link"
+          >
             {" "}
             On Going{" "}
           </Button>
-          <Button variant="link" className="top-bar-link">
+          <Button as={Link} to="/pos" variant="link" className="top-bar-link">
             {" "}
-            Kitchen Status{" "}
+            POS{" "}
           </Button>
-          <Button variant="link" className="top-bar-link" as={Link} to="/orderdisplay">
+          <Button
+            variant="link"
+            className="top-bar-link"
+            as={Link}
+            to="/orderdisplay"
+          >
             {" "}
             Orders{" "}
           </Button>
@@ -71,7 +81,7 @@ function TopBar() {
           <img
             src={
               typeof appContext.state.userData !== "undefined"
-                ? process.env.REACT_APP_API_URL+appContext.state.userData.user.profile_image
+                ? appContext.state.userData.user.profile_image
                 : "https://kathmandumomo.com.au/wp-content/uploads/2020/03/KathMoMoHouseAndBar_JholMoMoVegSoup.jpg"
             }
             alt="user"
