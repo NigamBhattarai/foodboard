@@ -20,15 +20,19 @@ const data = {
       alias: "admin",
     },
     {
+      _id:"62909ccf51a371ec239cb5f6",
       alias: "manager",
     },
     {
+      _id:"62909d08051afc6fd62f3175",
       alias: "kitchen",
     },
     {
+      _id:"62909d11ae81f12369300e1f",
       alias: "waiter",
     },
     {
+      _id:"62909d19301232f697b3af72",
       alias: "counter",
     },
   ],
