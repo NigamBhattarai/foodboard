@@ -7,6 +7,11 @@ router.get("/", function (req, res, next) {
   CategoryController.getAllCategories(req, res);
 });
 
+/* GET active category listing. */
+router.get("/active", function (req, res, next) {
+  CategoryController.getActiveCategories(req, res);
+});
+
 /* POST new category. */
 router.post("/add", function (req, res, next) {
   CategoryController.addCategory(req, res);
