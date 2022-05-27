@@ -1,10 +1,11 @@
-import React, { useState, useEffect, createContext } from "react";
-import { Row, Col, Container, Button } from "react-bootstrap";
+import React, { useState, useEffect, createContext, useContext } from "react";
+import { Row, Col, Container } from "react-bootstrap";
 
-import AddBusinessIcon from "@mui/icons-material/AddBusiness";
 import OrderCard from "../pos/extras/OrderCard";
 import axios from "axios";
 import UseTitle from "../../hooks/useTitle";
+import { AppContext } from "../../App";
+import { io } from "socket.io-client";
 
 export const KitchenContext = createContext();
 function Kitchen(props) {
@@ -12,23 +13,30 @@ function Kitchen(props) {
   const [orders, setOrders] = useState([]);
   const [nullState] = useState();
 
-  const fetchData = async () => {
-    const result = await axios.get(
-      process.env.REACT_APP_API_URL + "api/orders"
-    );
-    setOrders(result.data);
+  const fetchData = () => {
+    axios.get(process.env.REACT_APP_API_URL + "api/orders").then((result) => {
+      setOrders(result.data);
+    });
   };
   useEffect(() => {
+    const socket = io("http://localhost:5000");
+    socket.on("newOrder", () => {
+      fetchData();
+    });
+    socket.on("updateOrderStatus", () => {
+      fetchData();
+    });
     fetchData();
   }, [nullState]);
+  const appContext = useContext(AppContext);
 
   return (
-    <KitchenContext.Provider value={{ fetchData }}>
+    <KitchenContext.Provider value={{}}>
       <Container fluid className="mx-2">
         <Row className="title align-items-center">
           <Col lg={3}>
             <h2>Kitchen</h2>
-            <small className="text-muted">Tuesday 2,Feb,2021</small>
+            <small className="text-muted">{appContext.getCurrentDate()}</small>
           </Col>
         </Row>
         <hr />
@@ -36,12 +44,7 @@ function Kitchen(props) {
           <Row className="mt-3">
             {orders.map((order) => (
               <Col lg={4} key={order._id}>
-                <OrderCard
-                  page="kitchen"
-                  order={order}
-                  // fetchData={fetchData()}
-                  id={order.id}
-                />
+                <OrderCard page="kitchen" order={order} id={order.id} />
               </Col>
             ))}
           </Row>
