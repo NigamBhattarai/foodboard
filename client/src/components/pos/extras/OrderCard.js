@@ -1,5 +1,5 @@
-import React, { useState, useContext } from "react";
-import { Row, Col, Button, Form, Container } from "react-bootstrap";
+import React from "react";
+import { Row, Col, Button, Container } from "react-bootstrap";
 import OrderItems from "./OrderItems";
 import "./OrderCard.scss";
 import DoneIcon from "@mui/icons-material/Done";
@@ -12,15 +12,12 @@ import axios from "axios";
 import { useAlert } from "react-alert";
 
 export default function OrderCard(props) {
-  const [order, setOrder] = useState(props.order);
-
   const alert = useAlert();
 
   function convertTime(time) {
     return dateFormat(time, "dddd, d mmmm, hh:mm TT").toString();
   }
 
-  const [foodItems, setFoodItems] = useState(order.foodItems);
   function renderStatus(status) {
     switch (status) {
       case 0:
@@ -61,41 +58,25 @@ export default function OrderCard(props) {
         break;
     }
   }
-  function handleCallBack(getChecked, getId) {
-    let status = "pending";
-    if (getChecked) status = "preparing";
-    setFoodItems((prevFoodItems) => {
-      return prevFoodItems.map((foodItem) => {
-        return foodItem.id === getId
-          ? { ...foodItem, status: status }
-          : foodItem;
-      });
-    });
-    console.log("Update status in order:" + props.id);
-  }
   function submitData(status) {
-    axios
-      .post(process.env.REACT_APP_API_URL + "api/orders/updateStatus", {
-        status: status,
-        id: order._id,
-      })
-      .then((response) => {
-        setOrder(response.data);
-      });
+    axios.post(process.env.REACT_APP_API_URL + "api/orders/updateStatus", {
+      status: status,
+      id: props.order._id,
+    });
     alert.success("Order Succesfully Updated");
   }
   return (
     <Container fluid className="orderCard py-2 mx-0 mb-5">
       <Row className="mb-4 top-row">
         <Col className="mr-auto" md={8}>
-          <h5 className="m-0">Order {order.token_number}</h5>
+          <h5 className="m-0">Order {props.order.token_number}</h5>
           <small className="text-muted">
-            {convertTime(order.ordered_time)}
+            {convertTime(props.order.ordered_time)}
           </small>
         </Col>
         <Col className="ml-auto">
           {props.page === "order" ? (
-            order.status === "pending" && (
+            props.order.status === "pending" && (
               <Button
                 style={{ width: "100%" }}
                 className="default-button order-popup-bottom-button"
@@ -106,20 +87,19 @@ export default function OrderCard(props) {
           ) : (
             <Button variant="outline-info" disabled>
               <AccessAlarmIcon /> &nbsp;
-              <TimeAgo date={order.ordered_time} />{" "}
+              <TimeAgo date={props.order.ordered_time} />{" "}
             </Button>
           )}
         </Col>
       </Row>
       <Row className="mx-0 order-items">
-        {order.foodItems.map((foodItem) => (
+        {props.order.foodItems.map((foodItem) => (
           <OrderItems
             page={props.page}
-            orderStatus={order.status}
+            orderStatus={props.order.status}
             foodItems={foodItem}
             key={foodItem._id}
             id={foodItem._id}
-            handleCallBack={handleCallBack}
           />
         ))}
       </Row>
@@ -129,13 +109,13 @@ export default function OrderCard(props) {
             {props.page === "order" ? (
               <span>
                 <small className="text-muted">
-                  x{order.foodItems.length} items
+                  x{props.order.foodItems.length} items
                 </small>
                 <br />
-                <b>Rs.{order.grand_total}</b>
+                <b>Rs.{props.order.grand_total}</b>
               </span>
             ) : props.page === "kitchen" ? (
-              order.status == 0 ? (
+              props.order.status === 0 ? (
                 <span>
                   <Button
                     className="served"
@@ -154,7 +134,7 @@ export default function OrderCard(props) {
                     <ClearIcon />
                   </Button>
                 </span>
-              ) : order.status === 1 ? (
+              ) : props.order.status === 1 ? (
                 <Button
                   variant="outline-success"
                   style={{ width: "100%" }}
@@ -166,7 +146,7 @@ export default function OrderCard(props) {
                   Prepared
                 </Button>
               ) : (
-                renderStatus(order.status)
+                renderStatus(props.order.status)
               )
             ) : (
               <Button variant="success">Done</Button>
@@ -175,7 +155,7 @@ export default function OrderCard(props) {
           <Col></Col>
           <Col lg={5} className="d-flex align-item-center">
             {props.page === "order" ? (
-              renderStatus(order.status)
+              renderStatus(props.order.status)
             ) : props.page === "kitchen" ? (
               <span></span>
             ) : (

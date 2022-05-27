@@ -21,6 +21,24 @@ exports.getAllCategories = (req, res) => {
     });
 };
 
+exports.getActiveCategories = (req, res) => {
+  categoryModel
+    .find({ status: true })
+    .lean()
+    .exec(async (err, result) => {
+      if (result) {
+        for (var i = 0; i < result.length; i++) {
+          const foodCount = await foodModel.count({ category: result[i]._id });
+          result[i].foodCount = foodCount;
+        }
+        res.send(result);
+      } else {
+        console.log(err);
+        res.send(err);
+      }
+    });
+};
+
 exports.removeCategory = async (req, res) => {
   const foodCount = await foodModel.count({ category: req.body.id });
   const category = await categoryModel.findOne({ _id: req.body.id });
@@ -121,9 +139,12 @@ exports.addCategory = async (req, res) => {
             createdAt: new Date(),
             updatedAt: new Date(),
           });
-          category.save().then((savedDoc) => {
-            savedDoc.foodCount = 0;
-            res.status(200).send(savedDoc);
+          category.save().then((savedDoc, err) => {
+            if (err) res.sendStatus(400);
+            else {
+              savedDoc.foodCount = 0;
+              res.status(200).send(savedDoc);
+            }
           });
         }
       });

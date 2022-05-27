@@ -1,0 +1,31 @@
+@import "../../App.scss";
+
+.navigation {
+  background-color: white;
+}
+.navigation-items {
+  text-align: center;
+  cursor: pointer;
+  color: black;
+  border-bottom: 1px solid white;
+}
+.navigation-items:hover {
+  border-bottom: 1px solid $orange_primary;
+  color: $orange_primary;
+}
+
+.main-view {
+  background-color: white;
+}
+
+.add-form td {
+  text-align: right;
+}
+.add-form td .form-control,
+.add-user-select {
+  margin-left: 50px;
+}
+.assign-role .form-select {
+  width: 100%;
+  height: 30px;
+}

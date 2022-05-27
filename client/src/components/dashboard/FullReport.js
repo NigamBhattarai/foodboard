@@ -1,4 +1,4 @@
-import React, { useState,useEffect,useReducer } from "react";
+import React, { useState,useEffect,useReducer, useContext } from "react";
 import {
   Row,
   Col,
@@ -16,6 +16,7 @@ import ListAltIcon from "@mui/icons-material/ListAlt";
 import "./FullReport.scss";
 import OrderItems from "../pos/extras/OrderItems.js";
 import UseTitle from "../../hooks/useTitle.js";
+import { AppContext } from "../../App.js";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -58,13 +59,14 @@ function FullReport(props) {
     setSelected(order);
     setClick(true);
   }
+  const appContext=useContext(AppContext)
 
   return (
     <Container fluid>
       <Row className="title align-items-center">
         <Col lg={3}>
           <h2>Full Report</h2>
-          <small className="text-muted">Tuesday 2,Feb,2021</small>
+          <small className="text-muted">{appContext.getCurrentDate()}</small>
         </Col>
         <Col></Col>
         <Col lg={1}>
@@ -114,9 +116,9 @@ function FullReport(props) {
                       <OrderListTable
                         order={order}
                         key={order._id}
-                        id={order.id}
+                        id={order._id}
                         handleClick={() => handleClick(order)}
-                        selected={order.id === selected.id}
+                        selected={selected._id}
                       />
                     );
                   })}
@@ -144,10 +146,10 @@ function FullReport(props) {
                     </Row>
                   </Tab>
                   <Tab eventKey="second" title="Progress">
-                    Hii, I am 2nd tab content
+                    <center className="mt-5"><h3>Under Construction</h3></center>
                   </Tab>
                   <Tab eventKey="third" title="Review">
-                    Hii, I am 3rd tab content
+                  <center className="mt-5"><h3>Under Construction</h3></center>
                   </Tab>
                 </Tabs>
               </Col>

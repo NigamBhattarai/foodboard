@@ -165,7 +165,7 @@ export default function POS() {
     } else {
       try {
         const orderResponse = await axios.post(
-          process.env.REACT_APP_API_URL+"api/orders/add",
+          process.env.REACT_APP_API_URL + "api/orders/add",
           {
             bill: state.bill,
             customerName: extraData.customerName,
@@ -191,13 +191,17 @@ export default function POS() {
     document
       .querySelectorAll(".food-category-tab-item")[0]
       .classList.add("active");
-    const itemData = await axios.get(process.env.REACT_APP_API_URL+"api/food/active");
+    const itemData = await axios.get(
+      process.env.REACT_APP_API_URL + "api/food/active"
+    );
     dispatch({ type: "setOriginalItemData", value: itemData.data });
     dispatch({ type: "setInitialItemData" });
-    const categories = await axios.get(process.env.REACT_APP_API_URL+"api/category");
+    const categories = await axios.get(
+      process.env.REACT_APP_API_URL + "api/category/active"
+    );
     setCategories(categories.data);
     const newToken = await axios.get(
-      process.env.REACT_APP_API_URL+"api/orders/new-token"
+      process.env.REACT_APP_API_URL + "api/orders/new-token"
     );
     dispatch({ type: "setTokenNumber", value: newToken.data });
   }, [nullState]);
@@ -264,19 +268,21 @@ export default function POS() {
                 >
                   All <span className="active-underline"></span>{" "}
                 </Button>
-                {categories.map((category, index) => (
-                  <Button
-                    variant="link"
-                    className={"food-category-tab-item mr-1"}
-                    key={index}
-                    onClick={(e) => {
-                      setisAllSelected(false);
-                      handleCategoryChange(e, category._id, false);
-                    }}
-                  >
-                    {category.name} <span className="active-underline"></span>{" "}
-                  </Button>
-                ))}
+                {categories
+                  .filter((category) => category.foodCount > 0)
+                  .map((category, index) => (
+                    <Button
+                      variant="link"
+                      className={"food-category-tab-item mr-1"}
+                      key={index}
+                      onClick={(e) => {
+                        setisAllSelected(false);
+                        handleCategoryChange(e, category._id, false);
+                      }}
+                    >
+                      {category.name} <span className="active-underline"></span>{" "}
+                    </Button>
+                  ))}
               </div>
               <Row>
                 <Col xs={12} lg={6}>

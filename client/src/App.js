@@ -17,12 +17,14 @@ import AlertTemplate from "react-alert-template-basic";
 
 import React, { createContext, useEffect, useReducer, useState } from "react";
 import SignIn from "./components/dashboard/SignIn";
-import SignUp from "./components/dashboard/SignUp";
+import dateFormat from "dateformat";
 
 import Cookies from "universal-cookie";
 import Err404 from "./Err404";
 import OrderDisplay from "./components/pos/extras/OrderDisplay";
 import TopBar from "./components/pos/extras/TopBar";
+import Settings from "./components/dashboard/Settings";
+import UnderConstruction from "./UnderConstruction";
 const cookies = new Cookies();
 
 const initialState = {
@@ -95,6 +97,9 @@ function App() {
         return state;
     }
   }
+  function getCurrentDate() {
+    return dateFormat(new Date(), "dddd, d mmmm, yyyy").toString();
+  }
 
   const [state, dispatch] = useReducer(AppReducer, initialState);
   const [nullState] = useState();
@@ -111,7 +116,7 @@ function App() {
   }, [nullState]);
 
   return (
-    <AppContext.Provider value={{ state, dispatch }}>
+    <AppContext.Provider value={{ state, dispatch, getCurrentDate }}>
       <Provider template={AlertTemplate} {...options}>
         <Routes>
           {state.userData.isLoggedIn ? (
@@ -159,6 +164,14 @@ function App() {
                 }
               />
               <Route
+                path="/setting"
+                element={
+                  <Dashboard>
+                    <Settings />
+                  </Dashboard>
+                }
+              />
+              <Route
                 path="/addons"
                 element={
                   <Dashboard>
@@ -171,6 +184,14 @@ function App() {
                 element={
                   <Dashboard>
                     <FullReport />
+                  </Dashboard>
+                }
+              />{" "}
+              <Route
+                path="/coupon"
+                element={
+                  <Dashboard>
+                    <UnderConstruction />
                   </Dashboard>
                 }
               />{" "}
@@ -196,7 +217,6 @@ function App() {
           ) : (
             <>
               <Route path="/signin" element={<SignIn />} />
-              <Route path="/signup" element={<SignUp />} />
               <Route path="*" element={<Err404 />} />
             </>
           )}

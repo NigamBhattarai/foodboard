@@ -9,7 +9,6 @@ var cors = require("cors");
 //   optionsSuccessStatus: 200,
 // };
 
-
 /* GET food api. */
 router.get("/", function (req, res, next) {
   foodController.getAllFoods(req, res);
@@ -21,6 +20,14 @@ router.get("/active", function (req, res, next) {
 
 router.get("/getbyobject", function (req, res, next) {
   foodController.getFullFoodByObject(req, res);
+});
+
+router.get("/trending", function (req, res, next) {
+  foodController.getTrendingFoods(req, res);
+});
+
+router.get("/totalfoodcount", function (req, res, next) {
+  foodController.getTotalFoodCount(req, res);
 });
 
 router.post("/add", function (req, res, next) {

@@ -1,4 +1,4 @@
-import React, { useReducer, useEffect } from "react";
+import React, { useReducer, useEffect, useContext } from "react";
 import {Link} from "react-router-dom";
 import { Row, Col, Container, Button } from "react-bootstrap";
 import ListAltIcon from "@mui/icons-material/ListAlt";
@@ -11,6 +11,7 @@ import MessageBox from "./components/MessageBox";
 import DoneIcon from "@mui/icons-material/Done";
 import ClearIcon from "@mui/icons-material/Clear";
 import UseTitle from "../../hooks/useTitle";
+import { AppContext } from "../../App";
 function renderStatus(status) {
   switch (status) {
     case 0:
@@ -43,10 +44,11 @@ function reducer(state, action) {
   }
 }
 
+
 function Order(props) {
 
   UseTitle("Orders");
-
+  const appContext=useContext(AppContext)
 
   const [{ loading, error, orders }, dispatch] = useReducer(reducer, {
     orders: [],
@@ -69,12 +71,12 @@ function Order(props) {
   return (
     <Container fluid className="mx-2 order start">
       <Row className="title align-items-center">
-        <Col lg={3}>
+        <Col md={3}>
           <h2>Order</h2>
-          <small className="text-muted">Tuesday 2,Feb,2021</small>
+          <small className="text-muted">{appContext.getCurrentDate()}</small>
         </Col>
         <Col></Col>
-        <Col lg={4}>
+        <Col md={2}>
           <Button as={Link} to="/fullreport" variant="light" className="titleButton">
             <ListAltIcon className="mr-2" />
             Full Report{" "}

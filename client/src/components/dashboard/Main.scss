@@ -1,20 +1,63 @@
 @import "../../App.scss";
 
-
-.order-report{
-    background-color: white;
-    color: #333 !important;
+.order-report {
+  background-color: white;
+  color: #333 !important;
+  max-height: 720px;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
-
-.trending-tab{
-    background-color: white;
+.order-report::-webkit-scrollbar {
+  display: none;
 }
-.main-body{
-    max-height:77vh;
-    overflow-y: scroll;
-    scrollbar-width: none;
-    
+.trending-tab::-webkit-scrollbar {
+  display: none;
+}
+.trending-tab {
+  background-color: white;
+  color: #333 !important;
+  max-height: 720px;
+  overflow-y: scroll;
+  scrollbar-width: none;
+}
+.main-body {
+  max-height: 92vh;
+  overflow-y: scroll;
+  scrollbar-width: none;
 }
 .main-body::-webkit-scrollbar {
-    display: none;
+  display: none;
+}
+
+.shortcut-card-link {
+  text-align: center;
+  display: table;
+}
+.shortcut-card {
+  color: white;
+  padding: 5px;
+  border-radius: 10px;
+  height: 100%;
+  display: table-cell;
+  vertical-align: middle;
+  box-shadow: 4px 5px 6px #33333340;
+  &:hover {
+    text-decoration: none;
+    color: white;
+    box-shadow: 3px 8px 6px #33333340;
+  }
+  &:active{
+      box-shadow: none;
+      transform: scale(0.99);
+  }
+}
+
+.shortcut-card.first {
+  background: linear-gradient(to left, #ff784a, #ff926d);
+}
+.shortcut-card.second {
+  background: linear-gradient(to left, #e15671, #e7758a);
+}
+.shortcut-card.third {
+  background: linear-gradient(to left, #1f6bff, #528dff);
 }

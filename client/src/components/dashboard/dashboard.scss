@@ -1,55 +1,55 @@
 @import "../../App.scss";
-body{
-    background: #e5e5e5 !important;
+body {
+  background: #e5e5e5 !important;
 }
-.sideBar{
-    background-color: white;
-    height: 100vh;
+.sideBar {
+  background-color: white;
+  height: 100vh;
 }
-.sidebar-link{
-    font-family: 'Barlow', sans-serif;
-}
-
-.sidebar-link:hover{
-    border-right: 5px $orange_primary solid;  
+.sidebar-link {
+  font-family: "Barlow", sans-serif;
 }
 
-.sideBar .active{
-    background: rgba(234, 124, 105, 0.29);
-    color:$orange_primary;
-    border-right: 5px $orange_primary solid;
-
+.sidebar-link:hover {
+  border-right: 5px $orange_primary solid;
 }
 
-.topbar{
-    background-color: white;
-    margin: 0px;
-    height:5vh;
-}
-.topbar-link{
-    font-family: 'Barlow', sans-serif;
-}
-.topbar-link:hover{
-    background-color:$orange_primary;
-    color: white;
-
+.sideBar .active {
+  background: rgba(234, 124, 105, 0.29);
+  color: $orange_primary;
+  border-right: 5px $orange_primary solid;
 }
 
-a{
-    text-decoration: none;
-    color:#212529;
+.topbar {
+  background-color: white;
+  margin: 0px;
+  height: 45px;
+}
+.topbar-link {
+  line-height: 45px;
+  font-family: "Barlow", sans-serif;
+}
+.topbar-link:hover {
+  text-decoration: none;
+  background-color: $orange_primary;
+  color: white;
+}
 
+a {
+  text-decoration: none;
+  color: #212529;
 }
-.sidebar-link.active a{
-    color:$orange_primary;
-    text-decoration: none;
+.sidebar-link .active {
+  color: $orange_primary;
+  text-decoration: none;
 }
-.sidebar-link a:hover{
-    color:$orange_primary;
-    text-decoration: none;
+.sidebar-link:hover {
+  text-decoration: none;
+  color: $orange_secondary;
+  text-decoration: none;
 }
 
-.topbar-link a:hover{
-    color:white;
-    text-decoration:none
+.topbar-link a:hover {
+  color: white;
+  text-decoration: none;
 }

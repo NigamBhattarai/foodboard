@@ -132,6 +132,10 @@ function AddFoodPopup(props) {
             type: "updateItemData",
             value: newFoodData,
           });
+          foodManagementContext.dispatch({
+            type: "setOriginalItemData",
+            value: newFoodData,
+          });
           foodManagementContext.setLoading(false);
         } catch (err) {
           if (err.statusCode === 406)

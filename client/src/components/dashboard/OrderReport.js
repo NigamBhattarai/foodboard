@@ -8,7 +8,6 @@ import { io } from "socket.io-client";
 import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 import UseTitle from "../../hooks/useTitle";
-import { useAlert } from "react-alert";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -50,13 +49,16 @@ function renderStatus(order) {
       );
     case 4:
       return (
-        <Button
-          variant="outline-success"
-          style={{ width: 100 }}
-          onClick={() => submitData(2, order._id)}
-        >
-          Serve
-        </Button>
+        "Serve",
+        (
+          <Button
+            variant="outline-success"
+            style={{ width: 100 }}
+            onClick={() => submitData(2, order._id)}
+          >
+            Serve
+          </Button>
+        )
       );
     default:
       break;
@@ -68,7 +70,6 @@ function submitData(status, id) {
     id: id,
   });
   alert.success("Order has been served");
-
 }
 
 function OrderReport() {
@@ -79,23 +80,20 @@ function OrderReport() {
     loading: true,
     error: "",
   });
-  const alert = useAlert();
 
   function convertTime(time) {
     return dateFormat(time, "hh:mm TT").toString();
   }
 
   async function fetchData() {
-    {
-      dispatch({ type: "FETCH_REQUEST" });
-      try {
-        const result = await axios.get(
-          process.env.REACT_APP_API_URL + "api/orders"
-        );
-        dispatch({ type: "FETCH_SUCCESS", payload: result.data });
-      } catch (err) {
-        dispatch({ type: "FETCH_FAIL", payload: err.message });
-      }
+    dispatch({ type: "FETCH_REQUEST" });
+    try {
+      const result = await axios.get(
+        process.env.REACT_APP_API_URL + "api/orders"
+      );
+      dispatch({ type: "FETCH_SUCCESS", payload: result.data });
+    } catch (err) {
+      dispatch({ type: "FETCH_FAIL", payload: err.message });
     }
   }
   useEffect(() => {
@@ -105,7 +103,6 @@ function OrderReport() {
     });
     socket.on("updateOrderStatus", () => {
       fetchData();
-
     });
     fetchData();
   }, [nullState]);
@@ -156,7 +153,7 @@ function OrderReport() {
                           order.status === 4
                       )
                       .map((order, index) => {
-                        const classname = "pill-" + order.status;
+                        // const classname = "pill-" + order.status;
                         return (
                           <tr key={"order-" + index}>
                             <td>{order.customer_name}</td>

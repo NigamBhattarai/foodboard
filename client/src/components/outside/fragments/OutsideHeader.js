@@ -15,7 +15,6 @@ export default function OutsideHeader() {
         </Col>
         <Col xs={6} sm={4} md={4} lg={2} className="ml-auto my-auto">
           <Link to={"/signin"} className="mr-4">Sign in</Link>
-          <Link to={"/signup"}>Register</Link>
         </Col>
       </Row>
     </Container>

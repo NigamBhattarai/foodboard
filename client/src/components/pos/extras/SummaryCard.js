@@ -12,20 +12,23 @@ function SummaryCard(props) {
     <Col className="summaryCard">
       <Row className="p-3 align-items-center">
         <Col md={3} className="valueType px-2 py-1">
-        {
-    props.valueType === "Revenue" ? (
-      <CurrencyRupeeIcon />
-    ) : props.valueType === "Order" ? (
-      <AssignmentIcon />
-    ) : (
-      <LocalDiningIcon />
-    )}
+          {props.valueType === "Revenue" ? (
+            <CurrencyRupeeIcon />
+          ) : props.valueType === "Order" ? (
+            <AssignmentIcon />
+          ) : (
+            <LocalDiningIcon />
+          )}
         </Col>
-        <Col md={4} className="changeValue text-center">
+        {/* <Col md={4} className="changeValue text-center">
           {props.changeValue}%
-        </Col>
+        </Col> */}
         <Col md={3} className="change text-center">
-          {props.change==="0"?<ArrowCircleUpIcon />:<ArrowCircleDownIcon/>}
+          {props.change === "0" ? (
+            <ArrowCircleUpIcon style={{ color: "green" }} />
+          ) : (
+            <ArrowCircleDownIcon />
+          )}
         </Col>
       </Row>
       <Row className="value">
