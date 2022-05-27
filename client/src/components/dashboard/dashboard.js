@@ -15,133 +15,129 @@ function Dashboard(props) {
   const splitLocation = pathname.split("/");
   return (
     <Container fluid>
-    <Row>
-      <Col md={2} className="sideBar">
-        <Row className="imagePane py-3">
-          <Col md={9}>
-            <img
-              src="/images/foodboard-logo.png"
-              className="img-fluid"
-              alt="logo"
-            />
-          </Col>
-        </Row>
-        <div className="sidebar-links mt-2">
-          <Row
-            className={
-              "sidebar-link " +
-              (splitLocation[1] === "dashboard" ? "active" : "")
-            }
-          >
-            <Link to="/dashboard">
+      <Row>
+        <Col md={2} className="sideBar">
+          <Row className="imagePane py-3">
+            <Col md={9}>
+              <img
+                src="/images/foodboard-logo.png"
+                className="img-fluid"
+                alt="logo"
+              />
+            </Col>
+          </Row>
+          <div className="sidebar-links mt-2">
+            <Row
+              as={Link}
+              to="/dashboard"
+              className={
+                "sidebar-link " +
+                (splitLocation[1] === "dashboard" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <DashboardIcon />
                 </Col>
                 <Col>Dashboard</Col>
               </Row>
-            </Link>
-          </Row>
-          <Row
-            className={
-              "sidebar-link " + (splitLocation[1] === "orders" ? "active" : "")
-            }
-          >
-            <Link to="/orders">
+            </Row>
+            <Row
+              as={Link}
+              to="/orders"
+              className={
+                "sidebar-link " +
+                (splitLocation[1] === "orders" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <AssignmentIcon />
                 </Col>
                 <Col>Order</Col>
               </Row>{" "}
-            </Link>
-          </Row>
-          <Row
-            className={
-              "sidebar-link " + (splitLocation[1] === "food" ? "active" : "")
-            }
-          >
-            <Link to="/food">
+            </Row>
+            <Row
+              as={Link}
+              to="/food"
+              className={
+                "sidebar-link " + (splitLocation[1] === "food" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <LocalDiningIcon />
                 </Col>
                 <Col>Foods</Col>
               </Row>{" "}
-            </Link>
-          </Row>
-          <Row
-            className={
-              "sidebar-link " +
-              (splitLocation[1] === "categories" ? "active" : "")
-            }
-          >
-            <Link to="/categories">
+            </Row>
+            <Row
+              as={Link}
+              to="/categories"
+              className={
+                "sidebar-link " +
+                (splitLocation[1] === "categories" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <DnsIcon />
                 </Col>
                 <Col>Categories</Col>
               </Row>{" "}
-            </Link>
-          </Row>
-          <Row
-            className={
-              "sidebar-link " +
-              (splitLocation[1] === "coupon" ? "active" : "")
-            }
-          >
-            <Link to="/coupon">
+            </Row>
+            <Row
+              as={Link}
+              to="/coupon"
+              className={
+                "sidebar-link " +
+                (splitLocation[1] === "coupon" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <LocalOfferIcon />
                 </Col>
                 <Col>Coupons</Col>
               </Row>{" "}
-            </Link>
-          </Row>
-          <Row
-            className={
-              "sidebar-link " + (splitLocation[1] === "setting" ? "active" : "")
-            }
-          >
-            <Link to="/setting">
+            </Row>
+            <Row
+              as={Link}
+              to="/setting"
+              className={
+                "sidebar-link " +
+                (splitLocation[1] === "setting" ? "active" : "")
+              }
+            >
               <Row className="py-3 pl-5 my-2">
                 <Col md={1} className="mr-2">
                   <SettingsIcon />
                 </Col>
                 <Col>Settings</Col>
               </Row>
-            </Link>
+            </Row>
+          </div>
+        </Col>
+        <Col md={10} className="p-0">
+          <Row className="topbar">
+            <Col md={1} as={Link} to="/pos" className="topbar-link">
+              <Col className="text-center mx-1">POS</Col>
+            </Col>
+            <Col
+              md={1}
+              as={Link}
+              to="/fullreport"
+              className="topbar-link text-center mx-1"
+            >
+              <Col className="text-center mx-1">Order</Col>
+            </Col>
+            <Col as={Link} to="/kitchen" md={1} className="topbar-link">
+              <Col className="text-center mx-1">Kitchen</Col>
+            </Col>
           </Row>
-        </div>
-      </Col>
-      <Col md={10} className="p-0">
-        <Row className="topbar">
-          <Col md={1}  className="topbar-link">
-            <Link to="/pos">
-              <Col className="text-center mx-1">
-                POS
-              </Col>
-            </Link>
-          </Col>
-          <Col md={1} className="topbar-link text-center mx-1">
-            Order
-          </Col>
-          <Col md={1}  className="topbar-link">
-            <Link to="/kitchen">
-              <Col className="text-center mx-1">
-                Kitchen
-              </Col>
-            </Link>
-          </Col>
-          <Col md={1} className="topbar-link text-center mx-1">
-            Order
-          </Col>
-        </Row>
-        <Row className="m-1">{props.children}</Row>
-      </Col>
-    </Row>
+          <Row className="m-1">{props.children}</Row>
+        </Col>
+      </Row>
     </Container>
   );
 }
