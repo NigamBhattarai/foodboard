@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer } from "react";
+import React, { useState, useEffect, useReducer, useContext } from "react";
 import {
   Row,
   Col,
@@ -17,6 +17,7 @@ import LoadingBox from "./components/LoadingBox";
 import MessageBox from "./components/MessageBox";
 import UseTitle from "../../hooks/useTitle";
 import { useAlert, positions } from "react-alert";
+import { AppContext } from "../../App";
 
 function reducer(state, action) {
   switch (action.type) {
@@ -155,6 +156,7 @@ function Categories() {
       }
     }
   }
+  const appContext=useContext(AppContext)
 
   return (
     <Container fluid className="mx-2 categories">
@@ -163,7 +165,7 @@ function Categories() {
           <Row>
             {" "}
             <h2>Categories</h2>
-            <small className="text-muted">Tuesday 2,Feb,2021</small>{" "}
+            <small className="text-muted">{appContext.getCurrentDate()}</small>{" "}
           </Row>
         </Col>
 
